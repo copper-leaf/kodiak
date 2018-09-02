@@ -14,7 +14,6 @@ import org.jetbrains.dokka.FormatService
 import org.jetbrains.dokka.FormattedOutputBuilder
 import org.jetbrains.dokka.Location
 import org.jetbrains.dokka.NodeKind
-import org.jetbrains.dokka.identifierToFilename
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedName
 import org.jetbrains.dokka.simpleName
@@ -49,7 +48,7 @@ class DokkaJsonFormattedOutputBuilder(val to: StringBuilder) : FormattedOutputBu
         obj.put("summary", node.summaryText)
 
         if(NodeKind.classLike.contains(node.kind)) {
-            obj.put("package", node.path.map { it.name }.map { identifierToFilename(it) }.filterNot { it.isEmpty() }.first())
+            obj.put("package", node.path.map { it.name }.filterNot { it.isEmpty() }.first())
         }
 
         // always recurse, for Classdocs
