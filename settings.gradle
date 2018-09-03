@@ -1,2 +1,4 @@
 rootProject.name = 'dokka-json'
 
+include ':dokka-json-models'
+include ':dokka-json'
