@@ -45,7 +45,7 @@ data class KotlinPackageDoc(
     override val kind = "Package"
 
     companion object {
-        fun fromJson(json: String): KotlinClassDoc {
+        fun fromJson(json: String): KotlinPackageDoc {
             return JSON.parse(json)
         }
     }
