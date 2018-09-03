@@ -9,7 +9,6 @@ sourceCompatibility = 1.8
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     compile 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
-//    compile 'org.json:json:20180813'
     compile project(':dokka-json-models')
 }
 
