@@ -32,8 +32,6 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
     override fun buildPages(nodes: Iterable<DocumentationNode>) {
         if (nodes.none()) return
 
-        println("deciding pages for ${ArrayList<DocumentationNode>().also { it.addAll(nodes) }.size} nodes")
-
         val classes = ArrayList<DocumentationNode>()
         val packages = ArrayList<DocumentationNode>()
 
@@ -50,9 +48,7 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
             }
         }
 
-        println("rendering nodes for ${classes.size} classes")
         renderNodes(classes)
-        println("rendering nodes for ${packages.size} packages")
         renderNodes(packages)
     }
 
@@ -110,5 +106,6 @@ private fun absolutePathToNode(node: DocumentationNode) = absolutePathToNode(nod
 fun overrideIdentifierToFilename(path: String): String {
     val escaped = path.replace('<', '-').replace('>', '-')
     val lowercase = escaped.replace("[A-Z]".toRegex()) { matchResult -> matchResult.value.toLowerCase() }
-    return lowercase.replace('.', '/')
+//    return lowercase.replace('.', '/')
+    return lowercase.replace('.', '-')
 }

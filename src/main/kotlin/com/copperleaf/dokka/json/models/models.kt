@@ -1,47 +1,63 @@
 package com.copperleaf.dokka.json.models
 
-/**
- * This represents the root of your site, containing a list of the available classes and packages.
- */
-data class KotlinRootDoc(
-        val classes: List<KotlinClassDoc>,
-        val packages: List<KotlinPackageDoc>
-)
+import org.jetbrains.dokka.NodeKind
 
 /**
  * The docs for a single class. Includes a list of the fields and methods in the class, as well as the KDoc comment on
  * the class.
  */
 data class KotlinClassDoc(
-        val comment: String,
-        val fields: List<KotlinFieldDoc>,
-        val methods: List<KotlinMethodDoc>
-)
+        val `package`: String,
+        override val kind: String,
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        val constructors: List<KotlinConstructor>,
+        val methods: List<KotlinMethod>,
+        val fields: List<KotlinField>
+) : KotlinClasslike
 
 /**
  * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc comment on the
  * package.
  */
 data class KotlinPackageDoc(
-        val comment: String,
-        val classes: List<KotlinClassDoc>
-)
+        val classes: List<KotlinClassDoc>,
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int
+) : KotlinDocElement {
+    override val kind = NodeKind.Package.toString()
+}
 
-/**
- * The docs for a field in a class. Includes docs for the its annotations, and its comment.
- */
-data class KotlinFieldDoc(
-        val comment: String,
-        val tags: Map<String, String>
-)
+data class KotlinConstructor(
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        override val modifiers: List<String>
+) : KotlinMemberlike {
+    override val kind = "Constructor"
+}
 
-/**
- * The docs for a method in a class. Includes docs for the return type, its parameters, its annotations, and its
- * comments.
- */
-data class KotlinMethodDoc(
-        val comment: String,
-        val parameters: Map<String, String>
-)
+data class KotlinMethod(
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        override val modifiers: List<String>
+) : KotlinMemberlike {
+    override val kind = "Method"
+}
 
-
+data class KotlinField(
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        override val modifiers: List<String>
+) : KotlinMemberlike {
+    override val kind = "Field"
+}

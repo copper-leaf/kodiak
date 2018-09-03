@@ -1,5 +1,10 @@
 package com.copperleaf.dokka.json.generator
 
+import com.copperleaf.dokka.json.models.KotlinClassDoc
+import com.copperleaf.dokka.json.models.KotlinConstructor
+import com.copperleaf.dokka.json.models.KotlinField
+import com.copperleaf.dokka.json.models.KotlinMethod
+import com.copperleaf.dokka.json.models.KotlinPackageDoc
 import org.jetbrains.dokka.ContentBlock
 import org.jetbrains.dokka.ContentEmpty
 import org.jetbrains.dokka.ContentExternalLink
@@ -17,8 +22,6 @@ import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedName
 import org.jetbrains.dokka.simpleName
-import org.json.JSONArray
-import org.json.JSONObject
 
 class DokkaJsonFormatService : FormatService {
     override val extension: String get() = "json"
@@ -31,61 +34,111 @@ class DokkaJsonFormatService : FormatService {
 class DokkaJsonFormattedOutputBuilder(val to: StringBuilder) : FormattedOutputBuilder {
     override fun appendNodes(nodes: Iterable<DocumentationNode>) {
         val node = nodes.first()
-        when {
-            NodeKind.classLike.contains(node.kind) -> to.append(mapToJson(nodes.first(), -1).toString(2))
-            node.kind == NodeKind.Package          -> to.append(mapToJson(nodes.first(), 1).toString(2))
+
+        if (node.isClassLike) {
+            to.append(documentationNodeToClassDoc(node, true).toJson())
+        }
+        else if (node.kind == NodeKind.Package) {
+            to.append(documentationNodeToPackageDoc(node).toJson())
+        }
+        else {
+            // ignore, we are only documenting classes and packages for now
         }
     }
 
-    private fun mapToJson(node: DocumentationNode, depthRemaining: Int): JSONObject {
-        val obj = JSONObject()
+    private fun documentationNodeToPackageDoc(node: DocumentationNode): KotlinPackageDoc {
+        assert(node.kind == NodeKind.Package) { "node must be a Package" }
 
-        obj.put("name", node.simpleName())
-        obj.put("qualifiedName", node.qualifiedName())
-        obj.put("kind", node.kind.toString())
-        obj.put("classLike", NodeKind.classLike.contains(node.kind))
-        obj.put("comment", node.contentText)
-        obj.put("summary", node.summaryText)
-
-        if(NodeKind.classLike.contains(node.kind)) {
-            obj.put("package", node.path.map { it.name }.filterNot { it.isEmpty() }.first())
-        }
-
-        // always recurse, for Classdocs
-        if (depthRemaining == -1) {
-            println("recursing with ${node.members.size} members from ${node.qualifiedName()}")
-            obj.put("members", mapToJson(node.members, -1))
-
-        }
-
-        // recurse to a specified depth, for Packagedocs
-        else if (depthRemaining > 0) {
-            obj.put("members", mapToJson(node.members, depthRemaining - 1))
-        }
-
-        return obj
+        return KotlinPackageDoc(
+                node.members.filter { it.isClassLike }.map { documentationNodeToClassDoc(it, false) },
+                node.simpleName(),
+                node.qualifiedName(),
+                node.contentText,
+                node.summary.textLength
+        )
     }
 
-    private fun mapToJson(nodes: Iterable<DocumentationNode>, depthRemaining: Int): JSONArray {
-        val arr = JSONArray()
-        for (node in nodes) {
-            arr.put(mapToJson(node, depthRemaining))
-        }
-        return arr
+    private fun documentationNodeToClassDoc(node: DocumentationNode, deep: Boolean = false): KotlinClassDoc {
+        assert(node.isClassLike) { "node must be a Class-like" }
+
+        val constructors: List<KotlinConstructor> = if (deep) documentationNodeToClassDocConstructors(node) else emptyList()
+        val methods: List<KotlinMethod> = if (deep) documentationNodeToClassDocMethods(node) else emptyList()
+        val fields: List<KotlinField> = if (deep) documentationNodeToClassDocFields(node) else emptyList()
+
+        return KotlinClassDoc(
+                node.path.map { it.name }.filterNot { it.isEmpty() }.first(),
+                node.kind.toString(),
+                node.simpleName(),
+                node.qualifiedName(),
+                node.contentText,
+                node.summary.textLength,
+                constructors,
+                methods,
+                fields
+        )
     }
 
-    private val DocumentationNode.contentText: String
-        get() {
-            return extractContent(this.content.children)
-        }
+    private fun documentationNodeToClassDocConstructors(node: DocumentationNode): List<KotlinConstructor> {
+        assert(node.isClassLike) { "node must be a Class-like" }
+        return node.members.filter { it.isConstructor }.map { documentationNodeToConstructor(it) }
+    }
 
-    private val DocumentationNode.summaryText: String
-        get() {
-            return this.contentText.substring(0, this.summary.textLength)
-        }
+    private fun documentationNodeToConstructor(node: DocumentationNode): KotlinConstructor {
+        assert(node.isConstructor) { "node must be a Constructor" }
+        return KotlinConstructor(
+                node.simpleName(),
+                node.qualifiedName(),
+                node.contentText,
+                node.summary.textLength,
+                getModifiers(node)
+        )
+    }
+
+    private fun documentationNodeToClassDocMethods(node: DocumentationNode): List<KotlinMethod> {
+        assert(node.isClassLike) { "node must be a Class-like" }
+        return node.members.filter { it.isMethod }.map { documentationNodeToMethod(it) }
+    }
+
+    private fun documentationNodeToMethod(node: DocumentationNode): KotlinMethod {
+        assert(node.isMethod) { "node must be a Function" }
+        return KotlinMethod(
+                node.simpleName(),
+                node.qualifiedName(),
+                node.contentText,
+                node.summary.textLength,
+                getModifiers(node)
+        )
+    }
+
+    private fun documentationNodeToClassDocFields(node: DocumentationNode): List<KotlinField> {
+        assert(node.isClassLike) { "node must be a Class-like" }
+        return node.members.filter { it.isField }.map { documentationNodeToField(it) }
+    }
+
+    private fun documentationNodeToField(node: DocumentationNode): KotlinField {
+        assert(node.isField) { "node must be a Field or Property" }
+        return KotlinField(
+                node.simpleName(),
+                node.qualifiedName(),
+                node.contentText,
+                node.summary.textLength,
+                getModifiers(node)
+        )
+    }
 
 // Get String text from comments, with help from https://github.com/ScaCap/spring-auto-restdocs/tree/master/spring-auto-restdocs-dokka-json/src/main/kotlin/capital/scalable/dokka/json
 //----------------------------------------------------------------------------------------------------------------------
+
+    private val DocumentationNode.contentText: String get() = extractContent(this.content.children)
+    private val NodeKind.isClassLike: Boolean get() = NodeKind.classLike.contains(this)
+    private val DocumentationNode.isClassLike: Boolean get() = this.kind.isClassLike
+    private val DocumentationNode.isConstructor: Boolean get() = this.kind == NodeKind.Constructor
+    private val DocumentationNode.isMethod: Boolean get() = this.kind == NodeKind.Function
+    private val DocumentationNode.isField: Boolean get() = this.kind == NodeKind.Field || this.kind == NodeKind.Property
+
+    private fun getModifiers(node: DocumentationNode): List<String> {
+        return node.details.filter { it.kind == NodeKind.Modifier }.map { it.name }
+    }
 
     private fun extractContent(content: List<ContentNode>): String {
         return content.mapIndexed { index, it -> extractContent(it, topLevel = index == 0) }.joinToString("")
@@ -133,6 +186,5 @@ class DokkaJsonFormattedOutputBuilder(val to: StringBuilder) : FormattedOutputBu
     private fun wrap(prefix: String, suffix: String, body: String): String = "$prefix$body$suffix"
 
     private fun joinChildren(block: ContentBlock): String = block.children.joinToString("") { extractContent(it, topLevel = false) }
-
 
 }
