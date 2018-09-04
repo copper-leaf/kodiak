@@ -5,9 +5,11 @@ import org.jetbrains.dokka.FormatService
 import org.jetbrains.dokka.Formats.DefaultAnalysisComponent
 import org.jetbrains.dokka.Formats.FormatDescriptor
 import org.jetbrains.dokka.Formats.KotlinAsKotlin
+import org.jetbrains.dokka.FormattedOutputBuilder
 import org.jetbrains.dokka.Generator
 import org.jetbrains.dokka.KotlinLanguageService
 import org.jetbrains.dokka.LanguageService
+import org.jetbrains.dokka.Location
 import org.jetbrains.dokka.NodeLocationAwareGenerator
 import org.jetbrains.dokka.Utilities.bind
 import org.jetbrains.dokka.Utilities.lazyBind
@@ -28,5 +30,12 @@ class DokkaJsonFormatDescriptor : FormatDescriptor, DefaultAnalysisComponent {
         bind<LanguageService>() toType KotlinLanguageService::class
         lazyBind<FormatService>() toOptional DokkaJsonFormatService::class
     }
+}
 
+class DokkaJsonFormatService : FormatService {
+    override val extension: String get() = "json"
+
+    override fun createOutputBuilder(to: StringBuilder, location: Location): FormattedOutputBuilder {
+        return DokkaJsonFormatter(to)
+    }
 }
