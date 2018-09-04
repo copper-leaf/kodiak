@@ -115,7 +115,7 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private val DocumentationNode.isConstructor: Boolean get() = this.kind == NodeKind.Constructor
     private val DocumentationNode.isMethod: Boolean get() = this.kind == NodeKind.Function
     private val DocumentationNode.isField: Boolean get() = this.kind == NodeKind.Field || this.kind == NodeKind.Property
-    
+
     private val DocumentationNode.modifiers: List<String> get() = this.details.filter { it.kind == NodeKind.Modifier }.map { it.name }
-    
+
 }

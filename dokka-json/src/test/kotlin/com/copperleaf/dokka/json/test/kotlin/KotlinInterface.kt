@@ -1,7 +1,7 @@
-package com.copperleaf.dokka.json.test
+package com.copperleaf.dokka.json.test.kotlin
 
 /**
- * This is a Kotlin class
+ * This is a Kotlin interface
  */
 interface KotlinInterface {
 

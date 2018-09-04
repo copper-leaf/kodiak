@@ -92,18 +92,17 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
         return if (isPackage) {
             // leaf node, use file in owner's folder
             parts.joinToString("/") + (if (parts.none()) "" else "/") + "index"
-        } else {
+        }
+        else {
             parts.joinToString("/")
         }
     }
 
-
     private fun absolutePathToNode(node: DocumentationNode) = absolutePathToNode(node.path.map { it.name }, node.kind == NodeKind.Package)
 
-    fun overrideIdentifierToFilename(path: String): String {
+    private fun overrideIdentifierToFilename(path: String): String {
         val escaped = path.replace('<', '-').replace('>', '-')
         val lowercase = escaped.replace("[A-Z]".toRegex()) { matchResult -> matchResult.value.toLowerCase() }
-//    return lowercase.replace('.', '/')
-        return lowercase.replace('.', '-')
+        return lowercase.replace('.', '/')
     }
 }

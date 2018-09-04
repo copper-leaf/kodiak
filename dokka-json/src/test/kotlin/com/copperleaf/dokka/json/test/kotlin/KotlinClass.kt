@@ -1,9 +1,9 @@
-package com.copperleaf.dokka.json.test.camelCasePackage
+package com.copperleaf.dokka.json.test.kotlin
 
 /**
  * This is a Kotlin class
  */
-class KotlinClass2(
+class KotlinClass(
         /**
          * This is a property defined in the primary constructor
          */

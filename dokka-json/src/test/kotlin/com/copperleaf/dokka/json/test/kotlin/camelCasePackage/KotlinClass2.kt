@@ -1,4 +1,4 @@
-package com.copperleaf.dokka.json.test.camelCasePackage
+package com.copperleaf.dokka.json.test.kotlin.camelCasePackage
 
 /**
  * This is a Kotlin class

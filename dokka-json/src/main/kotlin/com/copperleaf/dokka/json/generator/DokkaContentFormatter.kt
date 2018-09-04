@@ -28,10 +28,12 @@ import org.jetbrains.dokka.ContentSymbol
 import org.jetbrains.dokka.ContentText
 import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
+import org.jetbrains.dokka.qualifiedName
 
 class DokkaContentFormatter(val node: DocumentationNode) {
 
     fun extractContent(): String {
+        println("Extracting content for node ${node.qualifiedName()}")
         return this.extractContent(node.content.children)
     }
 
@@ -40,6 +42,8 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun extractContent(content: ContentNode, topLevel: Boolean): String {
+        println("  ContentNode ${content.javaClass.simpleName}")
+
         when (content) {
             is ContentKeyword               -> return content.format(topLevel)
             is ContentIdentifier            -> return content.format(topLevel)

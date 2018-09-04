@@ -1,19 +1,24 @@
-package com.copperleaf.dokka.json.test
+package com.copperleaf.dokka.json.test.java;
 
 /**
- * This is a Kotlin class
+ * This is a Kotlin interface
  */
-interface KotlinInterface {
+public interface JavaInterface {
 
     /**
      * This is a method defined in the interface body
      */
-    fun interfaceMethod(): String
+    String interfaceMethod();
 
     /**
      * This is a property defined in the interface body
      */
-    val interfaceProperty: String
+    String getInterfaceProperty();
+
+    /**
+     * This is a property defined in the interface body
+     */
+    void setInterfaceProperty(String value);
 
     /**
      * This is a method defined in the interface body, which has parameters
@@ -21,6 +26,6 @@ interface KotlinInterface {
      * @param param This is the param for the method
      * @return This is the returned string value
      */
-    fun interfaceMethodWithParams(param: String): String
+    String interfaceMethodWithParams(String param);
 
 }

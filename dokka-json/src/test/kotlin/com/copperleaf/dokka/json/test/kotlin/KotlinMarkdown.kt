@@ -1,4 +1,4 @@
-package com.copperleaf.dokka.json.test
+package com.copperleaf.dokka.json.test.kotlin
 
 /**
  * Generators are what create the output pages within Orchid. Generators are run after all Options have been processed
@@ -33,7 +33,7 @@ package com.copperleaf.dokka.json.test
  * @since v1.0.0
  * @orchidApi extensible
  */
-class MarkdownDocumentation {
+class KotlinMarkdown {
 
 
 
