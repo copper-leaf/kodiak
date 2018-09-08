@@ -5,12 +5,13 @@ import com.copperleaf.dokka.json.models.KotlinConstructor
 import com.copperleaf.dokka.json.models.KotlinField
 import com.copperleaf.dokka.json.models.KotlinMethod
 import com.copperleaf.dokka.json.models.KotlinPackageDoc
+import com.copperleaf.dokka.json.models.KotlinParameter
+import com.copperleaf.dokka.json.models.KotlinReturnValue
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.FormattedOutputBuilder
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
-import org.jetbrains.dokka.qualifiedName
-import org.jetbrains.dokka.simpleName
+import org.jetbrains.dokka.qualifiedNameFromType
 
 class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     override fun appendNodes(nodes: Iterable<DocumentationNode>) {
@@ -32,8 +33,8 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
 
         return KotlinPackageDoc(
                 node.members.filter { it.classLike }.map { documentationNodeToClassDoc(it, false) },
-                node.simpleName(),
-                node.qualifiedName(),
+                node.simpleName,
+                node.qualifiedName,
                 node.contentText,
                 node.summary.textLength
         )
@@ -49,8 +50,8 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
         return KotlinClassDoc(
                 node.path.map { it.name }.filterNot { it.isEmpty() }.first(),
                 node.kind.toString(),
-                node.simpleName(),
-                node.qualifiedName(),
+                node.simpleName,
+                node.qualifiedName,
                 node.contentText,
                 node.summary.textLength,
                 constructors,
@@ -67,11 +68,13 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private fun documentationNodeToConstructor(node: DocumentationNode): KotlinConstructor {
         assert(node.isConstructor) { "node must be a Constructor" }
         return KotlinConstructor(
-                node.simpleName(),
-                node.qualifiedName(),
+                node.simpleName,
+                node.qualifiedName,
                 node.contentText,
                 node.summary.textLength,
-                node.modifiers
+                node.modifiers,
+                node.parameters,
+                node.signature
         )
     }
 
@@ -83,11 +86,14 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private fun documentationNodeToMethod(node: DocumentationNode): KotlinMethod {
         assert(node.isMethod) { "node must be a Function" }
         return KotlinMethod(
-                node.simpleName(),
-                node.qualifiedName(),
+                node.simpleName,
+                node.qualifiedName,
                 node.contentText,
                 node.summary.textLength,
-                node.modifiers
+                node.modifiers,
+                node.parameters,
+                node.returnValue,
+                node.signature
         )
     }
 
@@ -99,11 +105,13 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private fun documentationNodeToField(node: DocumentationNode): KotlinField {
         assert(node.isField) { "node must be a Field or Property" }
         return KotlinField(
-                node.simpleName(),
-                node.qualifiedName(),
+                node.simpleName,
+                node.qualifiedName,
                 node.contentText,
                 node.summary.textLength,
-                node.modifiers
+                node.modifiers,
+                node.type,
+                node.signature
         )
     }
 
@@ -117,5 +125,66 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private val DocumentationNode.isField: Boolean get() = this.kind == NodeKind.Field || this.kind == NodeKind.Property
 
     private val DocumentationNode.modifiers: List<String> get() = this.details.filter { it.kind == NodeKind.Modifier }.map { it.name }
+
+    private val DocumentationNode.parameters: List<KotlinParameter>
+        get() {
+            return this.details
+                    .filter { it.kind == NodeKind.Parameter }
+                    .map {
+                        KotlinParameter(
+                                it.simpleName,
+                                it.qualifiedName,
+                                it.contentText,
+                                it.summary.textLength,
+                                it.type
+                        )
+                    }
+        }
+
+    private val DocumentationNode.returnValue: KotlinReturnValue
+        get() {
+            val it = this.details.find { it.kind == NodeKind.Type }
+            if (it == null) {
+                throw IllegalArgumentException("node does not have a return value")
+            }
+            else {
+                return KotlinReturnValue(
+                        it.simpleName,
+                        it.qualifiedName,
+                        it.contentText,
+                        it.summary.textLength,
+                        it.type
+                )
+            }
+        }
+
+    private val DocumentationNode.signature: String
+        get() {
+            return this.details.first { it.kind == NodeKind.Signature }.simpleName
+        }
+
+    private val DocumentationNode.qualifiedName: String
+        get() {
+            if (kind == NodeKind.Type) {
+                return qualifiedNameFromType()
+            }
+            return path.drop(1).map { it.name }.filter { it.length > 0 }.joinToString(".")
+        }
+
+    private val DocumentationNode.simpleName: String
+        get() {
+            if (kind == NodeKind.Type) {
+                return qualifiedNameFromType()
+            }
+            return path.drop(1).map { it.name }.filter { it.length > 0 }.last().substringAfter('$')
+        }
+
+    private val DocumentationNode.type: String
+        get() {
+            if (kind == NodeKind.Type) {
+                return qualifiedNameFromType()
+            }
+            return this.details.firstOrNull { it.kind == NodeKind.Type }?.qualifiedNameFromType() ?: ""
+        }
 
 }

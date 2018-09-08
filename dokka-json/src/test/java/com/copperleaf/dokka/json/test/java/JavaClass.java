@@ -27,6 +27,13 @@ public class JavaClass {
     }
 
     /**
+     * This is a method defined in the class body which returns nothing
+     */
+    public void voidMethod() {
+
+    }
+
+    /**
      * This is a method defined in the class body, which has parameters
      *
      * @param param This is the param for the method

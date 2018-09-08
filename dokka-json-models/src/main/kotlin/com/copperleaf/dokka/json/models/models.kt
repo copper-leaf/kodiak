@@ -64,7 +64,9 @@ data class KotlinConstructor(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        override val modifiers: List<String>
+        override val modifiers: List<String>,
+        val parameters: List<KotlinParameter>,
+        val signature: String
 ) : KotlinMemberlike {
     override val kind = "Constructor"
 }
@@ -78,7 +80,10 @@ data class KotlinMethod(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        override val modifiers: List<String>
+        override val modifiers: List<String>,
+        val parameters: List<KotlinParameter>,
+        val returnValue: KotlinReturnValue,
+        val signature: String
 ) : KotlinMemberlike {
     override val kind = "Method"
 }
@@ -92,7 +97,37 @@ data class KotlinField(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        override val modifiers: List<String>
+        override val modifiers: List<String>,
+        val type: String,
+        val signature: String
 ) : KotlinMemberlike {
     override val kind = "Field"
+}
+
+/**
+ * The docs for a parameter of a constructor or method
+ */
+@Serializable
+data class KotlinParameter(
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        val type: String
+) : KotlinDocElement {
+    override val kind = "Parameter"
+}
+
+/**
+ * The docs for a parameter of a constructor or method
+ */
+@Serializable
+data class KotlinReturnValue(
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+        val type: String
+) : KotlinDocElement {
+    override val kind = "ReturnValue"
 }

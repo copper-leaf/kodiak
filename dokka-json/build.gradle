@@ -35,6 +35,7 @@ task runDokkaWithJsonFormatter(type: JavaExec) {
     classpath = configurations.dokka
     args = [
             "-format", "json",
+            "-noStdlibLink",
             "-src", "${project.projectDir}/src/test/kotlin:${project.projectDir}/src/test/java",
             "-output", "${project.buildDir}/docs/dokkaJson"
     ]

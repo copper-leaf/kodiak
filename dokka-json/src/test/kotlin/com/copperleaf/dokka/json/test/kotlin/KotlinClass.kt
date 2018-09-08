@@ -23,7 +23,6 @@ class KotlinClass(
          * This is the getter for getterSetterProperty
          */
         get() = ""
-
         /**
          * This is the setter for getterSetterProperty
          */
@@ -37,6 +36,13 @@ class KotlinClass(
      */
     fun classMethod(): String? {
         return null
+    }
+
+    /**
+     * This is a method defined in the class body which returns nothing
+     */
+    fun voidMethod() {
+
     }
 
     /**
