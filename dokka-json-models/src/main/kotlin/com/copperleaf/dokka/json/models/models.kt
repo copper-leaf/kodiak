@@ -17,7 +17,8 @@ data class KotlinClassDoc(
         override val summaryPos: Int,
         val constructors: List<KotlinConstructor>,
         val methods: List<KotlinMethod>,
-        val fields: List<KotlinField>
+        val fields: List<KotlinField>,
+        val extensions: List<KotlinMethod>
 ) : KotlinClasslike {
     companion object {
         fun fromJson(json: String): KotlinClassDoc {
@@ -37,6 +38,7 @@ data class KotlinClassDoc(
 @Serializable
 data class KotlinPackageDoc(
         val classes: List<KotlinClassDoc>,
+        val methods: List<KotlinMethod>,
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,

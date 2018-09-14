@@ -18,100 +18,83 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
         val node = nodes.first()
 
         if (node.classLike) {
-            to.append(documentationNodeToClassDoc(node, true).toJson())
+            to.append(node.toClassDoc(true).toJson())
         }
         else if (node.kind == NodeKind.Package) {
-            to.append(documentationNodeToPackageDoc(node).toJson())
+            to.append(node.toPackageDoc().toJson())
         }
         else {
             // ignore, we are only documenting classes and packages for now
         }
     }
 
-    private fun documentationNodeToPackageDoc(node: DocumentationNode): KotlinPackageDoc {
-        assert(node.kind == NodeKind.Package) { "node must be a Package" }
+    private fun DocumentationNode.toPackageDoc(): KotlinPackageDoc {
+        assert(this.kind == NodeKind.Package) { "node must be a Package" }
 
         return KotlinPackageDoc(
-                node.members.filter { it.classLike }.map { documentationNodeToClassDoc(it, false) },
-                node.simpleName,
-                node.qualifiedName,
-                node.contentText,
-                node.summary.textLength
+                this.members.filter { it.classLike }.map { it.toClassDoc(false) },
+                this.members.filter { it.isMethod }.map { it.toMethod() },
+                this.simpleName,
+                this.qualifiedName,
+                this.contentText,
+                this.summary.textLength
         )
     }
 
-    private fun documentationNodeToClassDoc(node: DocumentationNode, deep: Boolean = false): KotlinClassDoc {
-        assert(node.classLike) { "node must be a Class-like" }
-
-        val constructors: List<KotlinConstructor> = if (deep) documentationNodeToClassDocConstructors(node) else emptyList()
-        val methods: List<KotlinMethod> = if (deep) documentationNodeToClassDocMethods(node) else emptyList()
-        val fields: List<KotlinField> = if (deep) documentationNodeToClassDocFields(node) else emptyList()
+    private fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClassDoc {
+        assert(this.classLike) { "node must be a Class-like" }
 
         return KotlinClassDoc(
-                node.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-                node.kind.toString(),
-                node.simpleName,
-                node.qualifiedName,
-                node.contentText,
-                node.summary.textLength,
-                constructors,
-                methods,
-                fields
+                this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
+                this.kind.toString(),
+                this.simpleName,
+                this.qualifiedName,
+                this.contentText,
+                this.summary.textLength,
+                if (deep) this.members.filter { it.isConstructor }.map { it.toConstructor() } else emptyList(),
+                if (deep) this.members.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
+                if (deep) this.members.filter { it.isField }.map { it.toField() } else emptyList(),
+                if (deep) this.extensions.filter { it.isMethod }.map { it.toMethod() } else emptyList()
         )
     }
 
-    private fun documentationNodeToClassDocConstructors(node: DocumentationNode): List<KotlinConstructor> {
-        assert(node.classLike) { "node must be a Class-like" }
-        return node.members.filter { it.isConstructor }.map { documentationNodeToConstructor(it) }
-    }
-
-    private fun documentationNodeToConstructor(node: DocumentationNode): KotlinConstructor {
-        assert(node.isConstructor) { "node must be a Constructor" }
+    private fun DocumentationNode.toConstructor(): KotlinConstructor {
+        assert(this.isConstructor) { "node must be a Constructor" }
         return KotlinConstructor(
-                node.simpleName,
-                node.qualifiedName,
-                node.contentText,
-                node.summary.textLength,
-                node.modifiers,
-                node.parameters,
-                node.signature
+                this.simpleName,
+                this.qualifiedName,
+                this.contentText,
+                this.summary.textLength,
+                this.modifiers,
+                this.parameters,
+                this.signature
         )
     }
 
-    private fun documentationNodeToClassDocMethods(node: DocumentationNode): List<KotlinMethod> {
-        assert(node.classLike) { "node must be a Class-like" }
-        return node.members.filter { it.isMethod }.map { documentationNodeToMethod(it) }
-    }
-
-    private fun documentationNodeToMethod(node: DocumentationNode): KotlinMethod {
-        assert(node.isMethod) { "node must be a Function" }
+    private fun DocumentationNode.toMethod(): KotlinMethod {
+        assert(this.isMethod) { "node must be a Function" }
         return KotlinMethod(
-                node.simpleName,
-                node.qualifiedName,
-                node.contentText,
-                node.summary.textLength,
-                node.modifiers,
-                node.parameters,
-                node.returnValue,
-                node.signature
+                this.simpleName,
+                this.qualifiedName,
+                this.contentText,
+                this.summary.textLength,
+                this.modifiers,
+                this.parameters,
+                this.returnValue,
+                this.signature
         )
     }
 
-    private fun documentationNodeToClassDocFields(node: DocumentationNode): List<KotlinField> {
-        assert(node.classLike) { "node must be a Class-like" }
-        return node.members.filter { it.isField }.map { documentationNodeToField(it) }
-    }
-
-    private fun documentationNodeToField(node: DocumentationNode): KotlinField {
-        assert(node.isField) { "node must be a Field or Property" }
+    private fun DocumentationNode.toField(): KotlinField {
+        assert(this.isField) { "node must be a Field or Property" }
         return KotlinField(
-                node.simpleName,
-                node.qualifiedName,
-                node.contentText,
-                node.summary.textLength,
-                node.modifiers,
-                node.type,
-                node.signature
+                this.simpleName,
+                this.qualifiedName,
+                this.contentText,
+                this.summary.textLength,
+                this.modifiers,
+                this.type,
+                this.signature
         )
     }
 
