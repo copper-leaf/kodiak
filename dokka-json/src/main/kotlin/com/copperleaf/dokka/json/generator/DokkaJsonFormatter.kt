@@ -31,9 +31,18 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
     private fun DocumentationNode.toPackageDoc(): KotlinPackageDoc {
         assert(this.kind == NodeKind.Package) { "node must be a Package" }
 
+        val internalMethods = this.members
+                .filter { it.isMethod }
+                .map { it.toMethod() }
+        val externalMethods = this.members
+                .filter { it.kind == NodeKind.ExternalClass }
+                .flatMap { it.members }
+                .filter { it.isMethod }
+                .map { it.toMethod() }
+
         return KotlinPackageDoc(
                 this.members.filter { it.classLike }.map { it.toClassDoc(false) },
-                this.members.filter { it.isMethod }.map { it.toMethod() },
+                internalMethods + externalMethods,
                 this.simpleName,
                 this.qualifiedName,
                 this.contentText,
