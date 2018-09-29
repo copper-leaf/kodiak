@@ -22,11 +22,33 @@ class DokkaJsonRunnerTest {
     lateinit var resolver: MavenResolver
     lateinit var dokkaRunner: KotlindocInvoker
 
+    private val useTempDirs = false
+
+    private fun initTempDirs() {
+        cacheDir = Files.createTempDirectory("DokkaJsonRunnerTest")
+        outputDir = Files.createTempDirectory("dokkaTestOutput")
+    }
+    private fun cleanupTempDirs() {
+        cacheDir.toFile().deleteRecursively()
+        outputDir.toFile().deleteRecursively()
+    }
+
+    private fun initProjectDirs() {
+        cacheDir = File("../dokka-json/build/dokka/cache").canonicalFile.toPath()
+        outputDir = File("../dokka-json/build/dokka/output").canonicalFile.toPath()
+        outputDir.toFile().deleteRecursively()
+        outputDir.toFile().mkdirs()
+    }
+    private fun cleanupProjectDirs() {
+
+    }
+
     @BeforeEach
     internal fun setUp() {
         client = OkHttpClient.Builder().build()
-        cacheDir = Files.createTempDirectory("DokkaJsonRunnerTest")
-        outputDir = Files.createTempDirectory("dokkaTestOutput")
+
+        if(useTempDirs) initTempDirs() else initProjectDirs()
+
         resolver = MavenResolverImpl(client, cacheDir)
         dokkaRunner = KotlindocInvokerImpl(resolver, outputDir, listOf(
                 Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.60"),
@@ -40,8 +62,7 @@ class DokkaJsonRunnerTest {
 
     @AfterEach
     internal fun tearDown() {
-        cacheDir.toFile().deleteRecursively()
-        outputDir.toFile().deleteRecursively()
+        if(useTempDirs) cleanupTempDirs() else cleanupProjectDirs()
     }
 
     @Test

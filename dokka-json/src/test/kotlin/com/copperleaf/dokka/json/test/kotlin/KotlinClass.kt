@@ -32,6 +32,11 @@ class KotlinClass(
         }
 
     /**
+     * This is a property defined in the class body, using an internal type
+     */
+    lateinit var classInternalProperty: KotlinInterface
+
+    /**
      * This is a method defined in the class body
      */
     fun classMethod(): String? {
@@ -52,6 +57,17 @@ class KotlinClass(
      * @return This is the returned string value
      */
     fun classMethodWithParams(param: String): String? {
+        return null
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param1 This is the param1 for the method
+     * @param param2 This is the param2 for the method
+     * @return This is the returned string value
+     */
+    fun classMethodWithInternalParams(param1: KotlinInterface, param2: KotlinMarkdown): KotlinInterface? {
         return null
     }
 

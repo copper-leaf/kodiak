@@ -7,6 +7,7 @@ import com.copperleaf.dokka.json.models.KotlinMethod
 import com.copperleaf.dokka.json.models.KotlinPackageDoc
 import com.copperleaf.dokka.json.models.KotlinParameter
 import com.copperleaf.dokka.json.models.KotlinReturnValue
+import com.copperleaf.dokka.json.models.SignatureComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.FormattedOutputBuilder
 import org.jetbrains.dokka.NodeKind
@@ -69,41 +70,55 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
 
     private fun DocumentationNode.toConstructor(): KotlinConstructor {
         assert(this.isConstructor) { "node must be a Constructor" }
+        val modifiers = this.modifiers
+        val parameters = this.parameters
         return KotlinConstructor(
                 this.simpleName,
                 this.qualifiedName,
                 this.contentText,
                 this.summary.textLength,
-                this.modifiers,
-                this.parameters,
-                this.signature
+                modifiers,
+                parameters,
+                this.constructorSignature(
+                        modifiers,
+                        parameters
+                )
         )
     }
 
     private fun DocumentationNode.toMethod(): KotlinMethod {
         assert(this.isMethod) { "node must be a Function" }
+        val modifiers = this.modifiers
+        val parameters = this.parameters
+        val returnValue = this.returnValue
         return KotlinMethod(
                 this.simpleName,
                 this.qualifiedName,
                 this.contentText,
                 this.summary.textLength,
-                this.modifiers,
-                this.parameters,
-                this.returnValue,
-                this.signature
+                modifiers,
+                parameters,
+                returnValue,
+                this.methodSignature(
+                        modifiers,
+                        parameters,
+                        returnValue
+                )
         )
     }
 
     private fun DocumentationNode.toField(): KotlinField {
         assert(this.isField) { "node must be a Field or Property" }
+        val modifiers = this.modifiers
         return KotlinField(
                 this.simpleName,
                 this.qualifiedName,
                 this.contentText,
                 this.summary.textLength,
-                this.modifiers,
-                this.type,
-                this.signature
+                modifiers,
+                this.simpleType,
+                this.qualifiedType,
+                this.fieldSignature(modifiers)
         )
     }
 
@@ -128,7 +143,8 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
                                 it.qualifiedName,
                                 it.contentText,
                                 it.summary.textLength,
-                                it.type
+                                it.simpleType,
+                                it.qualifiedType
                         )
                     }
         }
@@ -145,38 +161,120 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
                         it.qualifiedName,
                         it.contentText,
                         it.summary.textLength,
-                        it.type
+                        it.simpleType
                 )
             }
         }
 
-    private val DocumentationNode.signature: String
+    private fun DocumentationNode.constructorSignature(
+            modifiers: List<String>,
+            parameters: List<KotlinParameter>
+    ): List<SignatureComponent> {
+        val signatureComponents = mutableListOf<SignatureComponent>()
+
+        for (modifier in modifiers) {
+            signatureComponents.add(SignatureComponent("modifier", "$modifier ", ""))
+        }
+        signatureComponents.add(SignatureComponent("keyword", "constructor", ""))
+
+        signatureComponents.add(SignatureComponent("punctuation", "(", ""))
+        parameters.forEachIndexed { index, parameter ->
+            signatureComponents.add(SignatureComponent("name", parameter.name, ""))
+            signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
+            signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
+
+            if (index < parameters.size - 1) {
+                signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
+            }
+        }
+        signatureComponents.add(SignatureComponent("punctuation", ")", ""))
+
+        return signatureComponents
+    }
+
+    private fun DocumentationNode.methodSignature(
+            modifiers: List<String>,
+            parameters: List<KotlinParameter>,
+            returnValue: KotlinReturnValue
+    ): List<SignatureComponent> {
+        val signatureComponents = mutableListOf<SignatureComponent>()
+
+        for (modifier in modifiers) {
+            signatureComponents.add(SignatureComponent("modifier", "$modifier ", ""))
+        }
+        signatureComponents.add(SignatureComponent("keyword", "fun ", ""))
+        signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
+
+        signatureComponents.add(SignatureComponent("punctuation", "(", ""))
+        parameters.forEachIndexed { index, parameter ->
+            signatureComponents.add(SignatureComponent("name", parameter.name, ""))
+            signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
+            signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
+
+            if (index < parameters.size - 1) {
+                signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
+            }
+        }
+        signatureComponents.add(SignatureComponent("punctuation", ")", ""))
+
+        if (returnValue.name != "Unit") {
+            signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
+            signatureComponents.add(SignatureComponent("type", returnValue.name, returnValue.qualifiedName))
+        }
+
+        return signatureComponents
+    }
+
+    private fun DocumentationNode.fieldSignature(
+            modifiers: List<String>
+    ): List<SignatureComponent> {
+        val signatureComponents = mutableListOf<SignatureComponent>()
+
+        for (modifier in modifiers) {
+            signatureComponents.add(SignatureComponent("modifier", "$modifier ", ""))
+        }
+        signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
+        signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
+        signatureComponents.add(SignatureComponent("type", this.simpleType, this.qualifiedType))
+
+        return signatureComponents
+    }
+
+    private val DocumentationNode.simpleName: String
         get() {
-            return this.details.first { it.kind == NodeKind.Signature }.simpleName
+            return path.drop(1).map { it.name }.filter { it.isNotEmpty() }.last().substringAfter('$')
         }
 
     private val DocumentationNode.qualifiedName: String
         get() {
-            if (kind == NodeKind.Type) {
-                return qualifiedNameFromType()
+            return if(kind == NodeKind.Type) {
+                this.qualifiedNameFromType()
             }
-            return path.drop(1).map { it.name }.filter { it.length > 0 }.joinToString(".")
+            else {
+                path.drop(1).map { it.name }.filter { it.isNotEmpty() }.joinToString(".")
+            }
         }
 
-    private val DocumentationNode.simpleName: String
+    private val DocumentationNode.simpleType: String
         get() {
-            if (kind == NodeKind.Type) {
-                return qualifiedNameFromType()
-            }
-            return path.drop(1).map { it.name }.filter { it.length > 0 }.last().substringAfter('$')
+            return (
+                    if (kind == NodeKind.Type)
+                        this
+                    else
+                        this.details.firstOrNull { it.kind == NodeKind.Type }
+                    )
+                    ?.simpleName ?: ""
         }
 
-    private val DocumentationNode.type: String
+    private val DocumentationNode.qualifiedType: String
         get() {
-            if (kind == NodeKind.Type) {
-                return qualifiedNameFromType()
-            }
-            return this.details.firstOrNull { it.kind == NodeKind.Type }?.qualifiedNameFromType() ?: ""
+            return (
+                    if (kind == NodeKind.Type)
+                        this
+                    else
+                        this.details.firstOrNull { it.kind == NodeKind.Type }
+                    )
+                    ?.qualifiedName ?: ""
         }
 
 }

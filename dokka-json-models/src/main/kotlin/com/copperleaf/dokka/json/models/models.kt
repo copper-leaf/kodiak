@@ -76,7 +76,8 @@ data class KotlinConstructor(
         override val summaryPos: Int,
         override val modifiers: List<String>,
         val parameters: List<KotlinParameter>,
-        val signature: String
+        val signature: List<SignatureComponent>,
+        val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinMemberlike {
     override val kind = "Constructor"
 }
@@ -93,7 +94,8 @@ data class KotlinMethod(
         override val modifiers: List<String>,
         val parameters: List<KotlinParameter>,
         val returnValue: KotlinReturnValue,
-        val signature: String
+        val signature: List<SignatureComponent>,
+        val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinMemberlike {
     override val kind = "Method"
 }
@@ -109,7 +111,9 @@ data class KotlinField(
         override val summaryPos: Int,
         override val modifiers: List<String>,
         val type: String,
-        val signature: String
+        val qualifiedType: String,
+        val signature: List<SignatureComponent>,
+        val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinMemberlike {
     override val kind = "Field"
 }
@@ -123,7 +127,8 @@ data class KotlinParameter(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        val type: String
+        val type: String,
+        val qualifiedType: String
 ) : KotlinDocElement {
     override val kind = "Parameter"
 }
@@ -141,3 +146,14 @@ data class KotlinReturnValue(
 ) : KotlinDocElement {
     override val kind = "ReturnValue"
 }
+
+/**
+ * A component to the rich signature. The complete signature can be created by joining all components together,
+ * optionally generating
+ */
+@Serializable
+data class SignatureComponent(
+        val kind: String,
+        val name: String,
+        val qualifiedName: String
+)
