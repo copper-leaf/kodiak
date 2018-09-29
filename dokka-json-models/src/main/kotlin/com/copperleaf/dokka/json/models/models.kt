@@ -4,6 +4,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JSON
 
 /**
+ * The result of executing Dokka and transforming the results to JSON.
+ */
+class KotlinRootdoc(
+        val packages: List<KotlinPackageDoc>,
+        val classes: List<KotlinClassDoc>
+)
+
+/**
  * The docs for a single class. Includes a list of the constructors, methods, and fields in the class, as well as the
  * KDoc comment on the class.
  */
