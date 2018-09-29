@@ -1,4 +1,4 @@
-package com.copperleaf.dokka.json.generator
+package com.copperleaf.dokka.json.generator.formatter
 
 import org.jetbrains.dokka.ContentBlock
 import org.jetbrains.dokka.ContentBlockCode
@@ -28,6 +28,8 @@ import org.jetbrains.dokka.ContentSymbol
 import org.jetbrains.dokka.ContentText
 import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
+
+val DocumentationNode.contentText: String get() = DokkaContentFormatter(this).extractContent()
 
 @Suppress("UNUSED_PARAMETER")
 class DokkaContentFormatter(val node: DocumentationNode) {
