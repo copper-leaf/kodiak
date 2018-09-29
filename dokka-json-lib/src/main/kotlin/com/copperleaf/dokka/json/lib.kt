@@ -11,6 +11,7 @@ import org.xml.sax.InputSource
 import java.io.File
 import java.io.InputStream
 import java.io.StringReader
+import java.nio.file.Files
 import java.nio.file.Path
 import java.util.ArrayDeque
 import java.util.concurrent.Executors
@@ -21,6 +22,7 @@ import javax.xml.xpath.XPathFactory
 
 interface KotlindocInvoker {
     fun getRootDoc(sourceDirs: List<Path>, args: List<String>, callback: (InputStream) -> Runnable): KotlinRootdoc
+    fun loadCachedRootDoc(): KotlinRootdoc?
 }
 interface MavenResolver {
     fun getMavenJars(targets: List<Artifact>): List<Artifact>
@@ -81,6 +83,15 @@ class KotlindocInvokerImpl(
         val dokkaJarPaths = mavenResolver.getMavenJars(targets)
         executeDokka(dokkaJarPaths, sourceDirs, args) { callback(it) }
         return getKotlinRootdoc()
+    }
+
+    override fun loadCachedRootDoc(): KotlinRootdoc? {
+        return if(Files.exists(dokkaOutputPath) && dokkaOutputPath.toFile().list().isNotEmpty()) {
+            getKotlinRootdoc()
+        }
+        else {
+            null
+        }
     }
 
 // Run Dokka
