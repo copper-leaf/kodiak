@@ -112,6 +112,7 @@ data class KotlinField(
         override val modifiers: List<String>,
         val type: String,
         val qualifiedType: String,
+        val nullable: Boolean,
         val signature: List<SignatureComponent>,
         val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinMemberlike {
@@ -129,6 +130,7 @@ data class KotlinParameter(
         override val summaryPos: Int,
         val type: String,
         val qualifiedType: String,
+        val nullable: Boolean,
         val defaultValue: String?
 ) : KotlinDocElement {
     override val kind = "Parameter"
@@ -143,7 +145,8 @@ data class KotlinReturnValue(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        val type: String
+        val type: String,
+        val nullable: Boolean
 ) : KotlinDocElement {
     override val kind = "ReturnValue"
 }

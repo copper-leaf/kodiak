@@ -32,27 +32,9 @@ fun DocumentationNode.constructorSignature(
 ): List<SignatureComponent> {
     val signatureComponents = mutableListOf<SignatureComponent>()
 
-    for (modifier in modifiers) {
-        signatureComponents.add(SignatureComponent("modifier", "$modifier ", ""))
-    }
+    signatureComponents.appendModifierList(modifiers)
     signatureComponents.add(SignatureComponent("keyword", "constructor", ""))
-
-    signatureComponents.add(SignatureComponent("punctuation", "(", ""))
-    parameters.forEachIndexed { index, parameter ->
-        signatureComponents.add(SignatureComponent("name", parameter.name, ""))
-        signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-        signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
-
-        if(parameter.defaultValue != null) {
-            signatureComponents.add(SignatureComponent("punctuation", " = ", ""))
-            signatureComponents.add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
-        }
-
-        if (index < parameters.size - 1) {
-            signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
-        }
-    }
-    signatureComponents.add(SignatureComponent("punctuation", ")", ""))
+    signatureComponents.appendParameterList(parameters)
 
     return signatureComponents
 }

@@ -37,32 +37,17 @@ fun DocumentationNode.methodSignature(
 ): List<SignatureComponent> {
     val signatureComponents = mutableListOf<SignatureComponent>()
 
-    for (modifier in modifiers) {
-        signatureComponents.add(SignatureComponent("modifier", "$modifier ", ""))
-    }
+    signatureComponents.appendModifierList(modifiers)
     signatureComponents.add(SignatureComponent("keyword", "fun ", ""))
     signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
-
-    signatureComponents.add(SignatureComponent("punctuation", "(", ""))
-    parameters.forEachIndexed { index, parameter ->
-        signatureComponents.add(SignatureComponent("name", parameter.name, ""))
-        signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-        signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
-
-        if(parameter.defaultValue != null) {
-            signatureComponents.add(SignatureComponent("punctuation", " = ", ""))
-            signatureComponents.add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
-        }
-
-        if (index < parameters.size - 1) {
-            signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
-        }
-    }
-    signatureComponents.add(SignatureComponent("punctuation", ")", ""))
+    signatureComponents.appendParameterList(parameters)
 
     if (returnValue.name != "Unit") {
         signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
         signatureComponents.add(SignatureComponent("type", returnValue.name, returnValue.qualifiedName))
+        if(returnValue.nullable) {
+            signatureComponents.add(SignatureComponent("punctuation", "?", ""))
+        }
     }
 
     return signatureComponents
@@ -76,6 +61,7 @@ val DocumentationNode.returnValue: KotlinReturnValue
                 it.qualifiedName,
                 it.contentText,
                 it.summary.textLength,
-                it.simpleType
+                it.simpleType,
+                it.details(NodeKind.NullabilityModifier).singleOrNull() != null
         )
     }

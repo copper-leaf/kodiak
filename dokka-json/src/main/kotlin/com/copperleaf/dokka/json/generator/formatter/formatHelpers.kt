@@ -1,6 +1,7 @@
 package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinParameter
+import com.copperleaf.dokka.json.models.SignatureComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
@@ -21,6 +22,7 @@ val DocumentationNode.parameters: List<KotlinParameter>
                             it.summary.textLength,
                             it.simpleType,
                             it.qualifiedType,
+                            it.detailOrNull(NodeKind.Type)?.details(NodeKind.NullabilityModifier)?.singleOrNull() != null,
                             it.detailOrNull(NodeKind.Value)?.name
                     )
                 }
@@ -50,3 +52,32 @@ val DocumentationNode.qualifiedType: String
     get() {
         return (if (kind == NodeKind.Type) this else this.detail(NodeKind.Type)).qualifiedName
     }
+
+fun MutableList<SignatureComponent>.appendModifierList(modifiers: List<String>) {
+    for (modifier in modifiers) {
+        add(SignatureComponent("modifier", "$modifier ", ""))
+    }
+}
+
+fun MutableList<SignatureComponent>.appendParameterList(params: List<KotlinParameter>) {
+    add(SignatureComponent("punctuation", "(", ""))
+    params.forEachIndexed { index, parameter ->
+        add(SignatureComponent("name", parameter.name, ""))
+        add(SignatureComponent("punctuation", ": ", ""))
+        add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
+
+        if(parameter.nullable) {
+            add(SignatureComponent("punctuation", "?", ""))
+        }
+
+        if(parameter.defaultValue != null) {
+            add(SignatureComponent("punctuation", " = ", ""))
+            add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
+        }
+
+        if (index < params.size - 1) {
+            add(SignatureComponent("punctuation", ", ", ""))
+        }
+    }
+    add(SignatureComponent("punctuation", ")", ""))
+}
