@@ -49,6 +49,11 @@ fun DocumentationNode.methodSignature(
         signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
         signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
 
+        if(parameter.defaultValue != null) {
+            signatureComponents.add(SignatureComponent("punctuation", " = ", ""))
+            signatureComponents.add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
+        }
+
         if (index < parameters.size - 1) {
             signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
         }
@@ -65,17 +70,12 @@ fun DocumentationNode.methodSignature(
 
 val DocumentationNode.returnValue: KotlinReturnValue
     get() {
-        val it = this.details.find { it.kind == NodeKind.Type }
-        if (it == null) {
-            throw IllegalArgumentException("node does not have a return value")
-        }
-        else {
-            return KotlinReturnValue(
-                    it.simpleName,
-                    it.qualifiedName,
-                    it.contentText,
-                    it.summary.textLength,
-                    it.simpleType
-            )
-        }
+        val it = this.detail(NodeKind.Type)
+        return KotlinReturnValue(
+                it.simpleName,
+                it.qualifiedName,
+                it.contentText,
+                it.summary.textLength,
+                it.simpleType
+        )
     }

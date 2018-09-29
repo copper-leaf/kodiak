@@ -6,12 +6,13 @@ import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedNameFromType
 
-val DocumentationNode.modifiers: List<String> get() = this.details.filter { it.kind == NodeKind.Modifier }.map { it.name }
+val DocumentationNode.modifiers: List<String> get() = this.details(NodeKind.Modifier)
+        .map { it.name }
+        .filter { !arrayOf("public", "final").contains(it) }
 
 val DocumentationNode.parameters: List<KotlinParameter>
     get() {
-        return this.details
-                .filter { it.kind == NodeKind.Parameter }
+        return this.details(NodeKind.Parameter)
                 .map {
                     KotlinParameter(
                             it.simpleName,
@@ -19,7 +20,8 @@ val DocumentationNode.parameters: List<KotlinParameter>
                             it.contentText,
                             it.summary.textLength,
                             it.simpleType,
-                            it.qualifiedType
+                            it.qualifiedType,
+                            it.detailOrNull(NodeKind.Value)?.name
                     )
                 }
     }
@@ -41,22 +43,10 @@ val DocumentationNode.qualifiedName: String
 
 val DocumentationNode.simpleType: String
     get() {
-        return (
-                if (kind == NodeKind.Type)
-                    this
-                else
-                    this.details.firstOrNull { it.kind == NodeKind.Type }
-                )
-                ?.simpleName ?: ""
+        return (if (kind == NodeKind.Type) this else this.detail(NodeKind.Type)).simpleName
     }
 
 val DocumentationNode.qualifiedType: String
     get() {
-        return (
-                if (kind == NodeKind.Type)
-                    this
-                else
-                    this.details.firstOrNull { it.kind == NodeKind.Type }
-                )
-                ?.qualifiedName ?: ""
+        return (if (kind == NodeKind.Type) this else this.detail(NodeKind.Type)).qualifiedName
     }

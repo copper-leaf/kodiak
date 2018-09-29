@@ -43,6 +43,11 @@ fun DocumentationNode.constructorSignature(
         signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
         signatureComponents.add(SignatureComponent("type", parameter.type, parameter.qualifiedType))
 
+        if(parameter.defaultValue != null) {
+            signatureComponents.add(SignatureComponent("punctuation", " = ", ""))
+            signatureComponents.add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
+        }
+
         if (index < parameters.size - 1) {
             signatureComponents.add(SignatureComponent("punctuation", ", ", ""))
         }

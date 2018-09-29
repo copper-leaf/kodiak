@@ -74,12 +74,21 @@ class KotlinClass(
     /**
      * This is a method defined in the class body, which has parameters and a return value with internal types
      *
-     * @param param1 This is the param1 for the method
-     * @param param2 This is the param2 for the method
+     * @param param This is the param for the method
      * @return This is the returned string value
      */
-    fun classMethodWithDefaultNullableParam(param1: String? = null): KotlinInterface? {
+    fun classMethodWithDefaultNullableParam(param: String? = "param1"): KotlinInterface? {
         return null
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param This is the param1 for the method
+     * @return This is the returned string value
+     */
+    fun classMethodWithFunctionParameter(param: (String)->String): String? {
+        return param("param")
     }
 
 }

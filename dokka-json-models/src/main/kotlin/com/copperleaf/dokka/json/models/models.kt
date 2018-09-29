@@ -128,7 +128,8 @@ data class KotlinParameter(
         override val comment: String,
         override val summaryPos: Int,
         val type: String,
-        val qualifiedType: String
+        val qualifiedType: String,
+        val defaultValue: String?
 ) : KotlinDocElement {
     override val kind = "Parameter"
 }
