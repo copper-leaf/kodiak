@@ -18,26 +18,3 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-
-// Test Dokka
-//----------------------------------------------------------------------------------------------------------------------
-
-configurations { dokka }
-dependencies {
-    dokka 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
-    dokka project
-}
-task runDokkaWithJsonFormatter(type: JavaExec) {
-    dependsOn classes
-    outputs.files(fileTree("${project.buildDir}/docs/dokkaJson"))
-
-    main = "org.jetbrains.dokka.MainKt"
-    classpath = configurations.dokka
-    args = [
-            "-format", "json",
-            "-noStdlibLink",
-            "-src", "${project.projectDir}/src/test/kotlin:${project.projectDir}/src/test/java",
-            "-output", "${project.buildDir}/docs/dokkaJson"
-    ]
-}
-project.tasks.assemble.dependsOn runDokkaWithJsonFormatter

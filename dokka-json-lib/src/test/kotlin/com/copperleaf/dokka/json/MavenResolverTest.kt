@@ -10,6 +10,7 @@ import strikt.assertions.get
 import strikt.assertions.hasSize
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotEmpty
+import strikt.assertions.isNotNull
 import strikt.assertions.map
 import java.nio.file.Files
 import java.nio.file.Path
@@ -41,6 +42,8 @@ class MavenResolverTest {
         expectThat(output)
                 .isNotEmpty()
                 .hasSize(1)[0]
+                .chain { it.jarPath }
+                .isNotNull()
                 .chain { it.toFile().absolutePath }
                 .isEqualTo("${cacheDir.toFile().absolutePath}/javax/inject/javax.inject/1/javax.inject-1.jar")
     }
@@ -54,7 +57,7 @@ class MavenResolverTest {
         expectThat(output)
                 .isNotEmpty()
                 .hasSize(2)
-                .map { it.toFile().absolutePath }
+                .map { it.jarPath!!.toFile().absolutePath }
                 .any { isEqualTo("${cacheDir.toFile().absolutePath}/com/eden/Clog/2.0.4/Clog-2.0.4.jar") }
                 .any { isEqualTo("${cacheDir.toFile().absolutePath}/org/fusesource/jansi/jansi/1.14/jansi-1.14.jar") }
     }

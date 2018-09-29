@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.2.71'
-    ext.serialization_version = '0.6.2'
+    ext.kotlin_version = '1.2.60'
+    ext.serialization_version = '0.6.1'
     repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
@@ -13,7 +13,7 @@ buildscript {
 }
 
 group 'com.copperleaf'
-version '0.1.1'
+version '0.1.0'
 
 allprojects {
     repositories {

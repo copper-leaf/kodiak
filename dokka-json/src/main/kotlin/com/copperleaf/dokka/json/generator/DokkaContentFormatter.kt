@@ -29,6 +29,7 @@ import org.jetbrains.dokka.ContentText
 import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
 
+@Suppress("UNUSED_PARAMETER")
 class DokkaContentFormatter(val node: DocumentationNode) {
 
     fun extractContent(): String {

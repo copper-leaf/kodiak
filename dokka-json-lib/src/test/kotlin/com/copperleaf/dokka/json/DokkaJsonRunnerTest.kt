@@ -5,7 +5,10 @@ import okhttp3.OkHttpClient
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import strikt.api.expectThat
+import strikt.assertions.isNotEmpty
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -24,10 +27,15 @@ class DokkaJsonRunnerTest {
         client = OkHttpClient.Builder().build()
         cacheDir = Files.createTempDirectory("DokkaJsonRunnerTest")
         outputDir = Files.createTempDirectory("dokkaTestOutput")
-        outputDir.toFile().mkdirs()
-
         resolver = MavenResolverImpl(client, cacheDir)
-        dokkaRunner = KotlindocInvokerImpl(resolver, outputDir, "com.github.copper-leaf.dokka-json:dokka-json:0.1.9")
+        dokkaRunner = KotlindocInvokerImpl(resolver, outputDir, listOf(
+                Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.60"),
+                Artifact.from("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.6.1"),
+                Artifact.from("org.jetbrains.dokka:dokka-fatjar:0.9.17"),
+
+                Artifact.from("copper-leaf", "dokka-json",        "0.1.0", File("../dokka-json/build/libs/dokka-json-0.1.0.jar").canonicalFile.toPath()),
+                Artifact.from("copper-leaf", "dokka-json-models", "0.1.0", File("../dokka-json-models/build/libs/dokka-json-models-0.1.0.jar").canonicalFile.toPath())
+        ))
     }
 
     @AfterEach
@@ -38,43 +46,28 @@ class DokkaJsonRunnerTest {
 
     @Test
     fun testRunningDokka() {
-//        try {
-//            val rootDoc = dokkaRunner.getRootDoc(
-//                    listOf(
-//                            File("../dokka-json/src/test/java").canonicalFile.toPath(),
-//                            File("../dokka-json/src/test/kotlin").canonicalFile.toPath()
-//                    ),
-//                    emptyList()
-//            ) { inputStream -> InputStreamPrinter(inputStream) }
-//
-//            for (f in outputDir.toFile().walk()) {
-//                println("output file: ${f.absolutePath}")
-//            }
-//        }
-//        catch(t: Throwable) {
-//            println(t.message)
-//            throw t
-//        }
+        try {
+            val rootDoc = dokkaRunner.getRootDoc(
+                    listOf(
+                            File("../dokka-json/src/test/java").canonicalFile.toPath(),
+                            File("../dokka-json/src/test/kotlin").canonicalFile.toPath()
+                    ),
+                    emptyList()
+            ) { inputStream -> InputStreamPrinter(inputStream) }
 
-//        try {
-//            expectThat(rootDoc)
-//                    .and {
-//                        chain { it.packages }.isNotEmpty()
-//                    }
-//                    .and {
-//                        chain { it.classes }.isNotEmpty()
-//                    }
-//        }
-//        catch (t: Throwable) {
-//            println(t.message)
-//            throw t
-//        }
+            expectThat(rootDoc)
+                    .and { chain { it.packages }.isNotEmpty() }
+                    .and { chain { it.classes  }.isNotEmpty() }
+        }
+        catch(t: Throwable) {
+            println(t.message)
+            throw t
+        }
     }
 
 }
 
 class InputStreamPrinter(private val inputStream: InputStream) : Runnable {
-
     override fun run() {
         BufferedReader(InputStreamReader(inputStream, Charset.forName("UTF-8"))).lines().forEach {
             println(it)
