@@ -15,6 +15,7 @@ fun DocumentationNode.toMethod(): KotlinMethod {
     val parameters = this.parameters
     val returnValue = this.returnValue
     return KotlinMethod(
+            this,
             this.simpleName,
             this.qualifiedName,
             this.contentText,
@@ -44,10 +45,9 @@ fun DocumentationNode.methodSignature(
 
     if (returnValue.name != "Unit") {
         signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-        signatureComponents.add(SignatureComponent("type", returnValue.name, returnValue.qualifiedName))
-        if(returnValue.nullable) {
-            signatureComponents.add(SignatureComponent("punctuation", "?", ""))
-        }
+        val node = returnValue.node as DocumentationNode
+        val nodeType = node.asType()
+        signatureComponents.appendParameterType(nodeType)
     }
 
     return signatureComponents
@@ -57,11 +57,12 @@ val DocumentationNode.returnValue: KotlinReturnValue
     get() {
         val it = this.detail(NodeKind.Type)
         return KotlinReturnValue(
+                it,
                 it.simpleName,
                 it.qualifiedName,
                 it.contentText,
                 it.summary.textLength,
                 it.simpleType,
-                it.details(NodeKind.NullabilityModifier).singleOrNull() != null
+                it.nullable
         )
     }

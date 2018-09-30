@@ -1,6 +1,7 @@
 package com.copperleaf.dokka.json.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
 
 /**
@@ -17,6 +18,9 @@ class KotlinRootdoc(
  */
 @Serializable
 data class KotlinClassDoc(
+        @Transient
+        val node: Any? = null,
+
         val `package`: String,
         override val kind: String,
         override val name: String,
@@ -45,6 +49,9 @@ data class KotlinClassDoc(
  */
 @Serializable
 data class KotlinPackageDoc(
+        @Transient
+        val node: Any? = null,
+
         val classes: List<KotlinClassDoc>,
         val methods: List<KotlinMethod>,
         override val name: String,
@@ -70,6 +77,9 @@ data class KotlinPackageDoc(
  */
 @Serializable
 data class KotlinConstructor(
+        @Transient
+        val node: Any? = null,
+
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,
@@ -87,6 +97,9 @@ data class KotlinConstructor(
  */
 @Serializable
 data class KotlinMethod(
+        @Transient
+        val node: Any? = null,
+
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,
@@ -105,6 +118,9 @@ data class KotlinMethod(
  */
 @Serializable
 data class KotlinField(
+        @Transient
+        val node: Any? = null,
+
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,
@@ -124,6 +140,9 @@ data class KotlinField(
  */
 @Serializable
 data class KotlinParameter(
+        @Transient
+        val node: Any? = null,
+
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,
@@ -141,6 +160,9 @@ data class KotlinParameter(
  */
 @Serializable
 data class KotlinReturnValue(
+        @Transient
+        val node: Any? = null,
+
         override val name: String,
         override val qualifiedName: String,
         override val comment: String,

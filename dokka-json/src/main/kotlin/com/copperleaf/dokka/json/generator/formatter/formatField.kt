@@ -10,8 +10,9 @@ val DocumentationNode.isField: Boolean get() = this.kind == NodeKind.Field || th
 fun DocumentationNode.toField(): KotlinField {
     assert(this.isField) { "node must be a Field or Property" }
     val modifiers = this.modifiers
-    val nullable = this.detailOrNull(NodeKind.Type)?.details(NodeKind.NullabilityModifier)?.singleOrNull() != null
+    val nullable = this.nullable
     return KotlinField(
+            this,
             this.simpleName,
             this.qualifiedName,
             this.contentText,
@@ -22,24 +23,21 @@ fun DocumentationNode.toField(): KotlinField {
             nullable,
             this.fieldSignature(
                     modifiers,
-                    nullable
+                    this.asType()
             )
     )
 }
 
 fun DocumentationNode.fieldSignature(
         modifiers: List<String>,
-        nullable: Boolean
+        type: DocumentationNode
 ): List<SignatureComponent> {
     val signatureComponents = mutableListOf<SignatureComponent>()
 
     signatureComponents.appendModifierList(modifiers)
     signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
     signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-    signatureComponents.add(SignatureComponent("type", this.simpleType, this.qualifiedType))
-    if(nullable) {
-        signatureComponents.add(SignatureComponent("punctuation", "?", ""))
-    }
+    signatureComponents.appendParameterType(type)
 
     return signatureComponents
 }

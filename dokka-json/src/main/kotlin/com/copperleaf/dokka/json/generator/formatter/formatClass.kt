@@ -11,6 +11,7 @@ fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClassDoc {
     assert(this.classLike) { "node must be a Class-like" }
 
     return KotlinClassDoc(
+            this,
             this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
             this.kind.toString(),
             this.simpleName,

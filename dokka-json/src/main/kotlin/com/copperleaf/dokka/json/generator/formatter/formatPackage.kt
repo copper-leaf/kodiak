@@ -19,6 +19,7 @@ fun DocumentationNode.toPackageDoc(): KotlinPackageDoc {
             .map { it.toMethod() }
 
     return KotlinPackageDoc(
+            this,
             this.members.filter { it.classLike }.map { it.toClassDoc(false) },
             internalMethods + externalMethods,
             this.simpleName,

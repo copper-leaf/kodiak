@@ -3,6 +3,7 @@ package com.copperleaf.dokka.json.test.kotlin
 /**
  * This is a Kotlin class
  */
+@Suppress("UNUSED_PARAMETER")
 class KotlinClass(
         /**
          * This is a property defined in the primary constructor
@@ -34,7 +35,12 @@ class KotlinClass(
     /**
      * This is a property defined in the class body, using an internal type
      */
-    lateinit var classInternalProperty: KotlinInterface
+    var classInternalProperty: KotlinInterface? = null
+
+    /**
+     * This is a property defined in the class body, using an internal type
+     */
+    lateinit var genericProperty: List<(String?)->String>
 
     /**
      * This is a method defined in the class body
@@ -88,7 +94,37 @@ class KotlinClass(
      * @return This is the returned string value
      */
     fun classMethodWithFunctionParameter(param: (String)->String): String? {
-        return param("param")
+        return null
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param This is the param1 for the method
+     * @return This is the returned string value
+     */
+    fun classMethodWithInternalFunctionParameter(param: (KotlinInterface?, (String?, Int)->String?)->KotlinMarkdown?): KotlinMarkdown? {
+        return null
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param This is the param1 for the method
+     * @return This is the returned string value
+     */
+    fun classMethodWithReceiverFunctionParameter(param: KotlinInterface.(String?)->KotlinMarkdown?): KotlinMarkdown? {
+        return null
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param This is the param1 for the method
+     * @return This is the returned string value
+     */
+    fun classMethodWithGenericReceiverFunctionParameter(param: List<String?>?.(List<String?>?)->List<String?>?): List<String?>? {
+        return null
     }
 
 }
