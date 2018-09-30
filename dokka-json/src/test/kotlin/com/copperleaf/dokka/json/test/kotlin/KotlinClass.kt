@@ -127,4 +127,14 @@ class KotlinClass(
         return null
     }
 
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @param param This is the param1 for the method
+     * @return This is the returned string value
+     */
+    fun <T, U> multipleTypeParameters(param: Map<T?, U?>) {
+
+    }
+
 }

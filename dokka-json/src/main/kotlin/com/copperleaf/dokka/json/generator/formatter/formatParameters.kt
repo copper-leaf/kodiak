@@ -70,7 +70,7 @@ fun MutableList<SignatureComponent>.appendNonFunctionalType(node: DocumentationN
         add(SignatureComponent("punctuation", "<", ""))
         typeArguments.forEachIndexed { index, parameter ->
             appendParameterType(parameter)
-            if (index < typeArguments.size - 2) {
+            if (index < typeArguments.size - 1) {
                 add(SignatureComponent("punctuation", ", ", ""))
             }
         }
