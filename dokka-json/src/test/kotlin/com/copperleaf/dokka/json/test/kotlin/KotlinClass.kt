@@ -137,4 +137,34 @@ class KotlinClass(
 
     }
 
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @receiver This is the receiver for the method
+     * @return This is the returned string value
+     */
+    fun  String?.methodWithReceiver() {
+
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @receiver This is the receiver for the method
+     * @return This is the returned string value
+     */
+    fun  List<String>.methodWithReceiverTypeParameter() {
+
+    }
+
+    /**
+     * This is a method defined in the class body, which has parameters and a return value with internal types
+     *
+     * @receiver This is the receiver for the method
+     * @return This is the returned string value
+     */
+    fun  KotlinMarkdown?.methodWithInternalReceiver() {
+
+    }
+
 }

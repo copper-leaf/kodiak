@@ -44,8 +44,6 @@ val DocumentationNode.nullable: Boolean
         return asType().details(NodeKind.NullabilityModifier).singleOrNull() != null
     }
 
-fun MutableList<SignatureComponent>.appendModifierList(modifiers: List<String>) {
-    for (modifier in modifiers) {
-        add(SignatureComponent("modifier", "$modifier ", ""))
-    }
+fun List<String>.toModifierListSignature(): List<SignatureComponent> {
+    return this.map { SignatureComponent("modifier", "$it ", "") }
 }

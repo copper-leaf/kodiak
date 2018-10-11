@@ -17,33 +17,28 @@ val DocumentationNode.parameters: List<KotlinParameter>
                             it.summary.textLength,
                             it.simpleType,
                             it.qualifiedType,
-                            it.nullable,
-                            it.detailOrNull(NodeKind.Value)?.name
+                            it.detailOrNull(NodeKind.Value)?.name,
+                            it.toTypeSignature()
                     )
                 }
     }
 
-fun MutableList<SignatureComponent>.appendParameterList(params: List<KotlinParameter>) {
-    add(SignatureComponent("punctuation", "(", ""))
-    params.forEachIndexed { index, parameter ->
-        val node = parameter.node as DocumentationNode
-        val nodeType = node.asType()
+fun List<KotlinParameter>.toParameterListSignature(): List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
+    list.add(SignatureComponent("punctuation", "(", ""))
+    this.forEachIndexed { index, parameter ->
+        list.add(SignatureComponent("name", parameter.name, ""))
+        list.add(SignatureComponent("punctuation", ": ", ""))
 
-        add(SignatureComponent("name", parameter.name, ""))
-        add(SignatureComponent("punctuation", ": ", ""))
+        list.addAll(parameter.signature)
 
-        appendParameterType(nodeType)
-
-        if (parameter.defaultValue != null) {
-            add(SignatureComponent("punctuation", " = ", ""))
-            add(SignatureComponent("value", parameter.defaultValue!!, parameter.defaultValue!!))
-        }
-
-        if (index < params.size - 1) {
-            add(SignatureComponent("punctuation", ", ", ""))
+        if (index < this.size - 1) {
+            list.add(SignatureComponent("punctuation", ", ", ""))
         }
     }
-    add(SignatureComponent("punctuation", ")", ""))
+    list.add(SignatureComponent("punctuation", ")", ""))
+
+    return list
 }
 
 fun DocumentationNode.isFunctionalType(): Boolean {
@@ -53,61 +48,78 @@ fun DocumentationNode.isFunctionalType(): Boolean {
     return name == functionalTypeName || name == suspendFunctionalTypeName
 }
 
-fun MutableList<SignatureComponent>.appendParameterType(node: DocumentationNode) {
-    if (node.isFunctionalType()) {
-        appendFunctionalType(node)
+fun DocumentationNode.toTypeSignature(): List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
+    if (isFunctionalType()) {
+        list.addAll(this.toFunctionalTypeSignature())
     }
     else {
-        appendNonFunctionalType(node)
+        list.addAll(this.toNonFunctionalTypeSignature())
     }
+
+    val defaultValue = this.detailOrNull(NodeKind.Value)?.name
+    if (defaultValue != null) {
+        list.add(SignatureComponent("punctuation", " = ", ""))
+        list.add(SignatureComponent("value", defaultValue, defaultValue))
+    }
+
+    return list
 }
 
-fun MutableList<SignatureComponent>.appendNonFunctionalType(node: DocumentationNode) {
-    add(SignatureComponent("type", node.simpleType, node.qualifiedType))
+fun DocumentationNode.toNonFunctionalTypeSignature(): List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
 
-    val typeArguments = node.details(NodeKind.Type)
+    list.add(SignatureComponent("type", this.simpleType, this.qualifiedType))
+
+    val typeArguments = this.details(NodeKind.Type)
     if (typeArguments.isNotEmpty()) {
-        add(SignatureComponent("punctuation", "<", ""))
+        list.add(SignatureComponent("punctuation", "<", ""))
         typeArguments.forEachIndexed { index, parameter ->
-            appendParameterType(parameter)
+            list.addAll(parameter.toTypeSignature())
             if (index < typeArguments.size - 1) {
-                add(SignatureComponent("punctuation", ", ", ""))
+                list.add(SignatureComponent("punctuation", ", ", ""))
             }
         }
-        add(SignatureComponent("punctuation", ">", ""))
+        list.add(SignatureComponent("punctuation", ">", ""))
     }
 
-    if (node.nullable) {
-        add(SignatureComponent("punctuation", "?", ""))
+    if (this.nullable) {
+        list.add(SignatureComponent("punctuation", "?", ""))
     }
+
+    return list
 }
 
-fun MutableList<SignatureComponent>.appendFunctionalType(node: DocumentationNode) {
-    var typeArguments = node.details(NodeKind.Type)
+fun DocumentationNode.toFunctionalTypeSignature(): List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
 
-    if (node.name.startsWith("Suspend")) {
-        add(SignatureComponent("keyword", "suspend ", ""))
+    var typeArguments = this.details(NodeKind.Type)
+
+    if (this.name.startsWith("Suspend")) {
+        list.add(SignatureComponent("keyword", "suspend ", ""))
     }
 
     // function receiver
-    val isExtension = node.annotations.any { it.name == "ExtensionFunctionType" }
+    val isExtension = this.annotations.any { it.name == "ExtensionFunctionType" }
     if (isExtension) {
-        appendParameterType(typeArguments.first())
-        add(SignatureComponent("punctuation", ".", ""))
+        list.addAll(typeArguments.first().toTypeSignature())
+        list.add(SignatureComponent("punctuation", ".", ""))
         typeArguments = typeArguments.drop(1)
     }
 
     // function parameters
-    add(SignatureComponent("punctuation", "(", ""))
+    list.add(SignatureComponent("punctuation", "(", ""))
     typeArguments.dropLast(1).forEachIndexed { index, parameter ->
-        appendParameterType(parameter)
+        list.addAll(parameter.toTypeSignature())
         if (index < typeArguments.size - 2) {
-            add(SignatureComponent("punctuation", ", ", ""))
+            list.add(SignatureComponent("punctuation", ", ", ""))
         }
     }
-    add(SignatureComponent("punctuation", ")", ""))
+    list.add(SignatureComponent("punctuation", ")", ""))
 
     // function return
-    add(SignatureComponent("punctuation", "->", ""))
-    appendParameterType(typeArguments.last())
+    list.add(SignatureComponent("punctuation", "->", ""))
+    list.addAll(typeArguments.last().toTypeSignature())
+
+    return list
 }

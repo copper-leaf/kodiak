@@ -105,8 +105,10 @@ data class KotlinMethod(
         override val comment: String,
         override val summaryPos: Int,
         override val modifiers: List<String>,
+
         val parameters: List<KotlinParameter>,
-        val returnValue: KotlinReturnValue,
+        val receiver: KotlinReceiverType? = null,
+        val returnValue: KotlinReturnType,
         val signature: List<SignatureComponent>,
         val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinMemberlike {
@@ -126,12 +128,12 @@ data class KotlinField(
         override val comment: String,
         override val summaryPos: Int,
         override val modifiers: List<String>,
-        val type: String,
-        val qualifiedType: String,
-        val nullable: Boolean,
-        val signature: List<SignatureComponent>,
-        val simpleSignature: String = signature.map { it.name }.joinToString("")
-) : KotlinMemberlike {
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : KotlinMemberlike, KotlinType {
     override val kind = "Field"
 }
 
@@ -147,19 +149,22 @@ data class KotlinParameter(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        val type: String,
-        val qualifiedType: String,
-        val nullable: Boolean,
-        val defaultValue: String?
-) : KotlinDocElement {
+
+        override val type: String,
+        override val qualifiedType: String,
+        val defaultValue: String?,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+
+) : KotlinDocElement, KotlinType {
     override val kind = "Parameter"
 }
 
 /**
- * The docs for a parameter of a constructor or method
+ * The docs for a method return type
  */
 @Serializable
-data class KotlinReturnValue(
+data class KotlinReturnType(
         @Transient
         val node: Any? = null,
 
@@ -167,15 +172,39 @@ data class KotlinReturnValue(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
-        val type: String,
-        val nullable: Boolean
-) : KotlinDocElement {
-    override val kind = "ReturnValue"
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : KotlinDocElement, KotlinType {
+    override val kind = "ReturnType"
+}
+
+/**
+ * The docs for a method receiver type
+ */
+@Serializable
+data class KotlinReceiverType(
+        @Transient
+        val node: Any? = null,
+
+        override val name: String,
+        override val qualifiedName: String,
+        override val comment: String,
+        override val summaryPos: Int,
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : KotlinDocElement, KotlinType {
+    override val kind = "ReceiverType"
 }
 
 /**
  * A component to the rich signature. The complete signature can be created by joining all components together,
- * optionally generating
+ * optionally generating links for individual components of the signature.
  */
 @Serializable
 data class SignatureComponent(

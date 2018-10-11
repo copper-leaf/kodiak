@@ -33,9 +33,9 @@ fun DocumentationNode.constructorSignature(
 ): List<SignatureComponent> {
     val signatureComponents = mutableListOf<SignatureComponent>()
 
-    signatureComponents.appendModifierList(modifiers)
+    signatureComponents.addAll(modifiers.toModifierListSignature())
     signatureComponents.add(SignatureComponent("keyword", "constructor", ""))
-    signatureComponents.appendParameterList(parameters)
+    signatureComponents.addAll(parameters.toParameterListSignature())
 
     return signatureComponents
 }

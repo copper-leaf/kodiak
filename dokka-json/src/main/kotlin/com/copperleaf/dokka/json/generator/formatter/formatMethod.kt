@@ -2,7 +2,8 @@ package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinMethod
 import com.copperleaf.dokka.json.models.KotlinParameter
-import com.copperleaf.dokka.json.models.KotlinReturnValue
+import com.copperleaf.dokka.json.models.KotlinReceiverType
+import com.copperleaf.dokka.json.models.KotlinReturnType
 import com.copperleaf.dokka.json.models.SignatureComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -13,7 +14,8 @@ fun DocumentationNode.toMethod(): KotlinMethod {
     assert(this.isMethod) { "node must be a Function" }
     val modifiers = this.modifiers
     val parameters = this.parameters
-    val returnValue = this.returnValue
+    val receiverType = this.receiverType
+    val returnType = this.returnType
     return KotlinMethod(
             this,
             this.simpleName,
@@ -22,11 +24,13 @@ fun DocumentationNode.toMethod(): KotlinMethod {
             this.summary.textLength,
             modifiers,
             parameters,
-            returnValue,
+            receiverType,
+            returnType,
             this.methodSignature(
                     modifiers,
                     parameters,
-                    returnValue
+                    receiverType,
+                    returnType
             )
     )
 }
@@ -34,35 +38,60 @@ fun DocumentationNode.toMethod(): KotlinMethod {
 fun DocumentationNode.methodSignature(
         modifiers: List<String>,
         parameters: List<KotlinParameter>,
-        returnValue: KotlinReturnValue
+        receiverType: KotlinReceiverType?,
+        returnType: KotlinReturnType
 ): List<SignatureComponent> {
     val signatureComponents = mutableListOf<SignatureComponent>()
 
-    signatureComponents.appendModifierList(modifiers)
+    signatureComponents.addAll(modifiers.toModifierListSignature())
     signatureComponents.add(SignatureComponent("keyword", "fun ", ""))
-    signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
-    signatureComponents.appendParameterList(parameters)
 
-    if (returnValue.name != "Unit") {
+    if (receiverType != null) {
+        signatureComponents.addAll(receiverType.signature)
+        signatureComponents.add(SignatureComponent("punctuation", ".", ""))
+    }
+
+    signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
+    signatureComponents.addAll(parameters.toParameterListSignature())
+
+    if (returnType.name != "Unit") {
         signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-        val node = returnValue.node as DocumentationNode
-        val nodeType = node.asType()
-        signatureComponents.appendParameterType(nodeType)
+        signatureComponents.addAll(returnType.signature)
     }
 
     return signatureComponents
 }
 
-val DocumentationNode.returnValue: KotlinReturnValue
+val DocumentationNode.returnType: KotlinReturnType
     get() {
         val it = this.detail(NodeKind.Type)
-        return KotlinReturnValue(
+        return KotlinReturnType(
                 it,
                 it.simpleName,
                 it.qualifiedName,
                 it.contentText,
                 it.summary.textLength,
                 it.simpleType,
-                it.nullable
+                it.qualifiedType,
+                it.asType().toTypeSignature()
         )
     }
+
+val DocumentationNode.receiverType: KotlinReceiverType?
+    get() {
+        val it = this.detailOrNull(NodeKind.Receiver)
+        return if (it == null)
+            null
+        else
+            KotlinReceiverType(
+                    it,
+                    it.simpleName,
+                    it.qualifiedName,
+                    it.contentText,
+                    it.summary.textLength,
+                    it.simpleType,
+                    it.qualifiedType,
+                    it.asType().toTypeSignature()
+            )
+    }
+

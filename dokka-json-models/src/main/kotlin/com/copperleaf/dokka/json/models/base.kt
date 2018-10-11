@@ -13,3 +13,10 @@ interface KotlinClasslike : KotlinDocElement
 interface KotlinMemberlike : KotlinDocElement {
     val modifiers: List<String>
 }
+
+interface KotlinType : KotlinDocElement {
+    val type: String
+    val qualifiedType: String
+    val signature: List<SignatureComponent>
+    val simpleSignature: String
+}
