@@ -1,5 +1,11 @@
 rootProject.name = 'dokka-json'
 
+include ':doc-json-common'
+
 include ':dokka-json'
 include ':dokka-json-models'
 include ':dokka-json-lib'
+
+include ':javadoc-json'
+include ':javadoc-json-models'
+include ':javadoc-json-lib'
