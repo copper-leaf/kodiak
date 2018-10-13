@@ -167,4 +167,22 @@ class KotlinClass(
 
     }
 
+
+    /**
+     * This is a method which attempts to include all the various doc components at once.
+     *
+     * @param T the type of T
+     * @param U the type of U
+     * @param param1 the function param 1
+     * @param param2 the function param 2
+     * @receiver This is the receiver for the method
+     * @return This is the returned string value
+     */
+    fun <T, U> List<T?>?.jackOfAllTrades(
+            param1: List<T?>?.(List<T?>?) -> List<U?>?,
+            param2: String
+    ): U? {
+        return null
+    }
+
 }

@@ -21,7 +21,7 @@ fun DocumentationNode.toField(): KotlinField {
             this.qualifiedType,
             this.fieldSignature(
                     modifiers,
-                    this.asType()
+                    this
             )
     )
 }
@@ -35,7 +35,7 @@ fun DocumentationNode.fieldSignature(
     signatureComponents.addAll(modifiers.toModifierListSignature())
     signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
     signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-    signatureComponents.addAll(type.toTypeSignature())
+    signatureComponents.addAll(type.asType().toTypeSignature())
 
     return signatureComponents
 }

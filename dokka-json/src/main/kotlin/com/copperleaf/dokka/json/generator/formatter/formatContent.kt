@@ -30,9 +30,20 @@ import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
 
 val DocumentationNode.contentText: String get() = DokkaContentFormatter(this).extractContent()
+fun DocumentationNode.contentText(sectionName: String, subjectName: String?): String = DokkaContentFormatter(this).extractContentFromSection(sectionName, subjectName)
 
 @Suppress("UNUSED_PARAMETER")
 class DokkaContentFormatter(val node: DocumentationNode) {
+
+    fun extractContentFromSection(sectionName: String, subjectName: String?): String {
+        for (section in node.owner!!.content.sections) {
+            if(section.tag == sectionName && section.subjectName == subjectName) {
+                return extractContent(section.children)
+            }
+        }
+
+        return ""
+    }
 
     fun extractContent(): String {
         return this.extractContent(node.content.children)

@@ -13,12 +13,12 @@ val DocumentationNode.parameters: List<KotlinParameter>
                             it,
                             it.simpleName,
                             it.qualifiedName,
-                            it.contentText,
+                            it.contentText("Parameters", it.simpleName),
                             it.summary.textLength,
                             it.simpleType,
                             it.qualifiedType,
                             it.detailOrNull(NodeKind.Value)?.name,
-                            it.toTypeSignature()
+                            it.asType().toTypeSignature()
                     )
                 }
     }
