@@ -26,7 +26,7 @@ class JavadocJsonDoclet {
 
         @JvmStatic
         fun optionLength(optionFlag: String): Int {
-            if(optionFlag == "-d") {
+            if (optionFlag == "-d") {
                 return 2
             }
 
@@ -40,10 +40,10 @@ class JavadocJsonDoclet {
         @JvmStatic
         fun start(rootDoc: RootDoc): Boolean {
             var destinationDir = rootDoc.options().find { it.firstOrNull() == "-d" }!![1]
-            if(destinationDir.endsWith("/")) {
+            if (destinationDir.endsWith("/")) {
                 destinationDir = destinationDir.dropLast(1)
             }
-            else if(destinationDir.endsWith("\\")) {
+            else if (destinationDir.endsWith("\\")) {
                 destinationDir = destinationDir.dropLast(1)
             }
 
@@ -55,20 +55,25 @@ class JavadocJsonDoclet {
                 packages.add(classDoc.containingPackage())
             }
 
-            for(classdoc in classes) {
-                val file = File("$destinationDir/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
-                if(!file.parentFile.exists()) {
-                    file.parentFile.mkdirs()
+            try {
+                for (classdoc in classes) {
+                    val file = File("$destinationDir/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
+                    if (!file.parentFile.exists()) {
+                        file.parentFile.mkdirs()
+                    }
+                    file.writeText(classdoc.toClassDoc(true).toJson())
                 }
-                file.writeText(classdoc.toClassDoc().toJson())
-            }
 
-            for(packagedoc in packages) {
-                val file = File("$destinationDir/${packagedoc.name().replace(".", "/")}/index.json")
-                if(!file.parentFile.exists()) {
-                    file.parentFile.mkdirs()
+                for (packagedoc in packages) {
+                    val file = File("$destinationDir/${packagedoc.name().replace(".", "/")}/index.json")
+                    if (!file.parentFile.exists()) {
+                        file.parentFile.mkdirs()
+                    }
+                    file.writeText(packagedoc.toPackageDoc().toJson())
                 }
-                file.writeText(packagedoc.toPackageDoc().toJson())
+            }
+            catch(e: Throwable) {
+                e.printStackTrace()
             }
 
             return true

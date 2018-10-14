@@ -4,7 +4,6 @@ import com.copperleaf.javadoc.json.models.CommentTag
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
 
-
 fun Array<Tag>.asCommentTags(): List<CommentTag> {
     return this.map(Tag::toCommentTag)
 }

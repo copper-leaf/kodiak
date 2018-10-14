@@ -8,8 +8,8 @@ import kotlinx.serialization.json.JSON
  * The result of executing Javadoc and transforming the results to JSON.
  */
 class JavadocRootdoc(
-        val packages: List<JavadocPackageDoc>,
-        val classes: List<JavadocClassDoc>
+        val packages: List<JavaPackageDoc>,
+        val classes: List<JavaClassDoc>
 )
 
 /**
@@ -17,7 +17,7 @@ class JavadocRootdoc(
  * KDoc comment on the class.
  */
 @Serializable
-data class JavadocClassDoc(
+data class JavaClassDoc(
         @Transient
         val node: Any? = null,
 
@@ -28,12 +28,12 @@ data class JavadocClassDoc(
         override val simpleComment: String,
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
-        val constructors: List<JavadocConstructor>,
-        val methods: List<JavadocMethod>,
-        val fields: List<JavadocField>
-) : JavadocClasslike {
+        val constructors: List<JavaConstructor>,
+        val methods: List<JavaMethod>,
+        val fields: List<JavaField>
+) : JavaClasslike {
     companion object {
-        fun fromJson(json: String): JavadocClassDoc {
+        fun fromJson(json: String): JavaClassDoc {
             return JSON.parse(json)
         }
     }
@@ -48,7 +48,7 @@ data class JavadocClassDoc(
  * package. Class definitions only include metadata, but do not include information about their members.
  */
 @Serializable
-data class JavadocPackageDoc(
+data class JavaPackageDoc(
         @Transient
         val node: Any? = null,
 
@@ -57,12 +57,12 @@ data class JavadocPackageDoc(
         override val simpleComment: String,
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
-        val classes: List<JavadocClassDoc>
-) : JavadocDocElement {
+        val classes: List<JavaClassDoc>
+) : JavaDocElement {
     override val kind = "Package"
 
     companion object {
-        fun fromJson(json: String): JavadocPackageDoc {
+        fun fromJson(json: String): JavaPackageDoc {
             return JSON.parse(json)
         }
     }
@@ -76,7 +76,7 @@ data class JavadocPackageDoc(
  * The docs for a constructor of a class.
  */
 @Serializable
-data class JavadocConstructor(
+data class JavaConstructor(
         @Transient
         val node: Any? = null,
 
@@ -86,10 +86,10 @@ data class JavadocConstructor(
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
         override val modifiers: List<String>,
-        val parameters: List<JavadocParameter>,
+        val parameters: List<JavaParameter>,
         val signature: List<SignatureComponent>,
         val simpleSignature: String = signature.map { it.name }.joinToString("")
-) : JavadocMemberlike {
+) : JavaMemberlike {
     override val kind = "Constructor"
 }
 
@@ -97,7 +97,7 @@ data class JavadocConstructor(
  * The docs for a method or function in a class.
  */
 @Serializable
-data class JavadocMethod(
+data class JavaMethod(
         @Transient
         val node: Any? = null,
 
@@ -107,11 +107,11 @@ data class JavadocMethod(
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
         override val modifiers: List<String>,
-        val parameters: List<JavadocParameter>,
-        val returnValue: JavadocReturnValue,
+        val parameters: List<JavaParameter>,
+        val returnValue: JavaReturnType,
         val signature: List<SignatureComponent>,
         val simpleSignature: String = signature.map { it.name }.joinToString("")
-) : JavadocMemberlike {
+) : JavaMemberlike {
     override val kind = "Method"
 }
 
@@ -119,7 +119,7 @@ data class JavadocMethod(
  * The docs for a field or property in a class.
  */
 @Serializable
-data class JavadocField(
+data class JavaField(
         @Transient
         val node: Any? = null,
 
@@ -129,12 +129,12 @@ data class JavadocField(
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
         override val modifiers: List<String>,
-        val type: String,
-        val qualifiedType: String,
-        val nullable: Boolean,
-        val signature: List<SignatureComponent>,
-        val simpleSignature: String = signature.map { it.name }.joinToString("")
-) : JavadocMemberlike {
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : JavaMemberlike, JavaType {
     override val kind = "Field"
 }
 
@@ -142,7 +142,7 @@ data class JavadocField(
  * The docs for a parameter of a constructor or method
  */
 @Serializable
-data class JavadocParameter(
+data class JavaParameter(
         @Transient
         val node: Any? = null,
 
@@ -151,11 +151,12 @@ data class JavadocParameter(
         override val simpleComment: String,
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
-        val type: String,
-        val qualifiedType: String,
-        val nullable: Boolean,
-        val defaultValue: String?
-) : JavadocDocElement {
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : JavaDocElement, JavaType {
     override val kind = "Parameter"
 }
 
@@ -163,7 +164,7 @@ data class JavadocParameter(
  * The docs for a parameter of a constructor or method
  */
 @Serializable
-data class JavadocReturnValue(
+data class JavaReturnType(
         @Transient
         val node: Any? = null,
 
@@ -172,19 +173,11 @@ data class JavadocReturnValue(
         override val simpleComment: String,
         override val comment: List<CommentTag>,
         override val tags: Map<String, CommentTag>,
-        val type: String,
-        val nullable: Boolean
-) : JavadocDocElement {
+
+        override val type: String,
+        override val qualifiedType: String,
+        override val signature: List<SignatureComponent>,
+        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+) : JavaDocElement, JavaType {
     override val kind = "ReturnValue"
 }
-
-/**
- * A component to the rich signature. The complete signature can be created by joining all components together,
- * optionally generating
- */
-@Serializable
-data class SignatureComponent(
-        val kind: String,
-        val name: String,
-        val qualifiedName: String
-)

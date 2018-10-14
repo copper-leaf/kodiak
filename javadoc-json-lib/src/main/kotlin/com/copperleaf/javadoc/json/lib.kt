@@ -2,8 +2,8 @@ package com.copperleaf.javadoc.json
 
 import com.copperleaf.dokka.json.Artifact
 import com.copperleaf.dokka.json.MavenResolver
-import com.copperleaf.javadoc.json.models.JavadocClassDoc
-import com.copperleaf.javadoc.json.models.JavadocPackageDoc
+import com.copperleaf.javadoc.json.models.JavaClassDoc
+import com.copperleaf.javadoc.json.models.JavaPackageDoc
 import com.copperleaf.javadoc.json.models.JavadocRootdoc
 import java.io.File
 import java.io.InputStream
@@ -85,25 +85,25 @@ class JavadocdocInvokerImpl(
         )
     }
 
-    private fun getJavadocPackagePages(): List<JavadocPackageDoc> {
-        val packagePagesList = ArrayList<JavadocPackageDoc>()
+    private fun getJavadocPackagePages(): List<JavaPackageDoc> {
+        val packagePagesList = ArrayList<JavaPackageDoc>()
         javadocOutputPath
                 .toFile()
                 .walkTopDown()
                 .filter { it.isFile && it.name == "index.json" }
-                .map { JavadocPackageDoc.fromJson(it.readText()) }
+                .map { JavaPackageDoc.fromJson(it.readText()) }
                 .toCollection(packagePagesList)
 
         return packagePagesList
     }
 
-    private fun getJavadocClassPages(): List<JavadocClassDoc> {
-        val classPagesList = ArrayList<JavadocClassDoc>()
+    private fun getJavadocClassPages(): List<JavaClassDoc> {
+        val classPagesList = ArrayList<JavaClassDoc>()
         javadocOutputPath
                 .toFile()
                 .walkTopDown()
                 .filter { it.isFile && it.name != "index.json" }
-                .map { JavadocClassDoc.fromJson(it.readText()) }
+                .map { JavaClassDoc.fromJson(it.readText()) }
                 .toCollection(classPagesList)
 
         return classPagesList
