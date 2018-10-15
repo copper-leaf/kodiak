@@ -22,6 +22,7 @@ data class JavaClassDoc(
         val node: Any? = null,
 
         val `package`: String,
+        val modifiers: List<String>,
         override val kind: String,
         override val name: String,
         override val qualifiedName: String,

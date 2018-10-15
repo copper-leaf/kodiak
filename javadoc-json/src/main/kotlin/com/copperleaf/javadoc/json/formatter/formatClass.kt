@@ -7,6 +7,7 @@ fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClassDoc {
     return JavaClassDoc(
             this,
             this.containingPackage().name(),
+            listOf(this.modifiers()),
             this.classKind,
             this.typeName(),
             this.qualifiedTypeName(),
@@ -23,7 +24,8 @@ val ClassDoc.classKind: String
     get() {
         return when {
             isInterface -> "interface"
-            isAnnotationType -> "annotation"
+            isAnnotationType -> "@interface"
+            isEnum -> "enum"
             isException -> "exception"
             isOrdinaryClass -> "class"
             else -> throw IllegalArgumentException("Class kind not found")
