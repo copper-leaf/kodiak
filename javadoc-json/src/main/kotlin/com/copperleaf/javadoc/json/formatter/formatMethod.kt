@@ -52,6 +52,7 @@ fun MethodDoc.methodSignature(
     val list = mutableListOf<SignatureComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
+    list.addAll(this.typeParameters().toWildcardSignature())
     list.addAll(returnType.signature)
     list.add(SignatureComponent("name", " ${this.name()}", ""))
     list.addAll(parameters.toParameterListSignature())

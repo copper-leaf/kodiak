@@ -6,6 +6,7 @@ import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
 import com.sun.javadoc.Tag
 import com.sun.javadoc.Type
+import com.sun.javadoc.TypeVariable
 
 fun formatParameters(params: Array<Parameter>, tags: Array<ParamTag>): List<JavaParameter> {
     return params.map { param ->
@@ -49,6 +50,31 @@ fun Type.toTypeSignature(): List<SignatureComponent> {
 
     list.add(SignatureComponent("type", this.simpleTypeName(), this.qualifiedTypeName()))
 
+    val wildcard = this.asWildcardType()
+    if(wildcard != null) {
+        val extendsTypes = wildcard.extendsBounds()
+        if(extendsTypes.isNotEmpty()) {
+            list.add(SignatureComponent("name", " extends ", ""))
+            extendsTypes.forEachIndexed { index, parameter ->
+                list.addAll(parameter.toTypeSignature())
+                if (index < extendsTypes.size - 1) {
+                    list.add(SignatureComponent("punctuation", ", ", ""))
+                }
+            }
+        }
+
+        val superTypes = wildcard.superBounds()
+        if(superTypes.isNotEmpty()) {
+            list.add(SignatureComponent("name", " extends ", ""))
+            superTypes.forEachIndexed { index, parameter ->
+                list.addAll(parameter.toTypeSignature())
+                if (index < superTypes.size - 1) {
+                    list.add(SignatureComponent("punctuation", ", ", ""))
+                }
+            }
+        }
+    }
+
     if (this.asParameterizedType() != null) {
         val typeArguments = this.asParameterizedType().typeArguments()
         list.add(SignatureComponent("punctuation", "<", ""))
@@ -64,3 +90,32 @@ fun Type.toTypeSignature(): List<SignatureComponent> {
     return list
 }
 
+fun Array<TypeVariable>.toWildcardSignature() : List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
+
+    if(this.isNotEmpty()) {
+        list.add(SignatureComponent("punctuation", "<", ""))
+        this.forEachIndexed { index, typeVariable ->
+            list.add(SignatureComponent("name", typeVariable.simpleTypeName(), ""))
+
+            val typeParamBounds = typeVariable.bounds()
+            if(typeParamBounds.isNotEmpty()) {
+                list.add(SignatureComponent("name", " extends ", ""))
+
+                typeParamBounds.forEachIndexed { boundsIndex, type ->
+                    list.addAll(type.toTypeSignature())
+                    if (boundsIndex < typeParamBounds.size - 1) {
+                        list.add(SignatureComponent("punctuation", " & ", ""))
+                    }
+                }
+            }
+
+            if (index < this.size - 1) {
+                list.add(SignatureComponent("punctuation", ", ", ""))
+            }
+        }
+        list.add(SignatureComponent("punctuation", ">", ""))
+    }
+
+    return list
+}

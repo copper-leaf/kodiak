@@ -31,7 +31,9 @@ data class JavaClassDoc(
         override val tags: Map<String, CommentTag>,
         val constructors: List<JavaConstructor>,
         val methods: List<JavaMethod>,
-        val fields: List<JavaField>
+        val fields: List<JavaField>,
+        val signature: List<SignatureComponent>,
+        val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : JavaClasslike {
     companion object {
         fun fromJson(json: String): JavaClassDoc {

@@ -31,6 +31,7 @@ fun ConstructorDoc.constructorSignature(
     val list = mutableListOf<SignatureComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
+    list.addAll(this.typeParameters().toWildcardSignature())
     list.add(SignatureComponent("type", this.containingClass().simpleTypeName(), this.containingClass().qualifiedName()))
     list.addAll(parameters.toParameterListSignature())
 

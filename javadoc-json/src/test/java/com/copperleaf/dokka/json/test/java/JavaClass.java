@@ -1,5 +1,9 @@
 package com.copperleaf.dokka.json.test.java;
 
+import com.copperleaf.dokka.json.test.java.camelCasePackage.JavaInterface2;
+
+import java.util.List;
+
 /**
  * This is a Java class
  */
@@ -58,4 +62,62 @@ public class JavaClass {
     public JavaInterface classMethodWithInternalarams(JavaInterface param1, JavaMarkdown param2) {
         return null;
     }
+
+    /**
+     * Method comments
+     *
+     * @param param1 param1 docs
+     * @param param2 param2 docs
+     * @return return value
+     */
+    public List<String> classMethodWithDefinedTypeParams(List<String> param1, List<String> param2) {
+        return null;
+    }
+
+    /**
+     * Method comments
+     *
+     * @param param1 param1 docs
+     * @param param2 param2 docs
+     * @param <T> type param
+     * @return return value
+     */
+    public <T> List<T> classMethodWithGenericTypeParams(List<T> param1, List<T> param2) {
+        return null;
+    }
+
+    /**
+     * Method comments
+     *
+     * @param param1 param1 docs
+     * @param param2 param2 docs
+     * @param <T> type param
+     * @return return value
+     */
+    public <T extends JavaInterface & JavaInterface2> List<T> classMethodWithGenericExtendsTypeParams(List<T> param1, List<T> param2) {
+        return null;
+    }
+
+    /**
+     * Method comments
+     *
+     * @param param1 param1 docs
+     * @param param2 param2 docs
+     * @return return value
+     */
+    public List<? extends JavaInterface> classMethodWithWildcardExtendsParams(List<? extends JavaInterface> param1, List<? extends List<? extends JavaInterface>> param2) {
+        return null;
+    }
+
+    /**
+     * Method comments
+     *
+     * @param param1 param1 docs
+     * @param param2 param2 docs
+     * @return return value
+     */
+    public List<? super JavaInterface> classMethodWithWildcardSuperParams(List<? super JavaInterface> param1, List<? super List<? super JavaInterface>> param2) {
+        return null;
+    }
+
 }
