@@ -55,25 +55,32 @@ class JavadocJsonDoclet {
                 packages.add(classDoc.containingPackage())
             }
 
-            try {
-                for (classdoc in classes) {
-                    val file = File("$destinationDir/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
-                    if (!file.parentFile.exists()) {
-                        file.parentFile.mkdirs()
-                    }
+            for (classdoc in classes) {
+                println("Loading classdoc [${classdoc.name()}]")
+                val file = File("$destinationDir/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
+                if (!file.parentFile.exists()) {
+                    file.parentFile.mkdirs()
+                }
+                try {
                     file.writeText(classdoc.toClassDoc(true).toJson())
                 }
-
-                for (packagedoc in packages) {
-                    val file = File("$destinationDir/${packagedoc.name().replace(".", "/")}/index.json")
-                    if (!file.parentFile.exists()) {
-                        file.parentFile.mkdirs()
-                    }
-                    file.writeText(packagedoc.toPackageDoc().toJson())
+                catch (e: Exception) {
+                    println("Failed to create json for classdoc [${classdoc.name()}]: ${e.message}")
                 }
             }
-            catch(e: Throwable) {
-                e.printStackTrace()
+
+            for (packagedoc in packages) {
+                println("Loading packagedoc [${packagedoc.name()}]")
+                val file = File("$destinationDir/${packagedoc.name().replace(".", "/")}/index.json")
+                if (!file.parentFile.exists()) {
+                    file.parentFile.mkdirs()
+                }
+                try {
+                    file.writeText(packagedoc.toPackageDoc().toJson())
+                }
+                catch (e: Exception) {
+                    println("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
+                }
             }
 
             return true

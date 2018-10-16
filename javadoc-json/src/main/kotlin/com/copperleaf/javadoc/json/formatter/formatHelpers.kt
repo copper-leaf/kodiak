@@ -20,7 +20,7 @@ fun Tag.toCommentTag(): CommentTag {
     val key = kind().let { if (it.startsWith("@")) it.drop(1) else it }
     val name: String
     val qualifiedName: String
-    if(this is SeeTag) {
+    if (this is SeeTag && referencedClass() != null) {
         name = referencedClass().simpleTypeName()
         qualifiedName = referencedClass().qualifiedTypeName()
     }
@@ -28,7 +28,6 @@ fun Tag.toCommentTag(): CommentTag {
         name = text()
         qualifiedName = text()
     }
-
     return CommentTag(
             key,
             name,
