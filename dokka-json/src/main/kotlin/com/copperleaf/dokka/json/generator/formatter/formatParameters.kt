@@ -71,17 +71,11 @@ fun DocumentationNode.toNonFunctionalTypeSignature(): List<SignatureComponent> {
 
     list.add(SignatureComponent("type", this.simpleType, this.qualifiedType))
 
-    val typeArguments = this.details(NodeKind.Type)
-    if (typeArguments.isNotEmpty()) {
-        list.add(SignatureComponent("punctuation", "<", ""))
-        typeArguments.forEachIndexed { index, parameter ->
-            list.addAll(parameter.toTypeSignature())
-            if (index < typeArguments.size - 1) {
-                list.add(SignatureComponent("punctuation", ", ", ""))
-            }
-        }
-        list.add(SignatureComponent("punctuation", ">", ""))
-    }
+    this.details(NodeKind.Type).toListSignature(
+            childMapper = { it.toTypeSignature() },
+            prefix = listOf(SignatureComponent("punctuation", "<", "")),
+            postfix = listOf(SignatureComponent("punctuation", ">", ""))
+    )
 
     if (this.nullable) {
         list.add(SignatureComponent("punctuation", "?", ""))
@@ -120,6 +114,35 @@ fun DocumentationNode.toFunctionalTypeSignature(): List<SignatureComponent> {
     // function return
     list.add(SignatureComponent("punctuation", "->", ""))
     list.addAll(typeArguments.last().toTypeSignature())
+
+    return list
+}
+
+
+// Type Params
+//----------------------------------------------------------------------------------------------------------------------
+
+fun DocumentationNode.toTypeParameterDeclarationSignature(): List<SignatureComponent> {
+    val list = mutableListOf<SignatureComponent>()
+
+    val typeArguments = this.details(NodeKind.TypeParameter)
+    if (typeArguments.isNotEmpty()) {
+        list.add(SignatureComponent("punctuation", "<", ""))
+        typeArguments.forEachIndexed { index, typeParameter ->
+            list.add(SignatureComponent("name", typeParameter.name, ""))
+
+            val upperBound = typeParameter.detailOrNull(NodeKind.UpperBound)
+            if (upperBound != null) {
+                list.add(SignatureComponent("punctuation", " : ", ""))
+                list.addAll(upperBound.asType().toTypeSignature())
+            }
+
+            if (index < typeArguments.size - 1) {
+                list.add(SignatureComponent("punctuation", ", ", ""))
+            }
+        }
+        list.add(SignatureComponent("punctuation", "> ", ""))
+    }
 
     return list
 }

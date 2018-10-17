@@ -30,12 +30,12 @@ fun DocumentationNode.fieldSignature(
         modifiers: List<String>,
         type: DocumentationNode
 ): List<SignatureComponent> {
-    val signatureComponents = mutableListOf<SignatureComponent>()
+    val list = mutableListOf<SignatureComponent>()
 
-    signatureComponents.addAll(modifiers.toModifierListSignature())
-    signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
-    signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-    signatureComponents.addAll(type.asType().toTypeSignature())
+    list.addAll(modifiers.toModifierListSignature())
+    list.add(SignatureComponent("name", this.simpleName, ""))
+    list.add(SignatureComponent("punctuation", ": ", ""))
+    list.addAll(type.asType().toTypeSignature())
 
-    return signatureComponents
+    return list
 }

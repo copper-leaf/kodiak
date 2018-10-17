@@ -1,5 +1,7 @@
 package com.copperleaf.dokka.json.test.kotlin
 
+import java.io.Serializable
+
 /**
  * This is a Kotlin class
  */
@@ -40,7 +42,7 @@ class KotlinClass(
     /**
      * This is a property defined in the class body, using an internal type
      */
-    lateinit var genericProperty: List<(String?)->String>
+    lateinit var genericProperty: List<(String?) -> String>
 
     /**
      * This is a method defined in the class body
@@ -93,7 +95,7 @@ class KotlinClass(
      * @param param This is the param1 for the method
      * @return This is the returned string value
      */
-    fun classMethodWithFunctionParameter(param: (String)->String): String? {
+    fun classMethodWithFunctionParameter(param: (String) -> String): String? {
         return null
     }
 
@@ -103,7 +105,7 @@ class KotlinClass(
      * @param param This is the param1 for the method
      * @return This is the returned string value
      */
-    fun classMethodWithInternalFunctionParameter(param: (KotlinInterface?, (String?, Int)->String?)->KotlinMarkdown?): KotlinMarkdown? {
+    fun classMethodWithInternalFunctionParameter(param: (KotlinInterface?, (String?, Int) -> String?) -> KotlinMarkdown?): KotlinMarkdown? {
         return null
     }
 
@@ -113,7 +115,7 @@ class KotlinClass(
      * @param param This is the param1 for the method
      * @return This is the returned string value
      */
-    fun classMethodWithReceiverFunctionParameter(param: KotlinInterface.(String?)->KotlinMarkdown?): KotlinMarkdown? {
+    fun classMethodWithReceiverFunctionParameter(param: KotlinInterface.(String?) -> KotlinMarkdown?): KotlinMarkdown? {
         return null
     }
 
@@ -123,7 +125,7 @@ class KotlinClass(
      * @param param This is the param1 for the method
      * @return This is the returned string value
      */
-    fun classMethodWithGenericReceiverFunctionParameter(param: List<String?>?.(List<String?>?)->List<String?>?): List<String?>? {
+    fun classMethodWithGenericReceiverFunctionParameter(param: List<String?>?.(List<String?>?) -> List<String?>?): List<String?>? {
         return null
     }
 
@@ -143,7 +145,7 @@ class KotlinClass(
      * @receiver This is the receiver for the method
      * @return This is the returned string value
      */
-    fun  String?.methodWithReceiver() {
+    fun String?.methodWithReceiver() {
 
     }
 
@@ -153,7 +155,7 @@ class KotlinClass(
      * @receiver This is the receiver for the method
      * @return This is the returned string value
      */
-    fun  List<String>.methodWithReceiverTypeParameter() {
+    fun List<String>.methodWithReceiverTypeParameter() {
 
     }
 
@@ -163,7 +165,7 @@ class KotlinClass(
      * @receiver This is the receiver for the method
      * @return This is the returned string value
      */
-    fun  KotlinMarkdown?.methodWithInternalReceiver() {
+    fun KotlinMarkdown?.methodWithInternalReceiver() {
 
     }
 
@@ -186,3 +188,31 @@ class KotlinClass(
     }
 
 }
+
+@Suppress("UNUSED_PARAMETER")
+open class KotlinClass2
+
+@Suppress("UNUSED_PARAMETER")
+abstract class KotlinClass3
+
+@Suppress("UNUSED_PARAMETER")
+public class KotlinClass4
+
+@Suppress("UNUSED_PARAMETER")
+private class KotlinClass5
+
+@Suppress("UNUSED_PARAMETER")
+internal class KotlinClass6
+
+@Suppress("UNUSED_PARAMETER")
+data class KotlinClass7(val s: String)
+
+@Suppress("UNUSED_PARAMETER")
+sealed class KotlinClass8
+
+@Suppress("UNUSED_PARAMETER")
+enum class KotlinClass9
+
+@Suppress("UNUSED_PARAMETER")
+abstract class KotlinClass10<T : List<U>, U> : KotlinClass8(), List<T>, Serializable
+

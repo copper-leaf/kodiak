@@ -31,11 +31,11 @@ fun DocumentationNode.constructorSignature(
         modifiers: List<String>,
         parameters: List<KotlinParameter>
 ): List<SignatureComponent> {
-    val signatureComponents = mutableListOf<SignatureComponent>()
+    val list = mutableListOf<SignatureComponent>()
 
-    signatureComponents.addAll(modifiers.toModifierListSignature())
-    signatureComponents.add(SignatureComponent("keyword", "constructor", ""))
-    signatureComponents.addAll(parameters.toParameterListSignature())
+    list.addAll(modifiers.toModifierListSignature())
+    list.add(SignatureComponent("keyword", "constructor", ""))
+    list.addAll(parameters.toParameterListSignature())
 
-    return signatureComponents
+    return list
 }

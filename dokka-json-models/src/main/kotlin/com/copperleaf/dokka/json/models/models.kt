@@ -27,10 +27,13 @@ data class KotlinClassDoc(
         override val qualifiedName: String,
         override val comment: String,
         override val summaryPos: Int,
+        val modifiers: List<String>,
         val constructors: List<KotlinConstructor>,
         val methods: List<KotlinMethod>,
         val fields: List<KotlinField>,
-        val extensions: List<KotlinMethod>
+        val extensions: List<KotlinMethod>,
+        val signature: List<SignatureComponent>,
+        val simpleSignature: String = signature.map { it.name }.joinToString("")
 ) : KotlinClasslike {
     companion object {
         fun fromJson(json: String): KotlinClassDoc {

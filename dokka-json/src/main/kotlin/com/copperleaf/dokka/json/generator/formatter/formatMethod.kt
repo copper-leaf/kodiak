@@ -41,25 +41,27 @@ fun DocumentationNode.methodSignature(
         receiverType: KotlinReceiverType?,
         returnType: KotlinReturnType
 ): List<SignatureComponent> {
-    val signatureComponents = mutableListOf<SignatureComponent>()
+    val list = mutableListOf<SignatureComponent>()
 
-    signatureComponents.addAll(modifiers.toModifierListSignature())
-    signatureComponents.add(SignatureComponent("keyword", "fun ", ""))
+    list.addAll(modifiers.toModifierListSignature())
+    list.add(SignatureComponent("keyword", "fun ", ""))
+
+    list.addAll(this.toTypeParameterDeclarationSignature())
 
     if (receiverType != null) {
-        signatureComponents.addAll(receiverType.signature)
-        signatureComponents.add(SignatureComponent("punctuation", ".", ""))
+        list.addAll(receiverType.signature)
+        list.add(SignatureComponent("punctuation", ".", ""))
     }
 
-    signatureComponents.add(SignatureComponent("name", this.simpleName, ""))
-    signatureComponents.addAll(parameters.toParameterListSignature())
+    list.add(SignatureComponent("name", this.simpleName, ""))
+    list.addAll(parameters.toParameterListSignature())
 
     if (returnType.name != "Unit") {
-        signatureComponents.add(SignatureComponent("punctuation", ": ", ""))
-        signatureComponents.addAll(returnType.signature)
+        list.add(SignatureComponent("punctuation", ": ", ""))
+        list.addAll(returnType.signature)
     }
 
-    return signatureComponents
+    return list
 }
 
 val DocumentationNode.returnType: KotlinReturnType

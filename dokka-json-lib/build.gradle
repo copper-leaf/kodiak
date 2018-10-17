@@ -30,3 +30,21 @@ test {
     }
 }
 test.outputs.upToDateWhen {false}
+
+
+
+configurations { dokka }
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    dokka 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
+}
+task runDefaultDokka(type: JavaExec) {
+    main = "org.jetbrains.dokka.MainKt"
+    classpath = configurations.dokka
+    args = [
+            "-src", "${project(':dokka-json').projectDir}/src/test/kotlin",
+            "-output", "${project(':dokka-json').buildDir}/dokka/default"
+    ]
+}
