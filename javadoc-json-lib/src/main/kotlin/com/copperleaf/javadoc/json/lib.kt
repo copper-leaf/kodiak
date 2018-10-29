@@ -12,7 +12,14 @@ import java.nio.file.Path
 import java.util.concurrent.Executors
 
 interface JavadocdocInvoker {
-    fun getRootDoc(sourceDirs: List<Path>, args: List<String>, callback: (InputStream) -> Runnable): JavadocRootdoc
+    fun getRootDoc(
+            sourceDirs: List<Path>,
+            startMemory: String = "256m",
+            maxMemory: String = "1024m",
+            args: List<String> = emptyList(),
+            callback: (InputStream) -> Runnable
+    ): JavadocRootdoc?
+
     fun loadCachedRootDoc(): JavadocRootdoc?
 }
 
@@ -22,14 +29,20 @@ class JavadocdocInvokerImpl(
         private val targets: List<Artifact>
 ) : JavadocdocInvoker {
 
-    override fun getRootDoc(sourceDirs: List<Path>, args: List<String>, callback: (InputStream) -> Runnable): JavadocRootdoc {
+    override fun getRootDoc(
+            sourceDirs: List<Path>,
+            startMemory: String,
+            maxMemory: String,
+            args: List<String>,
+            callback: (InputStream) -> Runnable
+    ): JavadocRootdoc? {
         val javadocJarPaths = mavenResolver.getMavenJars(targets)
-        executeJavadoc(javadocJarPaths, sourceDirs, args) { callback(it) }
-        return getJavadocRootdoc()
+        val success = executeJavadoc(javadocJarPaths, sourceDirs, startMemory, maxMemory, args) { callback(it) }
+        return if (success) getJavadocRootdoc() else null
     }
 
     override fun loadCachedRootDoc(): JavadocRootdoc? {
-        return if(Files.exists(javadocOutputPath) && javadocOutputPath.toFile().list().isNotEmpty()) {
+        return if (Files.exists(javadocOutputPath) && javadocOutputPath.toFile().list().isNotEmpty()) {
             getJavadocRootdoc()
         }
         else {
@@ -43,13 +56,15 @@ class JavadocdocInvokerImpl(
     private fun executeJavadoc(
             javadocJarPath: List<Artifact>,
             sourceDirs: List<Path>,
+            startMemory: String,
+            maxMemory: String,
             args: List<String>,
             callback: (InputStream) -> Runnable
-    ) {
+    ): Boolean {
         val allFiles = mutableListOf<String>()
         sourceDirs.forEach {
             it.toFile().walk().forEach { f ->
-                if(f.isFile && f.extension == "java") {
+                if (f.isFile && f.extension == "java") {
                     allFiles.add(f.absolutePath)
                 }
             }
@@ -57,6 +72,7 @@ class JavadocdocInvokerImpl(
 
         val processArgs = arrayOf(
                 "javadoc",
+                "-J-Xms$startMemory", "-J-Xmx$maxMemory",
                 "-d", javadocOutputPath.toFile().absolutePath, // where Orchid will find them later
                 "-doclet", "com.copperleaf.javadoc.json.JavadocJsonDoclet",
                 "-docletpath", javadocJarPath.map { it.jarPath!!.toFile().absolutePath }.joinToString(File.pathSeparator), // classpath of downloaded jars
@@ -66,10 +82,15 @@ class JavadocdocInvokerImpl(
 
         val process = ProcessBuilder()
                 .command(*processArgs)
+                .redirectErrorStream(true)
+                .redirectOutput(ProcessBuilder.Redirect.INHERIT)
                 .start()
 
-        Executors.newSingleThreadExecutor().submit(callback(process.inputStream))
-        process.waitFor()
+        val executor = Executors.newSingleThreadExecutor()
+        executor.submit(callback(process.inputStream))
+        val exitValue = process.waitFor()
+        executor.shutdown()
+        return exitValue == 0
     }
 
 // Process Javadoc output to a model Orchid can use
@@ -110,8 +131,3 @@ class JavadocdocInvokerImpl(
     }
 
 }
-
-
-/*
- javadoc /Users/cbrooks/Documents/personal/java/eden/dokka-json/javadoc-json/src/test/java/com/copperleaf/dokka/json/test/java/JavaClass.java -d /Users/cbrooks/Documents/personal/java/eden/dokka-json/javadoc-json/build/javadoc/output
- */

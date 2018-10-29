@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
+import strikt.assertions.isNotNull
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -73,11 +74,11 @@ class JavadocJsonRunnerTest {
             val rootDoc = javadocRunner.getRootDoc(
                     listOf(
                             File("../javadoc-json/src/test/java").canonicalFile.toPath()
-                    ),
-                    emptyList()
+                    )
             ) { inputStream -> InputStreamPrinter(inputStream) }
 
             expectThat(rootDoc)
+                    .isNotNull()
                     .and { chain { it.packages }.isNotEmpty() }
                     .and { chain { it.classes  }.isNotEmpty() }
         }

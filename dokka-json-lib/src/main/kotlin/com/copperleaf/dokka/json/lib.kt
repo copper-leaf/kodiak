@@ -10,24 +10,36 @@ import java.nio.file.Path
 import java.util.concurrent.Executors
 
 interface KotlindocInvoker {
-    fun getRootDoc(sourceDirs: List<Path>, args: List<String>, callback: (InputStream) -> Runnable): KotlinRootdoc
+    fun getRootDoc(
+            sourceDirs: List<Path>,
+            startMemory: String = "256m",
+            maxMemory: String = "1024m",
+            args: List<String> = emptyList(),
+            callback: (InputStream) -> Runnable
+    ): KotlinRootdoc?
+
     fun loadCachedRootDoc(): KotlinRootdoc?
 }
 
 class KotlindocInvokerImpl(
-        private val mavenResolver:  MavenResolver,
+        private val mavenResolver: MavenResolver,
         private val dokkaOutputPath: Path,
         private val targets: List<Artifact>
 ) : KotlindocInvoker {
 
-    override fun getRootDoc(sourceDirs: List<Path>, args: List<String>, callback: (InputStream) -> Runnable): KotlinRootdoc {
+    override fun getRootDoc(
+            sourceDirs: List<Path>,
+            startMemory: String,
+            maxMemory: String,
+            args: List<String>,
+            callback: (InputStream) -> Runnable): KotlinRootdoc? {
         val dokkaJarPaths = mavenResolver.getMavenJars(targets)
-        executeDokka(dokkaJarPaths, sourceDirs, args) { callback(it) }
-        return getKotlinRootdoc()
+        val success = executeDokka(dokkaJarPaths, sourceDirs, startMemory, maxMemory, args) { callback(it) }
+        return if (success) getKotlinRootdoc() else null
     }
 
     override fun loadCachedRootDoc(): KotlinRootdoc? {
-        return if(Files.exists(dokkaOutputPath) && dokkaOutputPath.toFile().list().isNotEmpty()) {
+        return if (Files.exists(dokkaOutputPath) && dokkaOutputPath.toFile().list().isNotEmpty()) {
             getKotlinRootdoc()
         }
         else {
@@ -41,11 +53,14 @@ class KotlindocInvokerImpl(
     private fun executeDokka(
             dokkaJarPath: List<Artifact>,
             sourceDirs: List<Path>,
+            startMemory: String,
+            maxMemory: String,
             args: List<String>,
             callback: (InputStream) -> Runnable
-    ) {
+    ): Boolean {
         val processArgs = arrayOf(
                 "java",
+                "-Xms$startMemory", "-Xmx$maxMemory",
                 "-classpath", dokkaJarPath.map { it.jarPath!!.toFile().absolutePath }.joinToString(File.pathSeparator), // classpath of downloaded jars
                 "org.jetbrains.dokka.MainKt", // Dokka main class
                 "-format", "json", // JSON format (so we can pick up results afterwards)
@@ -58,10 +73,15 @@ class KotlindocInvokerImpl(
 
         val process = ProcessBuilder()
                 .command(*processArgs)
+                .redirectErrorStream(true)
+                .redirectOutput(ProcessBuilder.Redirect.INHERIT)
                 .start()
 
-        Executors.newSingleThreadExecutor().submit(callback(process.inputStream))
-        process.waitFor()
+        val executor = Executors.newSingleThreadExecutor()
+        executor.submit(callback(process.inputStream))
+        val exitValue = process.waitFor()
+        executor.shutdown()
+        return exitValue == 0
     }
 
 // Process Dokka output to a model Orchid can use
