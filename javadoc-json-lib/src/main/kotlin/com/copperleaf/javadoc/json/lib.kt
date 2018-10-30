@@ -83,7 +83,6 @@ class JavadocdocInvokerImpl(
         val process = ProcessBuilder()
                 .command(*processArgs)
                 .redirectErrorStream(true)
-                .redirectOutput(ProcessBuilder.Redirect.INHERIT)
                 .start()
 
         val executor = Executors.newSingleThreadExecutor()

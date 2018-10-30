@@ -92,7 +92,7 @@ class DokkaJsonRunnerTest {
 class InputStreamPrinter(private val inputStream: InputStream) : Runnable {
     override fun run() {
         BufferedReader(InputStreamReader(inputStream, Charset.forName("UTF-8"))).lines().forEach {
-            println(it)
+            println("[tag] $it")
         }
     }
 }
