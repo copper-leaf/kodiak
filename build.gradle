@@ -10,11 +10,12 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
-group 'com.copperleaf'
-version '0.1.0'
+group 'com.eden'
+version '0.2.0'
 
 allprojects {
     repositories {
@@ -22,4 +23,45 @@ allprojects {
         maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url 'https://jitpack.io' }
     }
+}
+
+// Config Values
+//----------------------------------------------------------------------------------------------------------------------
+
+ext.ossLicenses = [
+        'BSD' : [
+                name: 'BSD 3-Clause',
+                url : 'https://opensource.org/licenses/BSD-3-Clause'
+        ]
+]
+
+ext {
+    group = 'com.eden'
+    github_project = 'copper-leaf/dokka-json'
+
+    // Orchid
+    orchid_version = '0.15.3'
+    base_url = 'https://copper-leaf.github.io/dokka-json'
+
+    // Bintray uploads
+    dry_deploy = project.hasProperty('dryDeploy')
+    bintray_username = "${project.properties['bintray_username']}"
+    bintray_api_key = "${project.properties['bintray_apiKey']}"
+    bintray_repo = 'Eden'
+    bintray_user_org = 'javaeden'
+
+    maven_central_sync = project.hasProperty('includeMavenCentralSync')
+    maven_central_username = "${project.properties['mavenCentral_username']}"
+    maven_central_password = "${project.properties['mavenCentral_password']}"
+
+    // Developer info
+    developer_id = 'JavaEden'
+    developer_name = 'Casey Brooks'
+    developer_email = 'cjbrooks12@gmail.com'
+
+    // Project info
+    project_name = 'Json Docs'
+    project_description = 'Wrappers around Dokka and Javadoc to produce JSON models as libraries'
+
+    license = rootProject.ext.ossLicenses['BSD']
 }

@@ -34,11 +34,6 @@ class KotlindocInvokerImpl(
             destinationDir: Path,
             args: List<String>,
             callback: (InputStream) -> Runnable): KotlinRootdoc? {
-        println("dokka sourceDirs=    ${sourceDirs.joinToString { it.toFile().canonicalPath }}")
-        println("dokka destinationDir=${destinationDir.toFile().canonicalPath }")
-        println("dokka cacheDir=      ${cacheDir.toFile().canonicalPath }")
-        println("dokka formatterJar=  ${formatterJar.toFile().canonicalPath }")
-
         val success = executeDokka(sourceDirs, destinationDir, args) { callback(it) }
         return if (success) getKotlinRootdoc(destinationDir) else null
     }
@@ -58,7 +53,7 @@ class KotlindocInvokerImpl(
     private fun cacheEmbeddedJar() {
         formatterJar.parent.toFile().mkdirs()
         Files.copy(
-            object {}::class.java.getResourceAsStream("/dokka-formatter-all.zip"),
+            this.javaClass.getResourceAsStream("/dokka-formatter-all.zip"),
             formatterJar,
             StandardCopyOption.REPLACE_EXISTING
         )

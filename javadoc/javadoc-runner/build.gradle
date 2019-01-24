@@ -1,4 +1,6 @@
 apply plugin: 'kotlin'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 group rootProject.group
 version rootProject.version
@@ -34,3 +36,5 @@ tasks.assemble.dependsOn project(':javadoc:javadoc-formatter').tasks.assemble
 processResources {
     from "${project(':javadoc:javadoc-formatter').buildDir}/libs/javadoc-formatter-all.zip"
 }
+
+apply from: "${rootProject.rootDir}/gradle/actions/publish.gradle"

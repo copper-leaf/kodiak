@@ -53,7 +53,7 @@ class JavadocdocInvokerImpl(
     private fun cacheEmbeddedJar() {
         formatterJar.parent.toFile().mkdirs()
         Files.copy(
-            object {}::class.java.getResourceAsStream("/javadoc-formatter-all.zip"),
+            this.javaClass.getResourceAsStream("/javadoc-formatter-all.zip"),
             formatterJar,
             StandardCopyOption.REPLACE_EXISTING
         )
