@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
-apply plugin: 'kotlinx-serialization'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group rootProject.group
@@ -9,8 +8,8 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
-    compile project(':javadoc:models')
+    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
+    compile project(':dokka:dokka-models')
 }
 
 compileKotlin {
@@ -22,7 +21,6 @@ compileTestKotlin {
 tasks.assemble.dependsOn shadowJar
 
 shadowJar {
-    baseName = "javadoc-formatter"
     version = null
     extension = "zip"
 }

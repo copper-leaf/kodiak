@@ -6,8 +6,7 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile project(':dokka:models')
-    compile project(':doc-json-common')
+    compile project(':dokka:dokka-models')
 
     // testing
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
@@ -31,7 +30,7 @@ test.outputs.upToDateWhen {false}
 
 // wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
 // in this project
-tasks.assemble.dependsOn project(':dokka:formatter').tasks.assemble
+tasks.assemble.dependsOn project(':dokka:dokka-formatter').tasks.assemble
 processResources {
-    from "${project(':dokka:formatter').buildDir}/libs/dokka-formatter-all.zip"
+    from "${project(':dokka:dokka-formatter').buildDir}/libs/dokka-formatter-all.zip"
 }

@@ -6,8 +6,7 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile project(':doc-json-common')
-    compile project(':javadoc:models')
+    compile project(':javadoc:javadoc-models')
 
     // testing
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
@@ -31,7 +30,7 @@ test.outputs.upToDateWhen {false}
 
 // wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
 // in this project
-tasks.assemble.dependsOn project(':javadoc:formatter').tasks.assemble
+tasks.assemble.dependsOn project(':javadoc:javadoc-formatter').tasks.assemble
 processResources {
-    from "${project(':javadoc:formatter').buildDir}/libs/javadoc-formatter-all.zip"
+    from "${project(':javadoc:javadoc-formatter').buildDir}/libs/javadoc-formatter-all.zip"
 }

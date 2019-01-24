@@ -33,8 +33,8 @@ class DokkaJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../formatter/build/dokka/cache").canonicalFile.toPath()
-        outputDir = File("../formatter/build/dokka/output").canonicalFile.toPath()
+        cacheDir = File("../dokka-formatter/build/dokka/cache").canonicalFile.toPath()
+        outputDir = File("../dokka-formatter/build/dokka/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }
@@ -59,8 +59,8 @@ class DokkaJsonRunnerTest {
         try {
             val rootDoc = dokkaRunner.getRootDoc(
                 listOf(
-                    File("../formatter/src/test/java").canonicalFile.toPath(),
-                    File("../formatter/src/test/kotlin").canonicalFile.toPath()
+                    File("../dokka-formatter/src/test/java").canonicalFile.toPath(),
+                    File("../dokka-formatter/src/test/kotlin").canonicalFile.toPath()
                 ),
                 outputDir
             ) { inputStream -> InputStreamPrinter(inputStream) }

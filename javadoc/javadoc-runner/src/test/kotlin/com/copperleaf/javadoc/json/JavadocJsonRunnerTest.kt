@@ -33,8 +33,8 @@ class JavadocJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../formatter/build/javadoc/cache").canonicalFile.toPath()
-        outputDir = File("../formatter/build/javadoc/output").canonicalFile.toPath()
+        cacheDir = File("../javadoc-formatter/build/javadoc/cache").canonicalFile.toPath()
+        outputDir = File("../javadoc-formatter/build/javadoc/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }
@@ -58,7 +58,7 @@ class JavadocJsonRunnerTest {
     fun testRunningJavadoc() {
         try {
             val rootDoc = javadocRunner.getRootDoc(
-                listOf(File("../formatter/src/test/java").canonicalFile.toPath()),
+                listOf(File("../javadoc-formatter/src/test/java").canonicalFile.toPath()),
                 outputDir
             ) { inputStream -> InputStreamPrinter(inputStream) }
 

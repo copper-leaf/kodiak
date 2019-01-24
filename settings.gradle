@@ -1,11 +1,9 @@
 rootProject.name = 'dokka-json'
 
-include ':doc-json-common'
+include ':dokka:dokka-models'
+include ':dokka:dokka-formatter'
+include ':dokka:dokka-runner'
 
-include ':dokka:models'
-include ':dokka:formatter'
-include ':dokka:runner'
-
-include ':javadoc:models'
-include ':javadoc:formatter'
-include ':javadoc:runner'
+include ':javadoc:javadoc-models'
+include ':javadoc:javadoc-formatter'
+include ':javadoc:javadoc-runner'
