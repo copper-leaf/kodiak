@@ -6,7 +6,8 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile project(':javadoc-json-models')
+    compile project(':doc-json-common')
 
     // testing
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
@@ -27,3 +28,10 @@ test {
     }
 }
 test.outputs.upToDateWhen {false}
+
+// wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
+// in this project
+tasks.assemble.dependsOn project(':javadoc-json-formatter').tasks.assemble
+processResources {
+    from "${project(':javadoc-json-formatter').buildDir}/libs/javadoc-json-formatter-all.zip"
+}

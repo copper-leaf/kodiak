@@ -1,5 +1,7 @@
+apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group rootProject.group
 version rootProject.version
@@ -7,9 +9,8 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+    shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+    compile project(':javadoc-json-models')
 }
 
 compileKotlin {
@@ -17,4 +18,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+tasks.assemble.dependsOn shadowJar
+
+shadowJar {
+    version = null
+    extension = "zip"
 }

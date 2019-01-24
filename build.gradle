@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
 }
 
@@ -19,5 +20,6 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
+        maven { url 'https://jitpack.io' }
     }
 }
