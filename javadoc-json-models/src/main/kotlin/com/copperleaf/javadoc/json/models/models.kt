@@ -37,12 +37,12 @@ data class JavaClassDoc(
 ) : JavaClasslike {
     companion object {
         fun fromJson(json: String): JavaClassDoc {
-            return JSON.parse(json)
+            return JSON.parse(JavaClassDoc.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(this)
+        return JSON.indented.stringify(JavaClassDoc.serializer(), this)
     }
 }
 
@@ -66,12 +66,12 @@ data class JavaPackageDoc(
 
     companion object {
         fun fromJson(json: String): JavaPackageDoc {
-            return JSON.parse(json)
+            return JSON.parse(JavaPackageDoc.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(this)
+        return JSON.indented.stringify(JavaPackageDoc.serializer(), this)
     }
 }
 

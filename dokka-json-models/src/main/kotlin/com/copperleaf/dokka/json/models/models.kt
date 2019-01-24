@@ -37,12 +37,12 @@ data class KotlinClassDoc(
 ) : KotlinClasslike {
     companion object {
         fun fromJson(json: String): KotlinClassDoc {
-            return JSON.parse(json)
+            return JSON.parse(KotlinClassDoc.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(this)
+        return JSON.indented.stringify(KotlinClassDoc.serializer(), this)
     }
 }
 
@@ -66,12 +66,12 @@ data class KotlinPackageDoc(
 
     companion object {
         fun fromJson(json: String): KotlinPackageDoc {
-            return JSON.parse(json)
+            return JSON.parse(KotlinPackageDoc.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(this)
+        return JSON.indented.stringify(KotlinPackageDoc.serializer(), this)
     }
 }
 

@@ -55,8 +55,8 @@ class JavadocJsonRunnerTest {
 
         resolver = MavenResolverImpl(client, cacheDir)
         javadocRunner = JavadocdocInvokerImpl(resolver, outputDir, listOf(
-                Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.60"),
-                Artifact.from("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.6.1"),
+                Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.20"),
+                Artifact.from("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.1"),
 
                 Artifact.from("copper-leaf", "javadoc-json",        "0.1.0", File("../javadoc-json/build/libs/javadoc-json-0.1.0.jar").canonicalFile.toPath()),
                 Artifact.from("copper-leaf", "javadoc-json-models", "0.1.0", File("../javadoc-json-models/build/libs/javadoc-json-models-0.1.0.jar").canonicalFile.toPath())

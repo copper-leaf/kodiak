@@ -52,8 +52,8 @@ class DokkaJsonRunnerTest {
 
         resolver = MavenResolverImpl(client, cacheDir)
         dokkaRunner = KotlindocInvokerImpl(resolver, outputDir, listOf(
-                Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.60"),
-                Artifact.from("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.6.1"),
+                Artifact.from("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.20"),
+                Artifact.from("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.9.1"),
                 Artifact.from("org.jetbrains.dokka:dokka-fatjar:0.9.17"),
 
                 Artifact.from("copper-leaf", "dokka-json",        "0.1.0", File("../dokka-json/build/libs/dokka-json-0.1.0.jar").canonicalFile.toPath()),
