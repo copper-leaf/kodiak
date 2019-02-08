@@ -1,16 +1,13 @@
 package com.copperleaf.javadoc.json
 
-import kotlinx.io.InputStream
+import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isNotEmpty
 import strikt.assertions.isNotNull
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
-import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -60,7 +57,7 @@ class JavadocJsonRunnerTest {
             val rootDoc = javadocRunner.getRootDoc(
                 listOf(File("../javadoc-formatter/src/test/java").canonicalFile.toPath()),
                 outputDir
-            ) { inputStream -> InputStreamPrinter(inputStream) }
+            ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
             expectThat(rootDoc)
                 .isNotNull()
@@ -72,12 +69,4 @@ class JavadocJsonRunnerTest {
         }
     }
 
-}
-
-class InputStreamPrinter(private val inputStream: InputStream) : Runnable {
-    override fun run() {
-        BufferedReader(InputStreamReader(inputStream, Charset.forName("UTF-8"))).lines().forEach {
-            println("[tag] $it")
-        }
-    }
 }
