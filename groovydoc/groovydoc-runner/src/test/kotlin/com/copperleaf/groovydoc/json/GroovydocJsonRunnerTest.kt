@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
+import strikt.assertions.isNotEmpty
 import strikt.assertions.isNotNull
 import java.io.File
 import java.nio.file.Files
@@ -63,6 +64,8 @@ class GroovydocJsonRunnerTest {
 
             expectThat(rootDoc)
                 .isNotNull()
+                .and { chain { it.packages }.isNotEmpty() }
+                .and { chain { it.classes }.isNotEmpty() }
         } catch (t: Throwable) {
             println(t.message)
             throw t

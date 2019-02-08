@@ -17,10 +17,7 @@ data class GroovydocClassDoc(
     @Transient
     val node: Any? = null,
 
-    val sourceFile: String,
-    val kind: String,
-    val name: String,
-    val comment: String
+    val name: String
 ) {
     companion object {
         fun fromJson(json: String): GroovydocClassDoc {
@@ -38,10 +35,7 @@ data class GroovydocPackageDoc(
     @Transient
     val node: Any? = null,
 
-    val sourceFile: String,
-    val kind: String,
-    val name: String,
-    val comment: String
+    val name: String
 ) {
     companion object {
         fun fromJson(json: String): GroovydocPackageDoc {

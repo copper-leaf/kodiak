@@ -30,6 +30,10 @@ class MainArgs {
         src.split(File.pathSeparator)
     }
 
+    val srcPaths: List<Path> by lazy {
+        srcDirs.map { File(it).toPath() }
+    }
+
     val cachePath: Path by lazy {
         File(cacheDir).toPath()
     }
