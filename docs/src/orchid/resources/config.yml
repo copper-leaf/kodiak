@@ -1,0 +1,49 @@
+
+site:
+  about:
+    siteName: JSON Documentation Formatters
+    siteDescription: A collection wrappers around various code documentation tools which produces a common JSON output readable by Orchid.
+
+theme:
+  social:
+    github: 'copper-leaf/dokka-json'
+  primaryColor: '#3884FF'
+  bannerColor: '#3884FF'
+  menu:
+    - type: 'page'
+      itemId: 'Changelog'
+    - type: 'pages'
+      group: 'languages'
+      asSubmenu: true
+      submenuTitle: 'Languages'
+
+services:
+  publications:
+    stages:
+      - type: ghPages
+        repo: 'copper-leaf/dokka-json'
+        username: 'cjbrooks12'
+      - type: githubReleases
+        repo: 'copper-leaf/dokka-json'
+
+allPages:
+  components:
+    - type: pageContent
+    - type: prism
+      githubTheme: 'duotone-light'
+      languages:
+        - 'groovy'
+        - 'java'
+        - 'kotlin'
+      extraCss:
+        - 'inline:prism-inline.scss:
+        pre[class*="language-"] {
+          border: none;
+          background: #f3f3f0;
+          padding: 2em;
+          code {
+            background: #f3f3f0;
+          }
+        }
+        .token.comment { color: #a04080; }
+        '

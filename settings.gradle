@@ -1,5 +1,7 @@
 rootProject.name = 'dokka-json'
 
+include ':docs'
+
 include ':dokka:dokka-models'
 include ':dokka:dokka-formatter'
 include ':dokka:dokka-runner'
