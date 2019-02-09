@@ -35,7 +35,7 @@ class GroovydocInvokerImpl(
         args: List<String>,
         callback: (InputStream) -> Runnable
     ): GroovydocRootdoc? {
-        val success = executeSwiftdoc(sourceDirs, destinationDir, args) { callback(it) }
+        val success = executeGroovydoc(sourceDirs, destinationDir, args) { callback(it) }
         return if (success) getGroovydocRootdoc(destinationDir) else null
     }
 
@@ -59,7 +59,7 @@ class GroovydocInvokerImpl(
         )
     }
 
-    private fun executeSwiftdoc(
+    private fun executeGroovydoc(
         sourceDirs: List<Path>,
         destinationDir: Path,
         args: List<String>,

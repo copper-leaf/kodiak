@@ -6,6 +6,9 @@ import org.codehaus.groovy.groovydoc.GroovyPackageDoc
 fun GroovyPackageDoc.toPackageDoc(): GroovydocPackageDoc {
     return GroovydocPackageDoc(
         this,
-        this.name()
+        this.nameWithDots(),
+        this.nameWithDots(),
+        this.description().trim(),
+        this.allClasses().map { it.toClassDoc(false) }
     )
 }

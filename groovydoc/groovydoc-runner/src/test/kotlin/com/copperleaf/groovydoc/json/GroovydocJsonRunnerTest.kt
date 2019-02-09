@@ -20,8 +20,8 @@ class GroovydocJsonRunnerTest {
     private val useTempDirs = false
 
     private fun initTempDirs() {
-        cacheDir = Files.createTempDirectory("SwiftdocJsonRunnerTest")
-        outputDir = Files.createTempDirectory("swiftdocTestOutput")
+        cacheDir = Files.createTempDirectory("groovydocJsonRunnerTest")
+        outputDir = Files.createTempDirectory("groovydocTestOutput")
     }
 
     private fun cleanupTempDirs() {
@@ -52,7 +52,7 @@ class GroovydocJsonRunnerTest {
     }
 
     @Test
-    fun testRunningSwiftdoc() {
+    fun testRunningGroovydoc() {
         try {
             val rootDoc = groovydocRunner.getRootDoc(
                 listOf(
