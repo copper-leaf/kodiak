@@ -1,6 +1,5 @@
 package com.copperleaf.groovydoc.json
 
-import org.apache.tools.ant.BuildException
 import org.codehaus.groovy.tools.groovydoc.FileOutputTool
 import java.nio.file.Path
 import java.util.Properties
@@ -11,7 +10,6 @@ class GroovydocJsonFormatter(
 ) {
 
     var scope = "public"
-    var processScripts = true
 
     private var extensions = listOf("java", "groovy", "gv", "gvy", "gsh")
 
@@ -19,29 +17,23 @@ class GroovydocJsonFormatter(
         return dirs
             .map { dir ->
                 dir.toFile()
-                    .walkTopDown()
-                    .filter { it.exists() && it.isFile }
-                    .filter { extensions.contains(it.extension) }
-                    .map {
-                        val basePath = dir.toFile()
-                        val sourceFilePath = it
-                        val relativePath = sourceFilePath.relativeTo(basePath)
-                        relativePath.invariantSeparatorsPath
-                    }
+                    .walkTopDown()                                               // recursively find files in the source directory
+                    .filter { it.exists() && it.isFile }                         // only get files, not directories
+                    .filter { extensions.contains(it.extension) }                // only use Groovy or Java files
+                    .map { it.relativeTo(dir.toFile()).invariantSeparatorsPath } // get the file's path relative to the source directory
                     .toList()
             }
             .flatten()
             .distinct()
     }
 
-    @Throws(BuildException::class)
     fun execute() {
         val properties = Properties().apply {
             setProperty("publicScope", (scope == "public").toString())
             setProperty("protectedScope", (scope == "protected").toString())
             setProperty("packageScope", (scope == "package").toString())
             setProperty("privateScope", (scope == "private").toString())
-            setProperty("processScripts", processScripts.toString())
+            setProperty("processScripts", "true")
             setProperty("includeMainForScripts", "false")
             setProperty("charset", FILE_ENCODING)
             setProperty("fileEncoding", FILE_ENCODING)

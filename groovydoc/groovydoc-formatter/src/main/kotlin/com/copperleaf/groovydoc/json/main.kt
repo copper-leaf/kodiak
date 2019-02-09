@@ -1,27 +1,27 @@
 package com.copperleaf.groovydoc.json
 
+import com.caseyjbrooks.clog.Clog
+import com.eden.orchid.api.cli.Cli
 import com.eden.orchid.api.options.annotations.Option
+import groovy.lang.GroovySystem
 import java.io.File
 import java.nio.file.Path
 
+const val FILE_ENCODING = "UTF-8"
+
 fun main(vararg args: String) {
-    val formatter = GroovydocFormatter()
-    formatter.init(args.toList().toTypedArray())
-    try {
-        formatter.runGroovydoc()
-    }
-    catch(e: Exception) {
-        e.printStackTrace()
-    }
+    Clog.tag("Groovy version").i("{}", GroovySystem.getVersion())
+
+    Clog.getInstance().addTagToBlacklist("FlagsParser")
+    val mainArgs = Cli.parseArgsInto(MainArgs(), args)
+
+    GroovydocJsonFormatter(mainArgs.srcPaths, mainArgs.outputPath).execute()
 }
 
 class MainArgs {
 
     @Option
     lateinit var src: String
-
-    @Option
-    lateinit var cacheDir: String
 
     @Option
     lateinit var output: String
@@ -32,10 +32,6 @@ class MainArgs {
 
     val srcPaths: List<Path> by lazy {
         srcDirs.map { File(it).toPath() }
-    }
-
-    val cachePath: Path by lazy {
-        File(cacheDir).toPath()
     }
 
     val outputPath: Path by lazy {

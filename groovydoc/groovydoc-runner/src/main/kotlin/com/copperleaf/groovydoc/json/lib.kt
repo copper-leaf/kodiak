@@ -74,7 +74,6 @@ class GroovydocInvokerImpl(
             "com.copperleaf.groovydoc.json.MainKt", // Groovydoc Formatter main class
             "--src", sourceDirs.map { it.toFile().absolutePath }.joinToString(separator = File.pathSeparator), // the sources to process
             "--output", destinationDir.toFile().absolutePath, // where Orchid will find them later
-            "--cacheDir", cacheDir.toFile().absolutePath, // where Orchid will find them later
             *args.toTypedArray() // allow additional arbitrary args
         )
 
