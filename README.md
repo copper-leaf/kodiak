@@ -106,6 +106,7 @@ complete functionality for that language's formatter.
 
 - `./gradlew clean :javadoc:javadoc-runner:build`
 - `./gradlew clean :dokka:dokka-runner:build`
+- `./gradlew clean :groovydoc:groovydoc-runner:build`
 
 Test source files for each language should go in the appropriate `-formatter` `test/` sourceroot. 
 
@@ -114,6 +115,9 @@ Test source files for each language should go in the appropriate `-formatter` `t
 - `:dokka:dokka-runner` tests sources from:
     - `dokka/dokka-formatter/test/java`
     - `dokka/dokka-formatter/test/kotlin`
+- `:groovydoc:groovydoc-runner` tests sources from:
+    - `groovydoc/groovydoc-formatter/test/java`
+    - `groovydoc/groovydoc-formatter/test/groovy`
 
 To build and serve docs locally:
 

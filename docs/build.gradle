@@ -26,6 +26,7 @@ orchid {
     version = "${project.version}"
     theme = "BsDoc"
     baseUrl = "https://copper-leaf.github.io/dokka-json"
+    githubToken = project.hasProperty("github_token") ? project.property("github_token") : ""
 
     if(project.hasProperty('env') && project.property('env') == 'prod') {
         environment = 'prod'
