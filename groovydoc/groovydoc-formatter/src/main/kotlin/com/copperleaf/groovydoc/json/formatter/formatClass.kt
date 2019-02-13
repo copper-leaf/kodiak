@@ -14,7 +14,7 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovydocClassDoc {
         this.classKind,
         this.simpleTypeName(),
         this.qualifiedTypeName(),
-        this.commentText().trim(),
+        this.findCommentText(),
         if(deep) this.constructors().map { it.toConstructor(this) } else emptyList(),
         if(deep) this.methods().map { it.toMethod(this) } else emptyList(),
         if(deep) this.fields().map { it.toField(this) } else emptyList(),

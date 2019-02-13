@@ -1,7 +1,7 @@
 package com.copperleaf.groovydoc.json.groovy
 
 /**
- * This is the `TestGroovyClass` comment text. It contains <code>code snippets</code>, <bold>bold text tags</b>, and
+ * This is the `TestGroovyClass` comment text. It contains <code>code snippets</code>, <b>bold text tags</b>, and
  * also **bold markdown things**.
  */
 public class TestGroovyClass {
@@ -10,7 +10,7 @@ public class TestGroovyClass {
      * This is a field comment
      */
     public transient String stringField = ""
-    public transient com.copperleaf.groovydoc.json.java.TestGroovyClass2 testGroovyClass2Field = null
+    public transient TestGroovyClass2 testGroovyClass2Field = null
 
     /**
      * This is a method which returns a string
@@ -26,19 +26,20 @@ public class TestGroovyClass {
      *
      * @return the testGroovyClass2Field value
      */
-    com.copperleaf.groovydoc.json.java.TestGroovyClass2 methodReturningTestGroovyClass2() {
+    TestGroovyClass2 methodReturningTestGroovyClass2() {
         return testGroovyClass2Field
     }
 
     /**
-     * This is the comment text
+     * qwerty This is the `TestGroovyClass#methodWithParametersReturningString` comment text. It contains <code>code snippets</code>, <b>bold text tags</b>, and
+     *  * also **bold markdown things**.
      *
      * @param a1 the a1 to process
      * @param a2 the a2 to process
      * @param a3 the a3 to process
      * @return the value to return
      */
-    String methodWithParametersReturningString(String a1, int a2, Object a3, com.copperleaf.groovydoc.json.java.TestGroovyClass2 a4) {
+    String methodWithParametersReturningString(String a1, int a2, Object a3, TestGroovyClass2 a4) {
         return stringField
     }
 

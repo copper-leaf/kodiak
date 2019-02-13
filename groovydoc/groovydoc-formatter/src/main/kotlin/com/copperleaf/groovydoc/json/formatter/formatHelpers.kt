@@ -1,9 +1,18 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.SignatureComponent
+import org.codehaus.groovy.groovydoc.GroovyDoc
 import org.codehaus.groovy.groovydoc.GroovyParameter
+import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
 import org.codehaus.groovy.tools.groovydoc.ExternalGroovyClassDoc
+import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
+import org.codehaus.groovy.tools.groovydoc.SimpleGroovyTag
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Comment
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Node
+import org.jsoup.select.NodeFilter
 
 fun List<String>.toModifierListSignature(): List<SignatureComponent> {
     return this.map { SignatureComponent("modifier", "$it ", "") }
@@ -24,11 +33,10 @@ class ExternalGroovyClassDocWrapper(val ext: ExternalGroovyClassDoc) : GroovyTyp
     override fun isPrimitive() = ext.isPrimitive
 }
 
-fun GroovyParameter.realType() : GroovyType {
-    return if(this.type() == null) {
+fun GroovyParameter.realType(): GroovyType {
+    return if (this.type() == null) {
         PrimitiveFieldTypeWrapper(this)
-    }
-    else {
+    } else {
         this.type()
     }
 }
@@ -39,3 +47,92 @@ class PrimitiveFieldTypeWrapper(val field: GroovyParameter) : GroovyType {
     override fun typeName() = field.typeName()
     override fun isPrimitive() = true
 }
+
+// Process comment text
+//----------------------------------------------------------------------------------------------------------------------
+
+private data class GroovyCommentData(
+    val commentText: String,
+    val commentTags: Map<String, List<Pair<String, String>>>
+)
+
+private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
+    val commentTags = mutableMapOf<String, List<Pair<String, String>>>()
+
+    val commentDoc = Jsoup.parse(this.commentText().trim())
+    commentDoc.outputSettings(Document.OutputSettings().apply {
+        indentAmount(2)
+        prettyPrint(true)
+        outline(true)
+    })
+    commentDoc.filter(object : NodeFilter {
+        override fun tail(node: Node, depth: Int): NodeFilter.FilterResult {
+            return if (node is Comment) {
+                NodeFilter.FilterResult.REMOVE
+            } else NodeFilter.FilterResult.CONTINUE
+        }
+
+        override fun head(node: Node, depth: Int): NodeFilter.FilterResult {
+            return if (node is Comment) {
+                NodeFilter.FilterResult.REMOVE
+            } else NodeFilter.FilterResult.CONTINUE
+        }
+    })
+
+    val dlElements = commentDoc.select("dl")
+    commentDoc.select("dl").remove()
+
+    for (dl in dlElements) {
+        val dlName = dl.select("dt").text().trim().removeSuffix(":").toLowerCase()
+
+        val ddElements = dl.select("dd")
+
+        val tagValues = mutableListOf<Pair<String, String>>()
+        for(dd in ddElements) {
+            val ddName = dd.select("code").text().trim()
+            dd.select("code").remove()
+            val ddText = dd.html().trimLines().removePrefix("- ")
+
+            tagValues.add(Pair(ddName, ddText))
+        }
+
+        commentTags[dlName] = tagValues
+    }
+
+    return GroovyCommentData(
+        commentDoc.select("body").html().trimLines(),
+        commentTags
+    )
+}
+
+fun GroovyDoc.findCommentText(): String {
+    return parseCommentToValues().commentText
+}
+
+fun GroovyDoc.findCommentTags(): List<GroovyTag> {
+    val groovyTagsList = mutableListOf<GroovyTag>()
+
+    if (this is SimpleGroovyDoc && this.tags() != null) {
+        groovyTagsList.addAll(this.tags())
+    }
+
+    parseCommentToValues().commentTags.forEach { tagName, values ->
+        if(values.any { it.first.isNotBlank() }) {
+            // convert values into tags with name
+            values.forEach {
+                groovyTagsList.add(SimpleGroovyTag(tagName, it.first, it.second))
+            }
+        }
+        else if(values.size == 1) {
+            // use the tagName and single item value only
+            groovyTagsList.add(SimpleGroovyTag(tagName, null, values.single().second))
+        }
+    }
+
+    return groovyTagsList
+}
+
+private fun String.trimLines() = this
+    .lines()
+    .map { it.trimEnd() }
+    .joinToString("\n")

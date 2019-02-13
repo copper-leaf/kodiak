@@ -11,13 +11,13 @@ import org.codehaus.groovy.groovydoc.GroovyType
 
 fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovydocMethod {
     val modifiers = listOf(this.modifiers()).filterNotNull()
-    val parameters = formatParameters(this.parameters())
-    val returnType = this.returnType().real().toReturnType()
+    val parameters = formatParameters(this.parameters(), this.findCommentTags().filter { it.name() == "parameters" })
+    val returnType = this.returnType().real().toReturnType(this)
     return GroovydocMethod(
             this,
             this.name(),
             this.name(),
-            this.commentText().trim(),
+            this.findCommentText(),
             modifiers,
             parameters,
             returnType,
@@ -29,12 +29,12 @@ fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovydocMethod {
     )
 }
 
-fun GroovyType.toReturnType(): GroovydocReturnType {
+fun GroovyType.toReturnType(parent: GroovyMethodDoc): GroovydocReturnType {
     return GroovydocReturnType(
             this,
             this.simpleTypeName(),
             this.qualifiedTypeName(),
-            "",
+            parent.findCommentTags().firstOrNull { it.name() == "returns" }?.text() ?: "",
             this.simpleTypeName(),
             this.qualifiedTypeName(),
             this.toTypeSignature()

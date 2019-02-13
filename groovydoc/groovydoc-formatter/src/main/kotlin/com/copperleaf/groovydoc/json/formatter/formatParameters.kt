@@ -3,23 +3,24 @@ package com.copperleaf.groovydoc.json.formatter
 import com.copperleaf.groovydoc.json.models.GroovydocParameter
 import com.copperleaf.groovydoc.json.models.SignatureComponent
 import org.codehaus.groovy.groovydoc.GroovyParameter
+import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
 
-fun formatParameters(params: Array<GroovyParameter>): List<GroovydocParameter> {
+fun formatParameters(params: Array<GroovyParameter>, tags: List<GroovyTag>): List<GroovydocParameter> {
     return params.map { param ->
-        param.toParameter()
+        param.toParameter(tags.find { tag -> tag.param() == param.name() })
     }
 }
 
-fun GroovyParameter.toParameter(): GroovydocParameter {
+fun GroovyParameter.toParameter(tag: GroovyTag?): GroovydocParameter {
     return GroovydocParameter(
-            this,
-            this.name(),
-            this.name(),
-            "",
-            this.realType().simpleTypeName(),
-            this.realType().qualifiedTypeName(),
-            this.realType().toTypeSignature()
+        this,
+        this.name(),
+        this.name(),
+        tag?.text() ?: "",
+        this.realType().simpleTypeName(),
+        this.realType().qualifiedTypeName(),
+        this.realType().toTypeSignature()
     )
 }
 
@@ -43,7 +44,7 @@ fun List<GroovydocParameter>.toParameterListSignature(): List<SignatureComponent
 fun GroovyType?.toTypeSignature(): List<SignatureComponent> {
     val list = mutableListOf<SignatureComponent>()
 
-    if(this != null) {
+    if (this != null) {
         list.add(SignatureComponent("type", this.real().simpleTypeName(), this.real().qualifiedTypeName()))
 
 //    val wildcard = this.asWildcardType()

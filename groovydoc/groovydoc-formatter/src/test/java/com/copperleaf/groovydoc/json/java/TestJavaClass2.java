@@ -1,7 +1,7 @@
 package com.copperleaf.groovydoc.json.java;
 
 /**
- * This is the `TestJavaClass` comment text. It contains <code>code snippets</code>, <bold>bold text tags</b>, and
+ * This is the `TestJavaClass` comment text. It contains <code>code snippets</code>, <b>bold text tags</b>, and
  * also **bold markdown things**.
  */
 public class TestJavaClass2 {

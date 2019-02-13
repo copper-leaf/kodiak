@@ -8,12 +8,12 @@ import org.codehaus.groovy.groovydoc.GroovyConstructorDoc
 
 fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovydocConstructor {
     val modifiers = listOf(this.modifiers()).filterNotNull()
-    val parameters = formatParameters(this.parameters())
+    val parameters = formatParameters(this.parameters(), this.findCommentTags().filter { it.name() == "parameters" })
     return GroovydocConstructor(
         this,
         parent.simpleTypeName(),
         parent.qualifiedTypeName(),
-        this.commentText().trim(),
+        this.findCommentText(),
         modifiers,
         parameters,
         this.constructorSignature(

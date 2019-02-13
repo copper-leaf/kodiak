@@ -12,7 +12,7 @@ fun GroovyFieldDoc.toField(parent: GroovyClassDoc): GroovydocField {
             this,
             this.name(),
             this.name(),
-            this.commentText().trim(),
+            this.findCommentText(),
             modifiers,
             this.type().real().simpleTypeName(),
             this.type().real().qualifiedTypeName(),
