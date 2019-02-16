@@ -1,6 +1,7 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.SignatureComponent
+import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
@@ -48,6 +49,17 @@ class PrimitiveFieldTypeWrapper(val field: GroovyParameter) : GroovyType {
     override fun isPrimitive() = true
 }
 
+// Determine if class is exception class
+//----------------------------------------------------------------------------------------------------------------------
+
+tailrec fun GroovyClassDoc.isExceptionClass(): Boolean {
+    return when {
+        this.qualifiedTypeName() == Throwable::class.java.name -> true
+        this.superclass() != null                              -> this.superclass().isExceptionClass()
+        else                                                   -> false
+    }
+}
+
 // Process comment text
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -88,7 +100,7 @@ private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
         val ddElements = dl.select("dd")
 
         val tagValues = mutableListOf<Pair<String, String>>()
-        for(dd in ddElements) {
+        for (dd in ddElements) {
             val ddName = dd.select("code").text().trim()
             dd.select("code").remove()
             val ddText = dd.html().trimLines().removePrefix("- ")
@@ -117,13 +129,12 @@ fun GroovyDoc.findCommentTags(): List<GroovyTag> {
     }
 
     parseCommentToValues().commentTags.forEach { tagName, values ->
-        if(values.any { it.first.isNotBlank() }) {
+        if (values.any { it.first.isNotBlank() }) {
             // convert values into tags with name
             values.forEach {
                 groovyTagsList.add(SimpleGroovyTag(tagName, it.first, it.second))
             }
-        }
-        else if(values.size == 1) {
+        } else if (values.size == 1) {
             // use the tagName and single item value only
             groovyTagsList.add(SimpleGroovyTag(tagName, null, values.single().second))
         }

@@ -4,13 +4,13 @@ package com.copperleaf.groovydoc.json.groovy
  * This is the `TestGroovyClass` comment text. It contains <code>code snippets</code>, <b>bold text tags</b>, and
  * also **bold markdown things**.
  */
-public class TestGroovyClass {
+class TestGroovyClass {
 
     /**
      * This is a field comment
      */
-    public transient String stringField = ""
-    public transient TestGroovyClass2 testGroovyClass2Field = null
+    public String stringField = ""
+    public TestGroovyClass2 testGroovyClass2Field = null
 
     /**
      * This is a method which returns a string

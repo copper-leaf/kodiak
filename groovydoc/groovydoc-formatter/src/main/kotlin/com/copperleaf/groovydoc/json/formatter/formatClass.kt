@@ -3,6 +3,7 @@ package com.copperleaf.groovydoc.json.formatter
 import com.copperleaf.groovydoc.json.models.GroovydocClassDoc
 import com.copperleaf.groovydoc.json.models.SignatureComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
+import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 
 fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovydocClassDoc {
     val modifiers = listOf(this.modifiers()).filterNotNull()
@@ -30,7 +31,8 @@ val GroovyClassDoc.classKind: String
             isInterface -> "interface"
             isAnnotationType -> "@interface"
             isEnum -> "enum"
-            isException -> "exception"
+            isExceptionClass() -> "exception"
+            this is SimpleGroovyDoc && isTrait -> "trait"
             else -> "class"
         }
     }

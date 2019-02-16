@@ -4,12 +4,13 @@ package com.copperleaf.groovydoc.json.groovy
  * This is the `TestGroovyClass` comment text. It contains <code>code snippets</code>, <b>bold text tags</b>, and
  * also **bold markdown things**.
  */
-class TestGroovyClass2 {
+trait TestGroovyTrait {
 
     /**
      * This is a field comment
      */
     public String stringField = ""
+    public TestGroovyClass2 testGroovyClass2Field = null
 
     /**
      * This is a method which returns a string
@@ -17,21 +18,16 @@ class TestGroovyClass2 {
      * @return the stringField value
      */
     String methodReturningString() {
-        return stringField
+        return ""
     }
-
 
     /**
-     * This is the comment text
+     * This is a method which returns a string
      *
-     * @param a1 the a1 to process
-     * @param a2 the a2 to process
-     * @param a3 the a3 to process
-     * @return the value to return
+     * @return the stringField value
      */
-    String methodWithParametersReturningString(String a1, int a2, Object a3) {
-        return stringField
+    String methodReturningString2() {
+        return ""
     }
-
 
 }
