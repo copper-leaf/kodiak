@@ -40,7 +40,7 @@ ext {
     github_project = 'copper-leaf/dokka-json'
 
     // Orchid
-    orchid_version = '0.15.4'
+    orchid_version = '0.16.1'
     base_url = 'https://copper-leaf.github.io/dokka-json'
 
     // Bintray uploads

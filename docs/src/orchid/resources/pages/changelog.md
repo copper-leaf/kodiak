@@ -1,4 +1,5 @@
 ---
 components:
-  - type: changelog
+  - type: changelog 
+layout: noBox
 ---

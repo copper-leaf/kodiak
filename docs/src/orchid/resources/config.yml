@@ -6,16 +6,30 @@ site:
 
 theme:
   social:
-    github: 'copper-leaf/dokka-json'
-  primaryColor: '#3884FF'
-  bannerColor: '#3884FF'
+    other:
+      - link: 'https://copper-leaf.github.io/dokka-json'
+        label: 'Home'
+        icon: 'fas fa-home'
+      - link: 'https://github.com/copper-leaf/dokka-json'
+        label: 'Github'
+        icon: 'fab fa-github'
+      - link: 'https://twitter.com/OrchidSSG'
+        label: 'Twitter'
+        icon: 'fab fa-twitter'
   menu:
     - type: 'page'
-      itemId: 'Changelog'
+      title: 'Home'
+      itemId: 'Home'
     - type: 'pages'
       group: 'languages'
-      asSubmenu: true
-      submenuTitle: 'Languages'
+    - type: 'page'
+      itemId: 'Changelog'
+  sidebarBackground: 'primary'
+  sidebarBackgroundType: GRADIENT
+  colors:
+    purple: '#48BAEF'
+    blue: '#48BAEF'
+  useSidebarSearch: true
 
 services:
   publications:
@@ -36,14 +50,7 @@ allPages:
         - 'java'
         - 'kotlin'
       extraCss:
-        - 'inline:prism-inline.scss:
-        pre[class*="language-"] {
-          border: none;
-          background: #f3f3f0;
-          padding: 2em;
-          code {
-            background: #f3f3f0;
-          }
-        }
-        .token.comment { color: #a04080; }
-        '
+        - 'inline:all.scss:
+          code.language-kotlin .token.number { margin: 0; padding: 0; background: none; border: none; font-size: 1em; min-width: 0; }
+          code.language-kotlin .token.operator { margin: 0; padding: 0; background: none; border: none; font-size: 1em; min-width: 0; }
+          '

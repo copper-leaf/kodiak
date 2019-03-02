@@ -1,5 +1,5 @@
 ---
-layout: frontPage
-components:
-  - type: readme
+layout: boxNoTitle
 ---
+
+{{ load('./../../../../README.md') | raw }}
