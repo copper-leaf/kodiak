@@ -1,4 +1,3 @@
-
 site:
   about:
     siteName: JSON Documentation Formatters
@@ -20,16 +19,16 @@ theme:
     - type: 'page'
       title: 'Home'
       itemId: 'Home'
-    - type: 'pages'
-      group: 'languages'
+    - type: 'wikiSections'
     - type: 'page'
       itemId: 'Changelog'
   sidebarBackground: 'primary'
   sidebarBackgroundType: GRADIENT
   colors:
-    purple: '#48BAEF'
     blue: '#48BAEF'
-  useSidebarSearch: true
+  palette:
+    primary: 'BLUE'
+    link: 'BLUE'
 
 services:
   publications:
@@ -40,17 +39,18 @@ services:
       - type: githubReleases
         repo: 'copper-leaf/dokka-json'
 
+wiki:
+  wikiPages:
+    layout: wiki
+    menu:
+      - type: wiki
+
 allPages:
   components:
-    - type: pageContent
-    - type: prism
+    - type: "pageContent"
+    - type: "prism"
       githubTheme: 'duotone-light'
       languages:
-        - 'groovy'
-        - 'java'
-        - 'kotlin'
-      extraCss:
-        - 'inline:all.scss:
-          code.language-kotlin .token.number { margin: 0; padding: 0; background: none; border: none; font-size: 1em; min-width: 0; }
-          code.language-kotlin .token.operator { margin: 0; padding: 0; background: none; border: none; font-size: 1em; min-width: 0; }
-          '
+        - kotlin
+        - java
+        - groovy

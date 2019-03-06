@@ -40,8 +40,11 @@ ext {
     github_project = 'copper-leaf/dokka-json'
 
     // Orchid
-    orchid_version = '0.16.1'
+    orchid_version = '0.16.4'
+    orchid_theme = 'Copper'
     base_url = 'https://copper-leaf.github.io/dokka-json'
+    github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv('GITHUB_TOKEN')
+    environment = "${project.hasProperty("env") ? project.property("env") : 'debug'}"
 
     // Bintray uploads
     dry_deploy = project.hasProperty('dryDeploy')
