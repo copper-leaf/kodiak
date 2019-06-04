@@ -3,6 +3,7 @@ package com.copperleaf.javadoc.json.models
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.CommentTag
 import com.copperleaf.json.common.DocElement
+import com.copperleaf.json.common.ElementType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
@@ -34,9 +35,11 @@ data class JavaClassDoc(
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : JavaClasslike {
+
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
+
     companion object {
         fun fromJson(json: String): JavaClassDoc {
             return JSON.parse(JavaClassDoc.serializer(), json)
@@ -90,8 +93,7 @@ data class JavaConstructor(
     override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
     val parameters: List<JavaParameter>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : JavaMemberlike {
     override val kind = "Constructor"
 }
@@ -111,8 +113,7 @@ data class JavaMethod(
     override val modifiers: List<String>,
     val parameters: List<JavaParameter>,
     val returnValue: JavaReturnType,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : JavaMemberlike {
     override val kind = "Method"
 }
@@ -131,11 +132,10 @@ data class JavaField(
     override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : JavaMemberlike, JavaType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : JavaMemberlike, ElementType {
     override val kind = "Field"
 }
 
@@ -152,11 +152,10 @@ data class JavaParameter(
     override val commentComponents: List<CommentComponent>,
     override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : DocElement, JavaType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "Parameter"
 }
 
@@ -173,10 +172,9 @@ data class JavaReturnType(
     override val commentComponents: List<CommentComponent>,
     override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : DocElement, JavaType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "ReturnValue"
 }

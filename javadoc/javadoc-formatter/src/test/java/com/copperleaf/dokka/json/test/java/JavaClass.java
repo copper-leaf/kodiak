@@ -79,7 +79,7 @@ public class JavaClass {
      *
      * @param param1 param1 docs
      * @param param2 param2 docs
-     * @param <T> type param
+     * @param <T> typeName param
      * @return return value
      */
     public <T> List<T> classMethodWithGenericTypeParams(List<T> param1, List<T> param2) {
@@ -91,7 +91,7 @@ public class JavaClass {
      *
      * @param param1 param1 docs
      * @param param2 param2 docs
-     * @param <T> type param
+     * @param <T> typeName param
      * @return return value
      */
     public <T extends JavaInterface & JavaInterface2> List<T> classMethodWithGenericExtendsTypeParams(List<T> param1, List<T> param2) {

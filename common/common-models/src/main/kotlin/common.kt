@@ -9,14 +9,14 @@ interface DocElement {
     val kind: String
 
     /**
-     * The unique identifier of this element. Other elements may refer to this specific element with just this ID
-     */
-    val id: String
-
-    /**
      * The human-readable name of this element
      */
     val name: String
+
+    /**
+     * The unique identifier of this element. Other elements may refer to this specific element with just this ID
+     */
+    val id: String
 
     /**
      * A list of comment components which, when concatenated together, creates the full inline comment description.
@@ -35,7 +35,7 @@ interface ElementType : DocElement {
     /**
      * The human-readble type of this element
      */
-    val type: String
+    val typeName: String
 
     /**
      * The unique identifier for the type representing this element

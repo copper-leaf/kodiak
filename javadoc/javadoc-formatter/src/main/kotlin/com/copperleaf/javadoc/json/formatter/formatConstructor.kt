@@ -31,7 +31,7 @@ fun ConstructorDoc.constructorSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(this.typeParameters().toWildcardSignature())
-    list.add(CommentComponent("type", this.containingClass().simpleTypeName(), this.containingClass().qualifiedName()))
+    list.add(CommentComponent("typeName", this.containingClass().simpleTypeName(), this.containingClass().qualifiedName()))
     list.addAll(parameters.toParameterListSignature())
 
     return list

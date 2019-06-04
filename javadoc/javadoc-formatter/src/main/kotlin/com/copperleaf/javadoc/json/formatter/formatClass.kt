@@ -44,7 +44,7 @@ fun ClassDoc.classSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.add(CommentComponent("name", "${this.classKind} "))
-    list.add(CommentComponent("type", this.name(), this.qualifiedName()))
+    list.add(CommentComponent("typeName", this.name(), this.qualifiedName()))
     list.addAll(this.typeParameters().toWildcardSignature())
 
     if(this.isInterface) {

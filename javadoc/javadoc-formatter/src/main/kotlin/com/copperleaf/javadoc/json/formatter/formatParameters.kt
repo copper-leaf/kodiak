@@ -47,7 +47,7 @@ fun List<JavaParameter>.toParameterListSignature(): List<CommentComponent> {
 fun Type.toTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent("type", this.simpleTypeName(), this.qualifiedTypeName()))
+    list.add(CommentComponent("typeName", this.simpleTypeName(), this.qualifiedTypeName()))
 
     val wildcard = this.asWildcardType()
     if(wildcard != null) {
