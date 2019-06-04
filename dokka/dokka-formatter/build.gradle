@@ -8,8 +8,10 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
+    compile project(":common:common-formatter")
     compile project(':dokka:dokka-models')
+
+    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
 }
 
 compileKotlin {

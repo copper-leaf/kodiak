@@ -8,8 +8,10 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+    compile project(":common:common-formatter")
     compile project(':javadoc:javadoc-models')
+
+    shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
 }
 
 compileKotlin {

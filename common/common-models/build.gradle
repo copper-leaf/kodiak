@@ -9,8 +9,6 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    compile project(":common:common-models")
-    
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"

@@ -9,7 +9,7 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 
-interface JavadocdocInvoker {
+interface JavadocInvoker {
     fun getRootDoc(
             sourceDirs: List<Path>,
             destinationDir: Path,
@@ -20,11 +20,11 @@ interface JavadocdocInvoker {
     fun loadCachedRootDoc(destinationDir: Path): JavadocRootdoc?
 }
 
-class JavadocdocInvokerImpl(
+class JavadocInvokerImpl(
         private val cacheDir: Path = Files.createTempDirectory("javadoc-runner"),
         private val startMemory: String = "256m",
         private val maxMemory: String = "1024m"
-) : JavadocdocInvoker {
+) : JavadocInvoker {
 
     val formatterJar = cacheDir.resolve("javadoc-formatter.jar")
 

@@ -8,6 +8,7 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
+    compile project(":common:common-runner")
     compile project(':javadoc:javadoc-models')
 
     // testing

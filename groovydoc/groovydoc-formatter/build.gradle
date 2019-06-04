@@ -8,7 +8,9 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
+    compile project(":common:common-formatter")
     compile project(':groovydoc:groovydoc-models')
+    
     compile 'com.eden:Common:1.11.2'
     compile 'org.codehaus.groovy:groovy-all:2.5.6'
     compile 'org.jsoup:jsoup:1.11.3'

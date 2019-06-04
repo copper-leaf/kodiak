@@ -15,7 +15,7 @@ class JavadocJsonRunnerTest {
 
     lateinit var cacheDir: Path
     lateinit var outputDir: Path
-    lateinit var javadocRunner: JavadocdocInvoker
+    lateinit var javadocRunner: JavadocInvoker
 
     private val useTempDirs = false
 
@@ -43,7 +43,7 @@ class JavadocJsonRunnerTest {
     @BeforeEach
     internal fun setUp() {
         if (useTempDirs) initTempDirs() else initProjectDirs()
-        javadocRunner = JavadocdocInvokerImpl(cacheDir)
+        javadocRunner = JavadocInvokerImpl(cacheDir)
     }
 
     @AfterEach
