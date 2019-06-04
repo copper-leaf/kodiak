@@ -14,7 +14,6 @@ fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClassDoc {
             this.classKind,
             this.typeName(),
             this.qualifiedTypeName(),
-            this.commentText(),
             this.inlineTags().asCommentComponents(),
             this.tags().asCommentComponentsMap(),
             if(deep) this.constructors().map { it.toConstructor() } else emptyList(),

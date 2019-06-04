@@ -1,6 +1,8 @@
 package com.copperleaf.javadoc.json.models
 
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.CommentTag
+import com.copperleaf.json.common.DocElement
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
@@ -15,7 +17,7 @@ class JavadocRootdoc(
 
 /**
  * The docs for a single class. Includes a list of the constructors, methods, and fields in the class, as well as the
- * KDoc comment on the class.
+ * KDoc commentComponents on the class.
  */
 @Serializable
 data class JavaClassDoc(
@@ -26,10 +28,9 @@ data class JavaClassDoc(
     val modifiers: List<String>,
     override val kind: String,
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
-    override val comment: List<CommentComponent>,
-    override val tags: Map<String, CommentComponent>,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
@@ -48,7 +49,7 @@ data class JavaClassDoc(
 }
 
 /**
- * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc comment on the
+ * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc commentComponents on the
  * package. Class definitions only include metadata, but do not include information about their members.
  */
 @Serializable
@@ -57,12 +58,11 @@ data class JavaPackageDoc(
         val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
-    override val comment: List<CommentComponent>,
-    override val tags: Map<String, CommentComponent>,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     val classes: List<JavaClassDoc>
-) : JavaDocElement {
+) : DocElement {
     override val kind = "Package"
 
     companion object {
@@ -81,18 +81,17 @@ data class JavaPackageDoc(
  */
 @Serializable
 data class JavaConstructor(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentComponent>,
-        override val tags: Map<String, CommentComponent>,
-        override val modifiers: List<String>,
-        val parameters: List<JavaParameter>,
-        val signature: List<CommentComponent>,
-        val simpleSignature: String = signature.map { it.text }.joinToString("")
+    override val name: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
+    override val modifiers: List<String>,
+    val parameters: List<JavaParameter>,
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike {
     override val kind = "Constructor"
 }
@@ -102,19 +101,18 @@ data class JavaConstructor(
  */
 @Serializable
 data class JavaMethod(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentComponent>,
-        override val tags: Map<String, CommentComponent>,
-        override val modifiers: List<String>,
-        val parameters: List<JavaParameter>,
-        val returnValue: JavaReturnType,
-        val signature: List<CommentComponent>,
-        val simpleSignature: String = signature.map { it.text }.joinToString("")
+    override val name: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
+    override val modifiers: List<String>,
+    val parameters: List<JavaParameter>,
+    val returnValue: JavaReturnType,
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike {
     override val kind = "Method"
 }
@@ -124,20 +122,19 @@ data class JavaMethod(
  */
 @Serializable
 data class JavaField(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentComponent>,
-        override val tags: Map<String, CommentComponent>,
-        override val modifiers: List<String>,
+    override val name: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
+    override val modifiers: List<String>,
 
-        override val type: String,
-        override val qualifiedType: String,
-        override val signature: List<CommentComponent>,
-        override val simpleSignature: String = signature.map { it.text }.joinToString("")
+    override val type: String,
+    override val qualifiedType: String,
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike, JavaType {
     override val kind = "Field"
 }
@@ -147,20 +144,19 @@ data class JavaField(
  */
 @Serializable
 data class JavaParameter(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentComponent>,
-        override val tags: Map<String, CommentComponent>,
+    override val name: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-        override val type: String,
-        override val qualifiedType: String,
-        override val signature: List<CommentComponent>,
-        override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : JavaDocElement, JavaType {
+    override val type: String,
+    override val qualifiedType: String,
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
+) : DocElement, JavaType {
     override val kind = "Parameter"
 }
 
@@ -169,19 +165,18 @@ data class JavaParameter(
  */
 @Serializable
 data class JavaReturnType(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentComponent>,
-        override val tags: Map<String, CommentComponent>,
+    override val name: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-        override val type: String,
-        override val qualifiedType: String,
-        override val signature: List<CommentComponent>,
-        override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : JavaDocElement, JavaType {
+    override val type: String,
+    override val qualifiedType: String,
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
+) : DocElement, JavaType {
     override val kind = "ReturnValue"
 }

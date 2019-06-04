@@ -12,7 +12,6 @@ fun ConstructorDoc.toConstructor(): JavaConstructor {
             this,
             this.name(),
             this.qualifiedName(),
-            this.commentText(),
             this.inlineTags().asCommentComponents(),
             this.tags().asCommentComponentsMap(),
             modifiers,

@@ -19,7 +19,6 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
             this,
             this.name(),
             this.name(),
-            if (tag != null) tag.parameterComment() else "",
             if (tag != null) arrayOf<Tag>(tag).asCommentComponents() else emptyList(),
             if (tag != null) arrayOf<Tag>(tag).asCommentComponentsMap() else emptyMap(),
             this.type().simpleTypeName(),

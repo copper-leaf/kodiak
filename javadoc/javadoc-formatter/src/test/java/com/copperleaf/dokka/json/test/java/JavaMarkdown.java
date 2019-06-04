@@ -18,7 +18,7 @@ import com.copperleaf.dokka.json.test.java.camelCasePackage.JavaClass2;
  *
  * This JSONElement is then placed into the root JSONObject under the key specified by `getKey()`. At generation time,
  * this index will be used to create deep-links throughout the site, typically through the page navigation or from
- * manually creating links, either through Javadoc 'see' or 'link' tags, or using an output filter in the main template.
+ * manually creating links, either through Javadoc 'see' or 'link' commentTags, or using an output filter in the main template.
  *
  * It is important that **no pages be written during the Indexing phase**. The sites's index is not completed at this
  * point, so it is likely that navigation among pages will not work as expected.

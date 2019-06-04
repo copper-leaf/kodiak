@@ -1,6 +1,7 @@
 package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.CommentTag
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
 
@@ -8,10 +9,10 @@ fun Array<Tag>.asCommentComponents(): List<CommentComponent> {
     return this.map(Tag::toCommentComponent)
 }
 
-fun Array<Tag>.asCommentComponentsMap(): Map<String, CommentComponent> {
+fun Array<Tag>.asCommentComponentsMap(): Map<String, CommentTag> {
     return this.map { tag ->
         val commentComponent = tag.toCommentComponent()
-        commentComponent.kind to commentComponent
+        commentComponent.kind to commentComponent.toCommentTag()
     }.toMap()
 }
 
@@ -32,6 +33,10 @@ fun Tag.toCommentComponent(): CommentComponent {
             name,
             qualifiedName
     )
+}
+
+fun CommentComponent.toCommentTag(): CommentTag {
+    return CommentTag(listOf(this))
 }
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
