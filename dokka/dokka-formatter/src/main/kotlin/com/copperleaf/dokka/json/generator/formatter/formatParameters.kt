@@ -8,19 +8,19 @@ import org.jetbrains.dokka.NodeKind
 val DocumentationNode.parameters: List<KotlinParameter>
     get() {
         return this.details(NodeKind.Parameter)
-                .map {
-                    KotlinParameter(
-                            it,
-                            it.simpleName,
-                            it.qualifiedName,
-                            it.contentText("Parameters", it.simpleName),
-                            it.summary.textLength,
-                            it.simpleType,
-                            it.qualifiedType,
-                            it.detailOrNull(NodeKind.Value)?.name,
-                            it.asType().toTypeSignature()
-                    )
-                }
+            .map {
+                KotlinParameter(
+                    it,
+                    it.simpleName,
+                    it.qualifiedName,
+                    it.contentText("Parameters", it.simpleName),
+                    this.contentTags,
+                    it.simpleType,
+                    it.qualifiedType,
+                    it.detailOrNull(NodeKind.Value)?.name,
+                    it.asType().toTypeSignature()
+                )
+            }
     }
 
 fun List<KotlinParameter>.toParameterListSignature(): List<CommentComponent> {
@@ -52,8 +52,7 @@ fun DocumentationNode.toTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
     if (isFunctionalType()) {
         list.addAll(this.toFunctionalTypeSignature())
-    }
-    else {
+    } else {
         list.addAll(this.toNonFunctionalTypeSignature())
     }
 
@@ -69,12 +68,12 @@ fun DocumentationNode.toTypeSignature(): List<CommentComponent> {
 fun DocumentationNode.toNonFunctionalTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent("type", this.simpleType, this.qualifiedType))
+    list.add(CommentComponent("typeName", this.simpleType, this.qualifiedType))
 
     this.details(NodeKind.Type).toListSignature(
-            childMapper = { it.toTypeSignature() },
-            prefix = listOf(CommentComponent("punctuation", "<")),
-            postfix = listOf(CommentComponent("punctuation", ">"))
+        childMapper = { it.toTypeSignature() },
+        prefix = listOf(CommentComponent("punctuation", "<")),
+        postfix = listOf(CommentComponent("punctuation", ">"))
     )
 
     if (this.nullable) {

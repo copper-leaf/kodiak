@@ -13,23 +13,23 @@ fun DocumentationNode.toConstructor(): KotlinConstructor {
     val modifiers = this.modifiers
     val parameters = this.parameters
     return KotlinConstructor(
-            this,
-            this.simpleName,
-            this.qualifiedName,
-            this.contentText,
-            this.summary.textLength,
+        this,
+        this.simpleName,
+        this.qualifiedName,
+        this.contentText,
+        this.contentTags,
+        modifiers,
+        parameters,
+        this.constructorSignature(
             modifiers,
-            parameters,
-            this.constructorSignature(
-                    modifiers,
-                    parameters
-            )
+            parameters
+        )
     )
 }
 
 fun DocumentationNode.constructorSignature(
-        modifiers: List<String>,
-        parameters: List<KotlinParameter>
+    modifiers: List<String>,
+    parameters: List<KotlinParameter>
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 

@@ -14,32 +14,32 @@ fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClassDoc {
     val modifiers = this.modifiers
 
     return KotlinClassDoc(
-            this,
-            this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-            this.kind.toString(),
-            this.simpleName,
-            this.qualifiedName,
-            this.contentText,
-            this.summary.textLength,
-            modifiers,
-            if (deep) this.members.filter { it.isConstructor }.map { it.toConstructor() } else emptyList(),
-            if (deep) this.members.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
-            if (deep) this.members.filter { it.isField }.map { it.toField() } else emptyList(),
-            if (deep) this.extensions.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
-            this.classSignature(
-                    modifiers
-            )
+        this,
+        this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
+        this.kind.toString(),
+        this.simpleName,
+        this.qualifiedName,
+        this.contentText,
+        this.contentTags,
+        modifiers,
+        if (deep) this.members.filter { it.isConstructor }.map { it.toConstructor() } else emptyList(),
+        if (deep) this.members.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
+        if (deep) this.members.filter { it.isField }.map { it.toField() } else emptyList(),
+        if (deep) this.extensions.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
+        this.classSignature(
+            modifiers
+        )
     )
 }
 
 fun DocumentationNode.classSignature(
-        modifiers: List<String>
+    modifiers: List<String>
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.add(CommentComponent("keyword", "class "))
-    list.add(CommentComponent("type", this.simpleName, this.qualifiedName))
+    list.add(CommentComponent("typeName", this.simpleName, this.qualifiedName))
 //    list.addAll(this.toTypeParameterDeclarationSignature())
 //    list.addAll(this.toSuperclassDeclarationSignature())
 
@@ -48,7 +48,7 @@ fun DocumentationNode.classSignature(
 
 fun DocumentationNode.toSuperclassDeclarationSignature(): List<CommentComponent> {
     return this.details(NodeKind.Supertype).toListSignature(
-            childMapper = { it.toTypeSignature() },
-            prefix = listOf(CommentComponent("punctuation", ": "))
+        childMapper = { it.toTypeSignature() },
+        prefix = listOf(CommentComponent("punctuation", ": "))
     )
 }

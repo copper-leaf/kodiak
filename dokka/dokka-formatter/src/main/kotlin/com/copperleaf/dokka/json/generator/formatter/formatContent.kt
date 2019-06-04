@@ -1,5 +1,7 @@
 package com.copperleaf.dokka.json.generator.formatter
 
+import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.CommentTag
 import org.jetbrains.dokka.ContentBlock
 import org.jetbrains.dokka.ContentBlockCode
 import org.jetbrains.dokka.ContentCode
@@ -29,24 +31,28 @@ import org.jetbrains.dokka.ContentText
 import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
 
-val DocumentationNode.contentText: String get() = DokkaContentFormatter(this).extractContent()
-fun DocumentationNode.contentText(sectionName: String, subjectName: String?): String = DokkaContentFormatter(this).extractContentFromSection(sectionName, subjectName)
+val DocumentationNode.contentText: List<CommentComponent> get() = DokkaContentFormatter(this).extractContent()
+fun DocumentationNode.contentText(sectionName: String, subjectName: String?): List<CommentComponent> =
+    DokkaContentFormatter(this).extractContentFromSection(sectionName, subjectName)
+
+val DocumentationNode.contentTags: Map<String, CommentTag> get() = emptyMap()
 
 @Suppress("UNUSED_PARAMETER")
 class DokkaContentFormatter(val node: DocumentationNode) {
 
-    fun extractContentFromSection(sectionName: String, subjectName: String?): String {
+    fun extractContentFromSection(sectionName: String, subjectName: String?): List<CommentComponent> {
         for (section in node.owner!!.content.sections) {
-            if(section.tag == sectionName && section.subjectName == subjectName) {
-                return extractContent(section.children)
+            if (section.tag == sectionName && section.subjectName == subjectName) {
+                return listOf(CommentComponent(CommentComponent.TEXT, extractContent(section.children)))
             }
         }
 
-        return ""
+        return listOf(CommentComponent(CommentComponent.TEXT, ""))
     }
 
-    fun extractContent(): String {
-        return this.extractContent(node.content.children)
+    fun extractContent(): List<CommentComponent> {
+        val content = this.extractContent(node.content.children)
+        return listOf(CommentComponent(CommentComponent.TEXT, content))
     }
 
     private fun extractContent(content: List<ContentNode>): String {
@@ -94,7 +100,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         return ""
     }
 
-// Content Node type Handlers
+// Content Node typeName Handlers
 //----------------------------------------------------------------------------------------------------------------------
 
     private fun ContentEmpty.format(topLevel: Boolean): String {
@@ -158,7 +164,11 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun ContentBlockCode.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<pre><code class=\"language-${this.language}\">", "</code></pre>", joinChildren(this))
+        return if (topLevel) joinChildren(this) else wrap(
+            "<pre><code class=\"language-${this.language}\">",
+            "</code></pre>",
+            joinChildren(this)
+        )
     }
 
     private fun ContentNodeLink.format(topLevel: Boolean): String {
@@ -194,8 +204,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         return if (child is ContentParagraph) {
             // Ignore paragraph if item is nested underneath an item
             wrap("<li>", "</li>", joinChildren(child))
-        }
-        else {
+        } else {
             wrap("<li>", "</li>", joinChildren(this))
         }
     }
@@ -213,6 +222,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun wrap(prefix: String, suffix: String, body: String): String = "$prefix$body$suffix"
 
-    private fun joinChildren(block: ContentBlock): String = block.children.joinToString("") { extractContent(it, topLevel = false) }
+    private fun joinChildren(block: ContentBlock): String =
+        block.children.joinToString("") { extractContent(it, topLevel = false) }
 
 }

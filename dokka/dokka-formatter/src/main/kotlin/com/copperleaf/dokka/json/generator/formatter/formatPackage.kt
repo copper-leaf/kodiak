@@ -25,6 +25,6 @@ fun DocumentationNode.toPackageDoc(): KotlinPackageDoc {
             this.simpleName,
             this.qualifiedName,
             this.contentText,
-            this.summary.textLength
+            this.contentTags
     )
 }

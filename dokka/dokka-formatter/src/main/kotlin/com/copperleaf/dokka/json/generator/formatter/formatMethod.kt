@@ -17,29 +17,29 @@ fun DocumentationNode.toMethod(): KotlinMethod {
     val receiverType = this.receiverType
     val returnType = this.returnType
     return KotlinMethod(
-            this,
-            this.simpleName,
-            this.qualifiedName,
-            this.contentText,
-            this.summary.textLength,
+        this,
+        this.simpleName,
+        this.qualifiedName,
+        this.contentText,
+        this.contentTags,
+        modifiers,
+        parameters,
+        receiverType,
+        returnType,
+        this.methodSignature(
             modifiers,
             parameters,
             receiverType,
-            returnType,
-            this.methodSignature(
-                    modifiers,
-                    parameters,
-                    receiverType,
-                    returnType
-            )
+            returnType
+        )
     )
 }
 
 fun DocumentationNode.methodSignature(
-        modifiers: List<String>,
-        parameters: List<KotlinParameter>,
-        receiverType: KotlinReceiverType?,
-        returnType: KotlinReturnType
+    modifiers: List<String>,
+    parameters: List<KotlinParameter>,
+    receiverType: KotlinReceiverType?,
+    returnType: KotlinReturnType
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
@@ -68,14 +68,14 @@ val DocumentationNode.returnType: KotlinReturnType
     get() {
         val it = this.detail(NodeKind.Type)
         return KotlinReturnType(
-                it,
-                it.simpleName,
-                it.qualifiedName,
-                it.contentText("Return", null),
-                it.summary.textLength,
-                it.simpleType,
-                it.qualifiedType,
-                it.asType().toTypeSignature()
+            it,
+            it.simpleName,
+            it.qualifiedName,
+            it.contentText("Return", null),
+            this.contentTags,
+            it.simpleType,
+            it.qualifiedType,
+            it.asType().toTypeSignature()
         )
     }
 
@@ -86,14 +86,14 @@ val DocumentationNode.receiverType: KotlinReceiverType?
             null
         else
             KotlinReceiverType(
-                    it,
-                    it.simpleName,
-                    it.qualifiedName,
-                    it.contentText("Receiver", null),
-                    it.summary.textLength,
-                    it.simpleType,
-                    it.qualifiedType,
-                    it.asType().toTypeSignature()
+                it,
+                it.simpleName,
+                it.qualifiedName,
+                it.contentText("Receiver", null),
+                this.contentTags,
+                it.simpleType,
+                it.qualifiedType,
+                it.asType().toTypeSignature()
             )
     }
 

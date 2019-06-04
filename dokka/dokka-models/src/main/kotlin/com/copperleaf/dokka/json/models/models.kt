@@ -1,9 +1,18 @@
 package com.copperleaf.dokka.json.models
 
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.CommentTag
+import com.copperleaf.json.common.DocElement
+import com.copperleaf.json.common.ElementType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
+
+interface KotlinClasslike : DocElement
+
+interface KotlinMemberlike : DocElement {
+    val modifiers: List<String>
+}
 
 /**
  * The result of executing Dokka and transforming the results to JSON.
@@ -26,15 +35,14 @@ data class KotlinClassDoc(
     override val kind: String,
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     val modifiers: List<String>,
     val constructors: List<KotlinConstructor>,
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
     val extensions: List<KotlinMethod>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : KotlinClasslike {
     companion object {
         fun fromJson(json: String): KotlinClassDoc {
@@ -60,9 +68,9 @@ data class KotlinPackageDoc(
     val methods: List<KotlinMethod>,
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int
-) : KotlinDocElement {
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>
+) : DocElement {
     override val kind = "Package"
 
     companion object {
@@ -86,12 +94,11 @@ data class KotlinConstructor(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
     val parameters: List<KotlinParameter>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : KotlinMemberlike {
     override val kind = "Constructor"
 }
@@ -106,15 +113,14 @@ data class KotlinMethod(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
 
     val parameters: List<KotlinParameter>,
     val receiver: KotlinReceiverType? = null,
     val returnValue: KotlinReturnType,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : KotlinMemberlike {
     override val kind = "Method"
 }
@@ -129,15 +135,14 @@ data class KotlinField(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : KotlinMemberlike, KotlinType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : KotlinMemberlike, ElementType {
     override val kind = "Field"
 }
 
@@ -151,21 +156,20 @@ data class KotlinParameter(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
+    override val typeName: String,
+    override val typeId: String,
     val defaultValue: String?,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
+    override val signature: List<CommentComponent>
 
-) : KotlinDocElement, KotlinType {
+) : DocElement, ElementType {
     override val kind = "Parameter"
 }
 
 /**
- * The docs for a method return type
+ * The docs for a method return typeName
  */
 @Serializable
 data class KotlinReturnType(
@@ -174,19 +178,18 @@ data class KotlinReturnType(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : KotlinDocElement, KotlinType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "ReturnType"
 }
 
 /**
- * The docs for a method receiver type
+ * The docs for a method receiver typeName
  */
 @Serializable
 data class KotlinReceiverType(
@@ -195,13 +198,12 @@ data class KotlinReceiverType(
 
     override val name: String,
     override val id: String,
-    override val comment: String,
-    override val summaryPos: Int,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : KotlinDocElement, KotlinType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "ReceiverType"
 }

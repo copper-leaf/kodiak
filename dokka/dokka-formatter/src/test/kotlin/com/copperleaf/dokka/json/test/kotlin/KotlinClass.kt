@@ -35,12 +35,12 @@ class KotlinClass(
         }
 
     /**
-     * This is a property defined in the class body, using an internal type
+     * This is a property defined in the class body, using an internal typeName
      */
     var classInternalProperty: KotlinInterface? = null
 
     /**
-     * This is a property defined in the class body, using an internal type
+     * This is a property defined in the class body, using an internal typeName
      */
     lateinit var genericProperty: List<(String?) -> String>
 
@@ -173,8 +173,8 @@ class KotlinClass(
     /**
      * This is a method which attempts to include all the various doc components at once.
      *
-     * @param T the type of T
-     * @param U the type of U
+     * @param T the typeName of T
+     * @param U the typeName of U
      * @param param1 the function param 1
      * @param param2 the function param 2
      * @receiver This is the receiver for the method

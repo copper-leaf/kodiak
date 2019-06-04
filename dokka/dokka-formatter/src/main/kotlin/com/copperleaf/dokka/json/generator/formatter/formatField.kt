@@ -11,24 +11,24 @@ fun DocumentationNode.toField(): KotlinField {
     assert(this.isField) { "node must be a Field or Property" }
     val modifiers = this.modifiers
     return KotlinField(
-            this,
-            this.simpleName,
-            this.qualifiedName,
-            this.contentText,
-            this.summary.textLength,
+        this,
+        this.simpleName,
+        this.qualifiedName,
+        this.contentText,
+        this.contentTags,
+        modifiers,
+        this.simpleType,
+        this.qualifiedType,
+        this.fieldSignature(
             modifiers,
-            this.simpleType,
-            this.qualifiedType,
-            this.fieldSignature(
-                    modifiers,
-                    this
-            )
+            this
+        )
     )
 }
 
 fun DocumentationNode.fieldSignature(
-        modifiers: List<String>,
-        type: DocumentationNode
+    modifiers: List<String>,
+    type: DocumentationNode
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 

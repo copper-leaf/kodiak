@@ -8,7 +8,7 @@ fun packageMethod(input: String): String {
 }
 
 /**
- * An extension method on the KotlinClass class, defined outside of any class, just in the package. The extended type is
+ * An extension method on the KotlinClass class, defined outside of any class, just in the package. The extended typeName is
  * internal to the project.
  */
 fun KotlinClass.kotlinClassClassExtensionMethod(input: String): String {
@@ -16,7 +16,7 @@ fun KotlinClass.kotlinClassClassExtensionMethod(input: String): String {
 }
 
 /**
- * An extension method on the String class, defined outside of any class, just in the package. The extended type is
+ * An extension method on the String class, defined outside of any class, just in the package. The extended typeName is
  * external to the project.
  */
 fun String.stringClassExtensionMethod(input: String): String {

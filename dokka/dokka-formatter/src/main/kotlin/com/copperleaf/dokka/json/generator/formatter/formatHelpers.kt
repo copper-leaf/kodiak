@@ -8,8 +8,8 @@ import org.jetbrains.dokka.qualifiedNameFromType
 
 val DocumentationNode.modifiers: List<String>
     get() = this.details(NodeKind.Modifier)
-            .map { it.name }
-            .filter { !arrayOf("public", "final").contains(it) }
+        .map { it.name }
+        .filter { !arrayOf("public", "final").contains(it) }
 
 val DocumentationNode.simpleName: String
     get() {
@@ -20,15 +20,14 @@ val DocumentationNode.qualifiedName: String
     get() {
         return if (kind == NodeKind.Type) {
             this.qualifiedNameFromType()
-        }
-        else {
+        } else {
             path.drop(1).map { it.name }.filter { it.isNotEmpty() }.joinToString(".")
         }
     }
 
 fun DocumentationNode.asType(): DocumentationNode {
     return if (kind == NodeKind.Type) this else this.detailOrNull(NodeKind.Type) ?: {
-        println("other node requesting type: ${this.kind} ${this.name}")
+        println("other node requesting typeName: ${this.kind} ${this.name}")
         this
     }()
 }
@@ -53,10 +52,10 @@ fun List<String>.toModifierListSignature(): List<CommentComponent> {
 }
 
 fun List<DocumentationNode>.toListSignature(
-        childMapper: (DocumentationNode) -> List<CommentComponent>,
-        prefix: List<CommentComponent> = emptyList(),
-        postfix: List<CommentComponent> = emptyList(),
-        separator: List<CommentComponent> = listOf(CommentComponent("punctuation", ", "))
+    childMapper: (DocumentationNode) -> List<CommentComponent>,
+    prefix: List<CommentComponent> = emptyList(),
+    postfix: List<CommentComponent> = emptyList(),
+    separator: List<CommentComponent> = listOf(CommentComponent("punctuation", ", "))
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
