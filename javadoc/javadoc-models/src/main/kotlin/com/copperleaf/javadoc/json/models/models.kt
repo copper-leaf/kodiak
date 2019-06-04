@@ -28,8 +28,8 @@ data class JavaClassDoc(
     override val name: String,
     override val qualifiedName: String,
     override val simpleComment: String,
-    override val comment: List<CommentTag>,
-    override val tags: Map<String, CommentTag>,
+    override val comment: List<CommentComponent>,
+    override val tags: Map<String, CommentComponent>,
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
@@ -53,15 +53,15 @@ data class JavaClassDoc(
  */
 @Serializable
 data class JavaPackageDoc(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
-        val classes: List<JavaClassDoc>
+    override val name: String,
+    override val qualifiedName: String,
+    override val simpleComment: String,
+    override val comment: List<CommentComponent>,
+    override val tags: Map<String, CommentComponent>,
+    val classes: List<JavaClassDoc>
 ) : JavaDocElement {
     override val kind = "Package"
 
@@ -87,8 +87,8 @@ data class JavaConstructor(
         override val name: String,
         override val qualifiedName: String,
         override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
+        override val comment: List<CommentComponent>,
+        override val tags: Map<String, CommentComponent>,
         override val modifiers: List<String>,
         val parameters: List<JavaParameter>,
         val signature: List<CommentComponent>,
@@ -108,8 +108,8 @@ data class JavaMethod(
         override val name: String,
         override val qualifiedName: String,
         override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
+        override val comment: List<CommentComponent>,
+        override val tags: Map<String, CommentComponent>,
         override val modifiers: List<String>,
         val parameters: List<JavaParameter>,
         val returnValue: JavaReturnType,
@@ -130,8 +130,8 @@ data class JavaField(
         override val name: String,
         override val qualifiedName: String,
         override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
+        override val comment: List<CommentComponent>,
+        override val tags: Map<String, CommentComponent>,
         override val modifiers: List<String>,
 
         override val type: String,
@@ -153,8 +153,8 @@ data class JavaParameter(
         override val name: String,
         override val qualifiedName: String,
         override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
+        override val comment: List<CommentComponent>,
+        override val tags: Map<String, CommentComponent>,
 
         override val type: String,
         override val qualifiedType: String,
@@ -175,8 +175,8 @@ data class JavaReturnType(
         override val name: String,
         override val qualifiedName: String,
         override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
+        override val comment: List<CommentComponent>,
+        override val tags: Map<String, CommentComponent>,
 
         override val type: String,
         override val qualifiedType: String,

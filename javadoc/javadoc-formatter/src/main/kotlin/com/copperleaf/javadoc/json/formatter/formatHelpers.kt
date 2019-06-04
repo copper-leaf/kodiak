@@ -1,22 +1,21 @@
 package com.copperleaf.javadoc.json.formatter
 
-import com.copperleaf.javadoc.json.models.CommentTag
 import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
 
-fun Array<Tag>.asCommentTags(): List<CommentTag> {
-    return this.map(Tag::toCommentTag)
+fun Array<Tag>.asCommentComponents(): List<CommentComponent> {
+    return this.map(Tag::toCommentComponent)
 }
 
-fun Array<Tag>.asCommentTagsMap(): Map<String, CommentTag> {
+fun Array<Tag>.asCommentComponentsMap(): Map<String, CommentComponent> {
     return this.map { tag ->
-        val commentTag = tag.toCommentTag()
-        commentTag.kind to commentTag
+        val commentComponent = tag.toCommentComponent()
+        commentComponent.kind to commentComponent
     }.toMap()
 }
 
-fun Tag.toCommentTag(): CommentTag {
+fun Tag.toCommentComponent(): CommentComponent {
     val key = kind().let { if (it.startsWith("@")) it.drop(1) else it }
     val name: String
     val qualifiedName: String
@@ -28,7 +27,7 @@ fun Tag.toCommentTag(): CommentTag {
         name = text()
         qualifiedName = text()
     }
-    return CommentTag(
+    return CommentComponent(
             key,
             name,
             qualifiedName

@@ -13,8 +13,8 @@ fun ConstructorDoc.toConstructor(): JavaConstructor {
             this.name(),
             this.qualifiedName(),
             this.commentText(),
-            this.inlineTags().asCommentTags(),
-            this.tags().asCommentTagsMap(),
+            this.inlineTags().asCommentComponents(),
+            this.tags().asCommentComponentsMap(),
             modifiers,
             parameters,
             this.constructorSignature(

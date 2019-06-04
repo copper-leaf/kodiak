@@ -9,8 +9,8 @@ fun PackageDoc.toPackageDoc(): JavaPackageDoc {
             this.name(),
             this.name(),
             this.commentText(),
-            this.inlineTags().asCommentTags(),
-            this.tags().asCommentTagsMap(),
+            this.inlineTags().asCommentComponents(),
+            this.tags().asCommentComponentsMap(),
             this.allClasses().map { it.toClassDoc(false) }
     )
 }

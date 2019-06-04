@@ -20,8 +20,8 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
             this.name(),
             this.name(),
             if (tag != null) tag.parameterComment() else "",
-            if (tag != null) arrayOf<Tag>(tag).asCommentTags() else emptyList(),
-            if (tag != null) arrayOf<Tag>(tag).asCommentTagsMap() else emptyMap(),
+            if (tag != null) arrayOf<Tag>(tag).asCommentComponents() else emptyList(),
+            if (tag != null) arrayOf<Tag>(tag).asCommentComponentsMap() else emptyMap(),
             this.type().simpleTypeName(),
             this.type().qualifiedTypeName(),
             this.type().toTypeSignature()
