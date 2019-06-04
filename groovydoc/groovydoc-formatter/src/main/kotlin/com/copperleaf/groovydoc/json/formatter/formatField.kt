@@ -9,23 +9,24 @@ import org.codehaus.groovy.groovydoc.GroovyType
 fun GroovyFieldDoc.toField(parent: GroovyClassDoc): GroovydocField {
     val modifiers = listOf(this.modifiers()).filterNotNull()
     return GroovydocField(
-            this,
-            this.name(),
-            this.name(),
-            this.findCommentText(),
+        this,
+        this.name(),
+        this.name(),
+        this.findCommentText(),
+        emptyMap(),
+        modifiers,
+        this.type().real().simpleTypeName(),
+        this.type().real().qualifiedTypeName(),
+        this.fieldSignature(
             modifiers,
-            this.type().real().simpleTypeName(),
-            this.type().real().qualifiedTypeName(),
-            this.fieldSignature(
-                    modifiers,
-                    this.type()
-            )
+            this.type()
+        )
     )
 }
 
 fun GroovyFieldDoc.fieldSignature(
-        modifiers: List<String>,
-        type: GroovyType
+    modifiers: List<String>,
+    type: GroovyType
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 

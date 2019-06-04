@@ -1,9 +1,18 @@
 package com.copperleaf.groovydoc.json.models
 
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.CommentTag
+import com.copperleaf.json.common.DocElement
+import com.copperleaf.json.common.ElementType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
+
+interface GroovydocClasslike : DocElement
+
+interface GroovydocMemberlike : DocElement {
+    val modifiers: List<String>
+}
 
 /**
  * The result of executing Groovydocdoc and transforming the results to JSON.
@@ -26,13 +35,13 @@ data class GroovydocClassDoc(
     val modifiers: List<String>,
     override val kind: String,
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     val constructors: List<GroovydocConstructor>,
     val methods: List<GroovydocMethod>,
     val fields: List<GroovydocField>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : GroovydocClasslike {
     companion object {
         fun fromJson(json: String): GroovydocClassDoc {
@@ -55,10 +64,11 @@ data class GroovydocPackageDoc(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     val classes: List<GroovydocClassDoc>
-) : GroovydocDocElement {
+) : DocElement {
     override val kind = "Package"
 
     companion object {
@@ -81,12 +91,12 @@ data class GroovydocConstructor(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
     val parameters: List<GroovydocParameter>,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : GroovydocMemberlike {
     override val kind = "Constructor"
 }
@@ -100,13 +110,13 @@ data class GroovydocMethod(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
     val parameters: List<GroovydocParameter>,
     val returnValue: GroovydocReturnType,
-    val signature: List<CommentComponent>,
-    val simpleSignature: String = signature.map { it.text }.joinToString("")
+    val signature: List<CommentComponent>
 ) : GroovydocMemberlike {
     override val kind = "Method"
 }
@@ -120,15 +130,15 @@ data class GroovydocField(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
     override val modifiers: List<String>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : GroovydocMemberlike, GroovydocType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : GroovydocMemberlike, ElementType {
     override val kind = "Field"
 }
 
@@ -141,14 +151,14 @@ data class GroovydocParameter(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : GroovydocDocElement, GroovydocType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "Parameter"
 }
 
@@ -161,13 +171,13 @@ data class GroovydocReturnType(
     val node: Any? = null,
 
     override val name: String,
-    override val qualifiedName: String,
-    override val simpleComment: String,
+    override val id: String,
+    override val commentComponents: List<CommentComponent>,
+    override val commentTags: Map<String, CommentTag>,
 
-    override val type: String,
-    override val qualifiedType: String,
-    override val signature: List<CommentComponent>,
-    override val simpleSignature: String = signature.map { it.text }.joinToString("")
-) : GroovydocDocElement, GroovydocType {
+    override val typeName: String,
+    override val typeId: String,
+    override val signature: List<CommentComponent>
+) : DocElement, ElementType {
     override val kind = "ReturnValue"
 }

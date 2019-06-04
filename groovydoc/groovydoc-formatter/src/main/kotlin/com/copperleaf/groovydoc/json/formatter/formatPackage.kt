@@ -8,7 +8,8 @@ fun GroovyPackageDoc.toPackageDoc(): GroovydocPackageDoc {
         this,
         this.nameWithDots(),
         this.nameWithDots(),
-        this.description().trim(),
+        this.description().asCommentText(),
+        emptyMap(),
         this.allClasses().map { it.toClassDoc(false) }
     )
 }

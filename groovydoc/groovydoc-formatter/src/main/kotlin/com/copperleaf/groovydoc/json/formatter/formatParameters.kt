@@ -17,7 +17,8 @@ fun GroovyParameter.toParameter(tag: GroovyTag?): GroovydocParameter {
         this,
         this.name(),
         this.name(),
-        tag?.text() ?: "",
+        (tag?.text() ?: "").asCommentText(),
+        emptyMap(),
         this.realType().simpleTypeName(),
         this.realType().qualifiedTypeName(),
         this.realType().toTypeSignature()
@@ -45,7 +46,7 @@ fun GroovyType?.toTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
     if (this != null) {
-        list.add(CommentComponent("type", this.real().simpleTypeName(), this.real().qualifiedTypeName()))
+        list.add(CommentComponent("typeName", this.real().simpleTypeName(), this.real().qualifiedTypeName()))
 
 //    val wildcard = this.asWildcardType()
 //    if(wildcard != null) {
@@ -101,8 +102,8 @@ fun GroovyType?.toTypeSignature(): List<CommentComponent> {
 //            if(typeParamBounds.isNotEmpty()) {
 //                list.add(CommentComponent("name", " extends "))
 //
-//                typeParamBounds.forEachIndexed { boundsIndex, type ->
-//                    list.addAll(type.toTypeSignature())
+//                typeParamBounds.forEachIndexed { boundsIndex, typeName ->
+//                    list.addAll(typeName.toTypeSignature())
 //                    if (boundsIndex < typeParamBounds.size - 1) {
 //                        list.add(CommentComponent("punctuation", " & "))
 //                    }

@@ -117,8 +117,16 @@ private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
     )
 }
 
-fun GroovyDoc.findCommentText(): String {
-    return parseCommentToValues().commentText
+fun GroovyDoc.findCommentText(): List<CommentComponent> {
+    return listOf(
+        CommentComponent(CommentComponent.TEXT, parseCommentToValues().commentText)
+    )
+}
+
+fun String.asCommentText(): List<CommentComponent> {
+    return listOf(
+        CommentComponent(CommentComponent.TEXT, this.trim())
+    )
 }
 
 fun GroovyDoc.findCommentTags(): List<GroovyTag> {

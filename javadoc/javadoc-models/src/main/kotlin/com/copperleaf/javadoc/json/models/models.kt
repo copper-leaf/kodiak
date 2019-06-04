@@ -8,6 +8,12 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
 
+interface JavaClasslike : DocElement
+
+interface JavaMemberlike : DocElement {
+    val modifiers: List<String>
+}
+
 /**
  * The result of executing Javadoc and transforming the results to JSON.
  */

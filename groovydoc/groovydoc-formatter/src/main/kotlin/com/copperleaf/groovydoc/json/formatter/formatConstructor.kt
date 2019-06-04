@@ -14,6 +14,7 @@ fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovydocConstru
         parent.simpleTypeName(),
         parent.qualifiedTypeName(),
         this.findCommentText(),
+        emptyMap(),
         modifiers,
         parameters,
         this.constructorSignature(
@@ -33,7 +34,7 @@ fun GroovyConstructorDoc.constructorSignature(
 
     list.addAll(modifiers.toModifierListSignature())
 //    list.addAll(this.typeParameters().toWildcardSignature())
-    list.add(CommentComponent("type", parent.simpleTypeName(), parent.qualifiedTypeName()))
+    list.add(CommentComponent("typeName", parent.simpleTypeName(), parent.qualifiedTypeName()))
     list.addAll(parameters.toParameterListSignature())
 
     return list
