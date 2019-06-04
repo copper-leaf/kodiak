@@ -1,7 +1,7 @@
 package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaField
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.FieldDoc
 import com.sun.javadoc.Type
 
@@ -27,12 +27,12 @@ fun FieldDoc.toField(): JavaField {
 fun FieldDoc.fieldSignature(
         modifiers: List<String>,
         type: Type
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(SignatureComponent("name", " ${this.name()}", ""))
+    list.add(CommentComponent("name", " ${this.name()}"))
 
     return list
 }

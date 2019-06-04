@@ -1,7 +1,7 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.GroovydocClassDoc
-import com.copperleaf.groovydoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 
@@ -39,22 +39,22 @@ val GroovyClassDoc.classKind: String
 
 fun GroovyClassDoc.classSignature(
     modifiers: List<String>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("name", "${this.classKind} ", ""))
-    list.add(SignatureComponent("type", "" + this.simpleTypeName(), "" + this.qualifiedTypeName()))
+    list.add(CommentComponent("name", "${this.classKind} "))
+    list.add(CommentComponent("type", "" + this.simpleTypeName(), "" + this.qualifiedTypeName()))
 //    list.addAll(this.typeParameters().toWildcardSignature())
 
     if(this.isInterface) {
         val interfaces = this.interfaces()
         if(interfaces.isNotEmpty()) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }
@@ -62,17 +62,17 @@ fun GroovyClassDoc.classSignature(
     else {
         val superclass = this.superclass()
         if(superclass != null) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             list.addAll(superclass.toTypeSignature())
         }
 
         val interfaces = this.interfaces()
         if(interfaces.isNotEmpty()) {
-            list.add(SignatureComponent("name", " implements ", ""))
+            list.add(CommentComponent("name", " implements "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }

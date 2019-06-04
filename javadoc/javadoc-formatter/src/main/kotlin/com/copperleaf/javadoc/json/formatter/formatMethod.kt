@@ -3,7 +3,7 @@ package com.copperleaf.javadoc.json.formatter
 import com.copperleaf.javadoc.json.models.JavaMethod
 import com.copperleaf.javadoc.json.models.JavaParameter
 import com.copperleaf.javadoc.json.models.JavaReturnType
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.MethodDoc
 import com.sun.javadoc.Tag
 import com.sun.javadoc.Type
@@ -48,13 +48,13 @@ fun MethodDoc.methodSignature(
         modifiers: List<String>,
         parameters: List<JavaParameter>,
         returnType: JavaReturnType
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(this.typeParameters().toWildcardSignature())
     list.addAll(returnType.signature)
-    list.add(SignatureComponent("name", " ${this.name()}", ""))
+    list.add(CommentComponent("name", " ${this.name()}"))
     list.addAll(parameters.toParameterListSignature())
 
     return list

@@ -1,5 +1,6 @@
 package com.copperleaf.groovydoc.json.models
 
+import com.copperleaf.json.common.CommentComponent
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
@@ -30,8 +31,8 @@ data class GroovydocClassDoc(
     val constructors: List<GroovydocConstructor>,
     val methods: List<GroovydocMethod>,
     val fields: List<GroovydocField>,
-    val signature: List<SignatureComponent>,
-    val simpleSignature: String = signature.map { it.name }.joinToString("")
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocClasslike {
     companion object {
         fun fromJson(json: String): GroovydocClassDoc {
@@ -84,8 +85,8 @@ data class GroovydocConstructor(
     override val simpleComment: String,
     override val modifiers: List<String>,
     val parameters: List<GroovydocParameter>,
-    val signature: List<SignatureComponent>,
-    val simpleSignature: String = signature.map { it.name }.joinToString("")
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocMemberlike {
     override val kind = "Constructor"
 }
@@ -104,8 +105,8 @@ data class GroovydocMethod(
     override val modifiers: List<String>,
     val parameters: List<GroovydocParameter>,
     val returnValue: GroovydocReturnType,
-    val signature: List<SignatureComponent>,
-    val simpleSignature: String = signature.map { it.name }.joinToString("")
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocMemberlike {
     override val kind = "Method"
 }
@@ -125,8 +126,8 @@ data class GroovydocField(
 
     override val type: String,
     override val qualifiedType: String,
-    override val signature: List<SignatureComponent>,
-    override val simpleSignature: String = signature.map { it.name }.joinToString("")
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocMemberlike, GroovydocType {
     override val kind = "Field"
 }
@@ -145,8 +146,8 @@ data class GroovydocParameter(
 
     override val type: String,
     override val qualifiedType: String,
-    override val signature: List<SignatureComponent>,
-    override val simpleSignature: String = signature.map { it.name }.joinToString("")
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocDocElement, GroovydocType {
     override val kind = "Parameter"
 }
@@ -165,8 +166,8 @@ data class GroovydocReturnType(
 
     override val type: String,
     override val qualifiedType: String,
-    override val signature: List<SignatureComponent>,
-    override val simpleSignature: String = signature.map { it.name }.joinToString("")
+    override val signature: List<CommentComponent>,
+    override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : GroovydocDocElement, GroovydocType {
     override val kind = "ReturnValue"
 }

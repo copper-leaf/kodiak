@@ -1,7 +1,7 @@
 package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaClassDoc
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.ClassDoc
 
 fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClassDoc {
@@ -40,22 +40,22 @@ val ClassDoc.classKind: String
 
 fun ClassDoc.classSignature(
         modifiers: List<String>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("name", "${this.classKind} ", ""))
-    list.add(SignatureComponent("type", this.name(), this.qualifiedName()))
+    list.add(CommentComponent("name", "${this.classKind} "))
+    list.add(CommentComponent("type", this.name(), this.qualifiedName()))
     list.addAll(this.typeParameters().toWildcardSignature())
 
     if(this.isInterface) {
         val interfaces = this.interfaces()
         if(interfaces.isNotEmpty()) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }
@@ -63,17 +63,17 @@ fun ClassDoc.classSignature(
     else {
         val superclass = this.superclass()
         if(superclass != null) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             list.addAll(superclass.toTypeSignature())
         }
 
         val interfaces = this.interfaces()
         if(interfaces.isNotEmpty()) {
-            list.add(SignatureComponent("name", " implements ", ""))
+            list.add(CommentComponent("name", " implements "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }

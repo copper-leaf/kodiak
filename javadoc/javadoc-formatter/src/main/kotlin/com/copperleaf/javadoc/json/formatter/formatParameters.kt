@@ -1,7 +1,7 @@
 package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaParameter
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
 import com.sun.javadoc.Tag
@@ -28,48 +28,48 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
     )
 }
 
-fun List<JavaParameter>.toParameterListSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
-    list.add(SignatureComponent("punctuation", "(", ""))
+fun List<JavaParameter>.toParameterListSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
+    list.add(CommentComponent("punctuation", "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
 
-        list.add(SignatureComponent("name", " ${parameter.name}", ""))
+        list.add(CommentComponent("name", " ${parameter.name}"))
 
         if (index < this.size - 1) {
-            list.add(SignatureComponent("punctuation", ", ", ""))
+            list.add(CommentComponent("punctuation", ", "))
         }
     }
-    list.add(SignatureComponent("punctuation", ")", ""))
+    list.add(CommentComponent("punctuation", ")"))
 
     return list
 }
 
-fun Type.toTypeSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun Type.toTypeSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
-    list.add(SignatureComponent("type", this.simpleTypeName(), this.qualifiedTypeName()))
+    list.add(CommentComponent("type", this.simpleTypeName(), this.qualifiedTypeName()))
 
     val wildcard = this.asWildcardType()
     if(wildcard != null) {
         val extendsTypes = wildcard.extendsBounds()
         if(extendsTypes.isNotEmpty()) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             extendsTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
                 if (index < extendsTypes.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }
 
         val superTypes = wildcard.superBounds()
         if(superTypes.isNotEmpty()) {
-            list.add(SignatureComponent("name", " extends ", ""))
+            list.add(CommentComponent("name", " extends "))
             superTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
                 if (index < superTypes.size - 1) {
-                    list.add(SignatureComponent("punctuation", ", ", ""))
+                    list.add(CommentComponent("punctuation", ", "))
                 }
             }
         }
@@ -77,44 +77,44 @@ fun Type.toTypeSignature(): List<SignatureComponent> {
 
     if (this.asParameterizedType() != null) {
         val typeArguments = this.asParameterizedType().typeArguments()
-        list.add(SignatureComponent("punctuation", "<", ""))
+        list.add(CommentComponent("punctuation", "<"))
         typeArguments.forEachIndexed { index, parameter ->
             list.addAll(parameter.toTypeSignature())
             if (index < typeArguments.size - 1) {
-                list.add(SignatureComponent("punctuation", ", ", ""))
+                list.add(CommentComponent("punctuation", ", "))
             }
         }
-        list.add(SignatureComponent("punctuation", ">", ""))
+        list.add(CommentComponent("punctuation", ">"))
     }
 
     return list
 }
 
-fun Array<TypeVariable>.toWildcardSignature() : List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun Array<TypeVariable>.toWildcardSignature() : List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     if(this.isNotEmpty()) {
-        list.add(SignatureComponent("punctuation", "<", ""))
+        list.add(CommentComponent("punctuation", "<"))
         this.forEachIndexed { index, typeVariable ->
-            list.add(SignatureComponent("name", typeVariable.simpleTypeName(), ""))
+            list.add(CommentComponent("name", typeVariable.simpleTypeName()))
 
             val typeParamBounds = typeVariable.bounds()
             if(typeParamBounds.isNotEmpty()) {
-                list.add(SignatureComponent("name", " extends ", ""))
+                list.add(CommentComponent("name", " extends "))
 
                 typeParamBounds.forEachIndexed { boundsIndex, type ->
                     list.addAll(type.toTypeSignature())
                     if (boundsIndex < typeParamBounds.size - 1) {
-                        list.add(SignatureComponent("punctuation", " & ", ""))
+                        list.add(CommentComponent("punctuation", " & "))
                     }
                 }
             }
 
             if (index < this.size - 1) {
-                list.add(SignatureComponent("punctuation", ", ", ""))
+                list.add(CommentComponent("punctuation", ", "))
             }
         }
-        list.add(SignatureComponent("punctuation", ">", ""))
+        list.add(CommentComponent("punctuation", ">"))
     }
 
     return list

@@ -1,7 +1,7 @@
 package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinParameter
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -23,20 +23,20 @@ val DocumentationNode.parameters: List<KotlinParameter>
                 }
     }
 
-fun List<KotlinParameter>.toParameterListSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
-    list.add(SignatureComponent("punctuation", "(", ""))
+fun List<KotlinParameter>.toParameterListSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
+    list.add(CommentComponent("punctuation", "("))
     this.forEachIndexed { index, parameter ->
-        list.add(SignatureComponent("name", parameter.name, ""))
-        list.add(SignatureComponent("punctuation", ": ", ""))
+        list.add(CommentComponent("name", parameter.name))
+        list.add(CommentComponent("punctuation", ": "))
 
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
-            list.add(SignatureComponent("punctuation", ", ", ""))
+            list.add(CommentComponent("punctuation", ", "))
         }
     }
-    list.add(SignatureComponent("punctuation", ")", ""))
+    list.add(CommentComponent("punctuation", ")"))
 
     return list
 }
@@ -48,8 +48,8 @@ fun DocumentationNode.isFunctionalType(): Boolean {
     return name == functionalTypeName || name == suspendFunctionalTypeName
 }
 
-fun DocumentationNode.toTypeSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun DocumentationNode.toTypeSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
     if (isFunctionalType()) {
         list.addAll(this.toFunctionalTypeSignature())
     }
@@ -59,60 +59,60 @@ fun DocumentationNode.toTypeSignature(): List<SignatureComponent> {
 
     val defaultValue = this.detailOrNull(NodeKind.Value)?.name
     if (defaultValue != null) {
-        list.add(SignatureComponent("punctuation", " = ", ""))
-        list.add(SignatureComponent("value", defaultValue, defaultValue))
+        list.add(CommentComponent("punctuation", " = "))
+        list.add(CommentComponent("value", defaultValue, defaultValue))
     }
 
     return list
 }
 
-fun DocumentationNode.toNonFunctionalTypeSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun DocumentationNode.toNonFunctionalTypeSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
-    list.add(SignatureComponent("type", this.simpleType, this.qualifiedType))
+    list.add(CommentComponent("type", this.simpleType, this.qualifiedType))
 
     this.details(NodeKind.Type).toListSignature(
             childMapper = { it.toTypeSignature() },
-            prefix = listOf(SignatureComponent("punctuation", "<", "")),
-            postfix = listOf(SignatureComponent("punctuation", ">", ""))
+            prefix = listOf(CommentComponent("punctuation", "<")),
+            postfix = listOf(CommentComponent("punctuation", ">"))
     )
 
     if (this.nullable) {
-        list.add(SignatureComponent("punctuation", "?", ""))
+        list.add(CommentComponent("punctuation", "?"))
     }
 
     return list
 }
 
-fun DocumentationNode.toFunctionalTypeSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun DocumentationNode.toFunctionalTypeSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     var typeArguments = this.details(NodeKind.Type)
 
     if (this.name.startsWith("Suspend")) {
-        list.add(SignatureComponent("keyword", "suspend ", ""))
+        list.add(CommentComponent("keyword", "suspend "))
     }
 
     // function receiver
     val isExtension = this.annotations.any { it.name == "ExtensionFunctionType" }
     if (isExtension) {
         list.addAll(typeArguments.first().toTypeSignature())
-        list.add(SignatureComponent("punctuation", ".", ""))
+        list.add(CommentComponent("punctuation", "."))
         typeArguments = typeArguments.drop(1)
     }
 
     // function parameters
-    list.add(SignatureComponent("punctuation", "(", ""))
+    list.add(CommentComponent("punctuation", "("))
     typeArguments.dropLast(1).forEachIndexed { index, parameter ->
         list.addAll(parameter.toTypeSignature())
         if (index < typeArguments.size - 2) {
-            list.add(SignatureComponent("punctuation", ", ", ""))
+            list.add(CommentComponent("punctuation", ", "))
         }
     }
-    list.add(SignatureComponent("punctuation", ")", ""))
+    list.add(CommentComponent("punctuation", ")"))
 
     // function return
-    list.add(SignatureComponent("punctuation", "->", ""))
+    list.add(CommentComponent("punctuation", "->"))
     list.addAll(typeArguments.last().toTypeSignature())
 
     return list
@@ -122,26 +122,26 @@ fun DocumentationNode.toFunctionalTypeSignature(): List<SignatureComponent> {
 // Type Params
 //----------------------------------------------------------------------------------------------------------------------
 
-fun DocumentationNode.toTypeParameterDeclarationSignature(): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+fun DocumentationNode.toTypeParameterDeclarationSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     val typeArguments = this.details(NodeKind.TypeParameter)
     if (typeArguments.isNotEmpty()) {
-        list.add(SignatureComponent("punctuation", "<", ""))
+        list.add(CommentComponent("punctuation", "<"))
         typeArguments.forEachIndexed { index, typeParameter ->
-            list.add(SignatureComponent("name", typeParameter.name, ""))
+            list.add(CommentComponent("name", typeParameter.name))
 
             val upperBound = typeParameter.detailOrNull(NodeKind.UpperBound)
             if (upperBound != null) {
-                list.add(SignatureComponent("punctuation", " : ", ""))
+                list.add(CommentComponent("punctuation", " : "))
                 list.addAll(upperBound.asType().toTypeSignature())
             }
 
             if (index < typeArguments.size - 1) {
-                list.add(SignatureComponent("punctuation", ", ", ""))
+                list.add(CommentComponent("punctuation", ", "))
             }
         }
-        list.add(SignatureComponent("punctuation", "> ", ""))
+        list.add(CommentComponent("punctuation", "> "))
     }
 
     return list

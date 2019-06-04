@@ -1,7 +1,7 @@
 package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinClassDoc
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
@@ -34,21 +34,21 @@ fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClassDoc {
 
 fun DocumentationNode.classSignature(
         modifiers: List<String>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("keyword", "class ", ""))
-    list.add(SignatureComponent("type", this.simpleName, this.qualifiedName))
+    list.add(CommentComponent("keyword", "class "))
+    list.add(CommentComponent("type", this.simpleName, this.qualifiedName))
 //    list.addAll(this.toTypeParameterDeclarationSignature())
 //    list.addAll(this.toSuperclassDeclarationSignature())
 
     return list
 }
 
-fun DocumentationNode.toSuperclassDeclarationSignature(): List<SignatureComponent> {
+fun DocumentationNode.toSuperclassDeclarationSignature(): List<CommentComponent> {
     return this.details(NodeKind.Supertype).toListSignature(
             childMapper = { it.toTypeSignature() },
-            prefix = listOf(SignatureComponent("punctuation", ": ", ""))
+            prefix = listOf(CommentComponent("punctuation", ": "))
     )
 }

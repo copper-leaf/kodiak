@@ -4,7 +4,7 @@ import com.copperleaf.groovydoc.json.models.GroovydocMethod
 import com.copperleaf.groovydoc.json.models.GroovydocParameter
 import com.copperleaf.groovydoc.json.models.GroovydocReturnType
 import com.copperleaf.groovydoc.json.models.GroovydocType
-import com.copperleaf.groovydoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyMethodDoc
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -45,13 +45,13 @@ fun GroovyMethodDoc.methodSignature(
     modifiers: List<String>,
     parameters: List<GroovydocParameter>,
     returnType: GroovydocType
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
 //    list.addAll(this.typeParameters().toWildcardSignature())
     list.addAll(returnType.signature)
-    list.add(SignatureComponent("name", " ${this.name()}", ""))
+    list.add(CommentComponent("name", " ${this.name()}"))
     list.addAll(parameters.toParameterListSignature())
 
     return list

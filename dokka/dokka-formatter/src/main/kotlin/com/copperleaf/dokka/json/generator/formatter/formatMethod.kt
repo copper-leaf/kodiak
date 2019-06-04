@@ -4,7 +4,7 @@ import com.copperleaf.dokka.json.models.KotlinMethod
 import com.copperleaf.dokka.json.models.KotlinParameter
 import com.copperleaf.dokka.json.models.KotlinReceiverType
 import com.copperleaf.dokka.json.models.KotlinReturnType
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -40,24 +40,24 @@ fun DocumentationNode.methodSignature(
         parameters: List<KotlinParameter>,
         receiverType: KotlinReceiverType?,
         returnType: KotlinReturnType
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("keyword", "fun ", ""))
+    list.add(CommentComponent("keyword", "fun "))
 
     list.addAll(this.toTypeParameterDeclarationSignature())
 
     if (receiverType != null) {
         list.addAll(receiverType.signature)
-        list.add(SignatureComponent("punctuation", ".", ""))
+        list.add(CommentComponent("punctuation", "."))
     }
 
-    list.add(SignatureComponent("name", this.simpleName, ""))
+    list.add(CommentComponent("name", this.simpleName))
     list.addAll(parameters.toParameterListSignature())
 
     if (returnType.name != "Unit") {
-        list.add(SignatureComponent("punctuation", ": ", ""))
+        list.add(CommentComponent("punctuation", ": "))
         list.addAll(returnType.signature)
     }
 

@@ -1,7 +1,7 @@
 package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.CommentTag
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
 
@@ -35,6 +35,6 @@ fun Tag.toCommentTag(): CommentTag {
     )
 }
 
-fun List<String>.toModifierListSignature(): List<SignatureComponent> {
-    return this.map { SignatureComponent("modifier", "$it ", "") }
+fun List<String>.toModifierListSignature(): List<CommentComponent> {
+    return this.map { CommentComponent("modifier", "$it ") }
 }

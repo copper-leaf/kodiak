@@ -1,6 +1,6 @@
 package com.copperleaf.dokka.json.generator.formatter
 
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
@@ -48,17 +48,17 @@ val DocumentationNode.nullable: Boolean
         return asType().details(NodeKind.NullabilityModifier).singleOrNull() != null
     }
 
-fun List<String>.toModifierListSignature(): List<SignatureComponent> {
-    return this.map { SignatureComponent("modifier", "$it ", "") }
+fun List<String>.toModifierListSignature(): List<CommentComponent> {
+    return this.map { CommentComponent("modifier", "$it ") }
 }
 
 fun List<DocumentationNode>.toListSignature(
-        childMapper: (DocumentationNode) -> List<SignatureComponent>,
-        prefix: List<SignatureComponent> = emptyList(),
-        postfix: List<SignatureComponent> = emptyList(),
-        separator: List<SignatureComponent> = listOf(SignatureComponent("punctuation", ", ", ""))
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+        childMapper: (DocumentationNode) -> List<CommentComponent>,
+        prefix: List<CommentComponent> = emptyList(),
+        postfix: List<CommentComponent> = emptyList(),
+        separator: List<CommentComponent> = listOf(CommentComponent("punctuation", ", "))
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     if (this.isNotEmpty()) {
         list.addAll(prefix)

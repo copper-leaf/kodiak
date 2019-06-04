@@ -1,6 +1,6 @@
 package com.copperleaf.groovydoc.json.models
 
-import kotlinx.serialization.Serializable
+import com.copperleaf.json.common.CommentComponent
 
 interface GroovydocDocElement {
     val kind: String
@@ -18,17 +18,6 @@ interface GroovydocMemberlike : GroovydocDocElement {
 interface GroovydocType : GroovydocDocElement {
     val type: String
     val qualifiedType: String
-    val signature: List<SignatureComponent>
+    val signature: List<CommentComponent>
     val simpleSignature: String
 }
-
-/**
- * A component to the rich signature. The complete signature can be created by joining all components together,
- * optionally generating
- */
-@Serializable
-data class SignatureComponent(
-    val kind: String,
-    val name: String,
-    val qualifiedName: String
-)

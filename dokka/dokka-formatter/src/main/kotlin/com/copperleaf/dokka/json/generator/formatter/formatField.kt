@@ -1,7 +1,7 @@
 package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinField
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -29,12 +29,12 @@ fun DocumentationNode.toField(): KotlinField {
 fun DocumentationNode.fieldSignature(
         modifiers: List<String>,
         type: DocumentationNode
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("name", this.simpleName, ""))
-    list.add(SignatureComponent("punctuation", ": ", ""))
+    list.add(CommentComponent("name", this.simpleName))
+    list.add(CommentComponent("punctuation", ": "))
     list.addAll(type.asType().toTypeSignature())
 
     return list

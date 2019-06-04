@@ -2,7 +2,7 @@ package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinConstructor
 import com.copperleaf.dokka.json.models.KotlinParameter
-import com.copperleaf.dokka.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -30,11 +30,11 @@ fun DocumentationNode.toConstructor(): KotlinConstructor {
 fun DocumentationNode.constructorSignature(
         modifiers: List<String>,
         parameters: List<KotlinParameter>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(SignatureComponent("keyword", "constructor", ""))
+    list.add(CommentComponent("keyword", "constructor"))
     list.addAll(parameters.toParameterListSignature())
 
     return list

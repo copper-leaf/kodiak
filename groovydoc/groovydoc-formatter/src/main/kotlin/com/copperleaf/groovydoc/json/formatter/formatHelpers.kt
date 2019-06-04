@@ -1,6 +1,6 @@
 package com.copperleaf.groovydoc.json.formatter
 
-import com.copperleaf.groovydoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
 import org.codehaus.groovy.groovydoc.GroovyParameter
@@ -15,8 +15,8 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Node
 import org.jsoup.select.NodeFilter
 
-fun List<String>.toModifierListSignature(): List<SignatureComponent> {
-    return this.map { SignatureComponent("modifier", "$it ", "") }
+fun List<String>.toModifierListSignature(): List<CommentComponent> {
+    return this.map { CommentComponent("modifier", "$it ") }
 }
 
 fun GroovyType.real(): GroovyType {

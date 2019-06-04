@@ -2,7 +2,7 @@ package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.GroovydocConstructor
 import com.copperleaf.groovydoc.json.models.GroovydocParameter
-import com.copperleaf.groovydoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyConstructorDoc
 
@@ -28,12 +28,12 @@ fun GroovyConstructorDoc.constructorSignature(
     parent: GroovyClassDoc,
     modifiers: List<String>,
     parameters: List<GroovydocParameter>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
 //    list.addAll(this.typeParameters().toWildcardSignature())
-    list.add(SignatureComponent("type", parent.simpleTypeName(), parent.qualifiedTypeName()))
+    list.add(CommentComponent("type", parent.simpleTypeName(), parent.qualifiedTypeName()))
     list.addAll(parameters.toParameterListSignature())
 
     return list

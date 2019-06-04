@@ -1,7 +1,7 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.GroovydocField
-import com.copperleaf.groovydoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -26,12 +26,12 @@ fun GroovyFieldDoc.toField(parent: GroovyClassDoc): GroovydocField {
 fun GroovyFieldDoc.fieldSignature(
         modifiers: List<String>,
         type: GroovyType
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(SignatureComponent("name", " ${this.name()}", ""))
+    list.add(CommentComponent("name", " ${this.name()}"))
 
     return list
 }

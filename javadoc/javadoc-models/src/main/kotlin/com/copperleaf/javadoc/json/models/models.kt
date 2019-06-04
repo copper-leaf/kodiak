@@ -1,5 +1,6 @@
 package com.copperleaf.javadoc.json.models
 
+import com.copperleaf.json.common.CommentComponent
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
@@ -18,22 +19,22 @@ class JavadocRootdoc(
  */
 @Serializable
 data class JavaClassDoc(
-        @Transient
+    @Transient
         val node: Any? = null,
 
-        val `package`: String,
-        val modifiers: List<String>,
-        override val kind: String,
-        override val name: String,
-        override val qualifiedName: String,
-        override val simpleComment: String,
-        override val comment: List<CommentTag>,
-        override val tags: Map<String, CommentTag>,
-        val constructors: List<JavaConstructor>,
-        val methods: List<JavaMethod>,
-        val fields: List<JavaField>,
-        val signature: List<SignatureComponent>,
-        val simpleSignature: String = signature.map { it.name }.joinToString("")
+    val `package`: String,
+    val modifiers: List<String>,
+    override val kind: String,
+    override val name: String,
+    override val qualifiedName: String,
+    override val simpleComment: String,
+    override val comment: List<CommentTag>,
+    override val tags: Map<String, CommentTag>,
+    val constructors: List<JavaConstructor>,
+    val methods: List<JavaMethod>,
+    val fields: List<JavaField>,
+    val signature: List<CommentComponent>,
+    val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaClasslike {
     companion object {
         fun fromJson(json: String): JavaClassDoc {
@@ -90,8 +91,8 @@ data class JavaConstructor(
         override val tags: Map<String, CommentTag>,
         override val modifiers: List<String>,
         val parameters: List<JavaParameter>,
-        val signature: List<SignatureComponent>,
-        val simpleSignature: String = signature.map { it.name }.joinToString("")
+        val signature: List<CommentComponent>,
+        val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike {
     override val kind = "Constructor"
 }
@@ -112,8 +113,8 @@ data class JavaMethod(
         override val modifiers: List<String>,
         val parameters: List<JavaParameter>,
         val returnValue: JavaReturnType,
-        val signature: List<SignatureComponent>,
-        val simpleSignature: String = signature.map { it.name }.joinToString("")
+        val signature: List<CommentComponent>,
+        val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike {
     override val kind = "Method"
 }
@@ -135,8 +136,8 @@ data class JavaField(
 
         override val type: String,
         override val qualifiedType: String,
-        override val signature: List<SignatureComponent>,
-        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+        override val signature: List<CommentComponent>,
+        override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaMemberlike, JavaType {
     override val kind = "Field"
 }
@@ -157,8 +158,8 @@ data class JavaParameter(
 
         override val type: String,
         override val qualifiedType: String,
-        override val signature: List<SignatureComponent>,
-        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+        override val signature: List<CommentComponent>,
+        override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaDocElement, JavaType {
     override val kind = "Parameter"
 }
@@ -179,8 +180,8 @@ data class JavaReturnType(
 
         override val type: String,
         override val qualifiedType: String,
-        override val signature: List<SignatureComponent>,
-        override val simpleSignature: String = signature.map { it.name }.joinToString("")
+        override val signature: List<CommentComponent>,
+        override val simpleSignature: String = signature.map { it.text }.joinToString("")
 ) : JavaDocElement, JavaType {
     override val kind = "ReturnValue"
 }

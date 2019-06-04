@@ -2,7 +2,7 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaConstructor
 import com.copperleaf.javadoc.json.models.JavaParameter
-import com.copperleaf.javadoc.json.models.SignatureComponent
+import com.copperleaf.json.common.CommentComponent
 import com.sun.javadoc.ConstructorDoc
 
 fun ConstructorDoc.toConstructor(): JavaConstructor {
@@ -27,12 +27,12 @@ fun ConstructorDoc.toConstructor(): JavaConstructor {
 fun ConstructorDoc.constructorSignature(
         modifiers: List<String>,
         parameters: List<JavaParameter>
-): List<SignatureComponent> {
-    val list = mutableListOf<SignatureComponent>()
+): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(this.typeParameters().toWildcardSignature())
-    list.add(SignatureComponent("type", this.containingClass().simpleTypeName(), this.containingClass().qualifiedName()))
+    list.add(CommentComponent("type", this.containingClass().simpleTypeName(), this.containingClass().qualifiedName()))
     list.addAll(parameters.toParameterListSignature())
 
     return list
