@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group rootProject.group
+version rootProject.version
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile project(":common:common-formatter")
+    compile project(':kss:kss-models')
+
+    compile 'com.eden:Common:1.11.2'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+tasks.assemble.dependsOn shadowJar
+
+shadowJar {
+    version = null
+    extension = "zip"
+}

@@ -17,3 +17,7 @@ include ':groovydoc:groovydoc-runner'
 include ':javadoc:javadoc-models'
 include ':javadoc:javadoc-formatter'
 include ':javadoc:javadoc-runner'
+
+include ':kss:kss-models'
+include ':kss:kss-formatter'
+include ':kss:kss-runner'
