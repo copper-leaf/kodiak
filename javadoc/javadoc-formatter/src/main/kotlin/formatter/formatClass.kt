@@ -2,26 +2,29 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaClassDoc
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ClassDoc
 
 fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClassDoc {
     val modifiers = listOf(this.modifiers())
 
     return JavaClassDoc(
-            this,
-            this.containingPackage().name(),
-            modifiers,
-            this.classKind,
-            this.typeName(),
-            this.qualifiedTypeName(),
+        this,
+        this.containingPackage().name(),
+        this.classKind,
+        this.typeName(),
+        this.qualifiedTypeName(),
+        modifiers,
+        DocComment(
             this.inlineTags().asCommentComponents(),
-            this.tags().asCommentComponentsMap(),
-            if(deep) this.constructors().map { it.toConstructor() } else emptyList(),
-            if(deep) this.methods().map { it.toMethod() } else emptyList(),
-            if(deep) this.fields().map { it.toField() } else emptyList(),
-            this.classSignature(
-                    modifiers
-            )
+            this.tags().asCommentComponentsMap()
+        ),
+        if (deep) this.constructors().map { it.toConstructor() } else emptyList(),
+        if (deep) this.methods().map { it.toMethod() } else emptyList(),
+        if (deep) this.fields().map { it.toField() } else emptyList(),
+        this.classSignature(
+            modifiers
+        )
     )
 }
 
@@ -38,7 +41,7 @@ val ClassDoc.classKind: String
     }
 
 fun ClassDoc.classSignature(
-        modifiers: List<String>
+    modifiers: List<String>
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
@@ -47,9 +50,9 @@ fun ClassDoc.classSignature(
     list.add(CommentComponent("typeName", this.name(), this.qualifiedName()))
     list.addAll(this.typeParameters().toWildcardSignature())
 
-    if(this.isInterface) {
+    if (this.isInterface) {
         val interfaces = this.interfaces()
-        if(interfaces.isNotEmpty()) {
+        if (interfaces.isNotEmpty()) {
             list.add(CommentComponent("name", " extends "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
@@ -58,16 +61,15 @@ fun ClassDoc.classSignature(
                 }
             }
         }
-    }
-    else {
+    } else {
         val superclass = this.superclass()
-        if(superclass != null) {
+        if (superclass != null) {
             list.add(CommentComponent("name", " extends "))
             list.addAll(superclass.toTypeSignature())
         }
 
         val interfaces = this.interfaces()
-        if(interfaces.isNotEmpty()) {
+        if (interfaces.isNotEmpty()) {
             list.add(CommentComponent("name", " implements "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())

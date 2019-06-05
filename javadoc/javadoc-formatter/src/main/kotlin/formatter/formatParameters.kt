@@ -2,6 +2,7 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaParameter
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
 import com.sun.javadoc.Tag
@@ -16,14 +17,17 @@ fun formatParameters(params: Array<Parameter>, tags: Array<ParamTag>): List<Java
 
 fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
     return JavaParameter(
-            this,
-            this.name(),
-            this.name(),
+        this,
+        this.name(),
+        this.name(),
+        emptyList(),
+        DocComment(
             if (tag != null) arrayOf<Tag>(tag).asCommentComponents() else emptyList(),
-            if (tag != null) arrayOf<Tag>(tag).asCommentComponentsMap() else emptyMap(),
-            this.type().simpleTypeName(),
-            this.type().qualifiedTypeName(),
-            this.type().toTypeSignature()
+            if (tag != null) arrayOf<Tag>(tag).asCommentComponentsMap() else emptyMap()
+        ),
+        this.type().simpleTypeName(),
+        this.type().qualifiedTypeName(),
+        this.type().toTypeSignature()
     )
 }
 
@@ -50,9 +54,9 @@ fun Type.toTypeSignature(): List<CommentComponent> {
     list.add(CommentComponent("typeName", this.simpleTypeName(), this.qualifiedTypeName()))
 
     val wildcard = this.asWildcardType()
-    if(wildcard != null) {
+    if (wildcard != null) {
         val extendsTypes = wildcard.extendsBounds()
-        if(extendsTypes.isNotEmpty()) {
+        if (extendsTypes.isNotEmpty()) {
             list.add(CommentComponent("name", " extends "))
             extendsTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
@@ -63,7 +67,7 @@ fun Type.toTypeSignature(): List<CommentComponent> {
         }
 
         val superTypes = wildcard.superBounds()
-        if(superTypes.isNotEmpty()) {
+        if (superTypes.isNotEmpty()) {
             list.add(CommentComponent("name", " extends "))
             superTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
@@ -89,16 +93,16 @@ fun Type.toTypeSignature(): List<CommentComponent> {
     return list
 }
 
-fun Array<TypeVariable>.toWildcardSignature() : List<CommentComponent> {
+fun Array<TypeVariable>.toWildcardSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    if(this.isNotEmpty()) {
+    if (this.isNotEmpty()) {
         list.add(CommentComponent("punctuation", "<"))
         this.forEachIndexed { index, typeVariable ->
             list.add(CommentComponent("name", typeVariable.simpleTypeName()))
 
             val typeParamBounds = typeVariable.bounds()
-            if(typeParamBounds.isNotEmpty()) {
+            if (typeParamBounds.isNotEmpty()) {
                 list.add(CommentComponent("name", " extends "))
 
                 typeParamBounds.forEachIndexed { boundsIndex, type ->

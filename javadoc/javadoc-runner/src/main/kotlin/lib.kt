@@ -2,7 +2,7 @@ package com.copperleaf.javadoc.json
 
 import com.copperleaf.javadoc.json.models.JavaClassDoc
 import com.copperleaf.javadoc.json.models.JavaPackageDoc
-import com.copperleaf.javadoc.json.models.JavadocRootdoc
+import com.copperleaf.javadoc.json.models.JavaRootDoc
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -15,9 +15,9 @@ interface JavadocInvoker {
             destinationDir: Path,
             args: List<String> = emptyList(),
             callback: (InputStream) -> Runnable
-    ): JavadocRootdoc?
+    ): JavaRootDoc?
 
-    fun loadCachedRootDoc(destinationDir: Path): JavadocRootdoc?
+    fun loadCachedRootDoc(destinationDir: Path): JavaRootDoc?
 }
 
 class JavadocInvokerImpl(
@@ -33,12 +33,12 @@ class JavadocInvokerImpl(
             destinationDir: Path,
             args: List<String>,
             callback: (InputStream) -> Runnable
-    ): JavadocRootdoc? {
+    ): JavaRootDoc? {
         val success = executeJavadoc(sourceDirs, destinationDir, args) { callback(it) }
         return if (success) getJavadocRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): JavadocRootdoc? {
+    override fun loadCachedRootDoc(destinationDir: Path): JavaRootDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getJavadocRootdoc(destinationDir)
         }
@@ -101,11 +101,11 @@ class JavadocInvokerImpl(
 // Process Javadoc output to a model Orchid can use
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun getJavadocRootdoc(destinationDir: Path): JavadocRootdoc {
+    private fun getJavadocRootdoc(destinationDir: Path): JavaRootDoc {
         val packages = getJavadocPackagePages(destinationDir)
         val classes = getJavadocClassPages(destinationDir)
 
-        return JavadocRootdoc(
+        return JavaRootDoc(
                 packages,
                 classes
         )

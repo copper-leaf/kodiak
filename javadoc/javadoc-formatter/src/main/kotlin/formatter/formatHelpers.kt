@@ -23,15 +23,14 @@ fun Tag.toCommentComponent(): CommentComponent {
     if (this is SeeTag && referencedClass() != null) {
         name = referencedClass().simpleTypeName()
         qualifiedName = referencedClass().qualifiedTypeName()
-    }
-    else {
+    } else {
         name = text()
         qualifiedName = text()
     }
     return CommentComponent(
-            key,
-            name,
-            qualifiedName
+        key,
+        name,
+        qualifiedName
     )
 }
 
