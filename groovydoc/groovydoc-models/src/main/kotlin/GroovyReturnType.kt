@@ -1,7 +1,5 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.groovydoc.json.models
 
-import com.copperleaf.json.common.AutoDocument
-import com.copperleaf.json.common.AutoDocumentNode
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.ElementType
@@ -9,10 +7,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * The docs for a field or property in a class.
+ * The docs for a parameter of a constructor or method
  */
 @Serializable
-data class JavaField(
+data class GroovyReturnType(
     @Transient
     val node: Any? = null,
 
@@ -24,9 +22,6 @@ data class JavaField(
     override val typeName: String,
     override val typeId: String,
     override val signature: List<CommentComponent>
-) : ElementType, AutoDocument {
-    override val kind = "Field"
-
-    @Transient
-    override val nodes = emptyList<AutoDocumentNode>()
+) : ElementType {
+    override val kind = "ReturnValue"
 }

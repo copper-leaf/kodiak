@@ -33,7 +33,6 @@ test {
 sourceSets {
     example
 }
-
 test.outputs.upToDateWhen {false}
 
 // wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource

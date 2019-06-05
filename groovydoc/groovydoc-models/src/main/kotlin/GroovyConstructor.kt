@@ -1,18 +1,18 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.groovydoc.json.models
 
 import com.copperleaf.json.common.AutoDocument
-import com.copperleaf.json.common.AutoDocumentNode
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
-import com.copperleaf.json.common.ElementType
+import com.copperleaf.json.common.DocElement
+import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * The docs for a field or property in a class.
+ * The docs for a constructor of a class.
  */
 @Serializable
-data class JavaField(
+data class GroovyConstructor(
     @Transient
     val node: Any? = null,
 
@@ -21,12 +21,13 @@ data class JavaField(
     override val modifiers: List<String>,
     override val comment: DocComment,
 
-    override val typeName: String,
-    override val typeId: String,
-    override val signature: List<CommentComponent>
-) : ElementType, AutoDocument {
-    override val kind = "Field"
+    val parameters: List<GroovyParameter>,
+    val signature: List<CommentComponent>
+) : DocElement, AutoDocument {
+    override val kind = "Constructor"
 
     @Transient
-    override val nodes = emptyList<AutoDocumentNode>()
+    override val nodes = listOf(
+        fromDocList(::parameters)
+    )
 }

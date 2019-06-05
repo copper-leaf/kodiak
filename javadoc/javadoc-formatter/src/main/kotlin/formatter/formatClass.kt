@@ -1,14 +1,14 @@
 package com.copperleaf.javadoc.json.formatter
 
-import com.copperleaf.javadoc.json.models.JavaClassDoc
+import com.copperleaf.javadoc.json.models.JavaClass
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ClassDoc
 
-fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClassDoc {
+fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
     val modifiers = listOf(this.modifiers())
 
-    return JavaClassDoc(
+    return JavaClass(
         this,
         this.containingPackage().name(),
         this.classKind,

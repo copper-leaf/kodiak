@@ -1,21 +1,24 @@
 package com.copperleaf.groovydoc.json.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovydocConstructor
-import com.copperleaf.groovydoc.json.models.GroovydocParameter
+import com.copperleaf.groovydoc.json.models.GroovyConstructor
+import com.copperleaf.groovydoc.json.models.GroovyParameter
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyConstructorDoc
 
-fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovydocConstructor {
+fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovyConstructor {
     val modifiers = listOf(this.modifiers()).filterNotNull()
     val parameters = formatParameters(this.parameters(), this.findCommentTags().filter { it.name() == "parameters" })
-    return GroovydocConstructor(
+    return GroovyConstructor(
         this,
         parent.simpleTypeName(),
         parent.qualifiedTypeName(),
-        this.findCommentText(),
-        emptyMap(),
         modifiers,
+        DocComment(
+            this.findCommentText(),
+            emptyMap()
+        ),
         parameters,
         this.constructorSignature(
             parent,
@@ -28,7 +31,7 @@ fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovydocConstru
 fun GroovyConstructorDoc.constructorSignature(
     parent: GroovyClassDoc,
     modifiers: List<String>,
-    parameters: List<GroovydocParameter>
+    parameters: List<GroovyParameter>
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 

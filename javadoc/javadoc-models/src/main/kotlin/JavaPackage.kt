@@ -13,7 +13,7 @@ import kotlinx.serialization.json.JSON
  * package. Class definitions only include metadata, but do not include information about their members.
  */
 @Serializable
-data class JavaPackageDoc(
+data class JavaPackage(
     @Transient
     val node: Any? = null,
 
@@ -22,7 +22,7 @@ data class JavaPackageDoc(
     override val modifiers: List<String>,
     override val comment: DocComment,
 
-    val classes: List<JavaClassDoc>
+    val classes: List<JavaClass>
 ) : DocElement, AutoDocument {
     override val kind = "Package"
 
@@ -32,13 +32,12 @@ data class JavaPackageDoc(
     )
 
     companion object {
-        fun fromJson(json: String): JavaPackageDoc {
-            return JSON.parse(JavaPackageDoc.serializer(), json)
+        fun fromJson(json: String): JavaPackage {
+            return JSON.parse(JavaPackage.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(JavaPackageDoc.serializer(), this)
+        return JSON.indented.stringify(JavaPackage.serializer(), this)
     }
 }
-

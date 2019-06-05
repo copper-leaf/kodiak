@@ -30,8 +30,8 @@ class GroovydocJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../groovydoc-formatter/build/groovydoc/cache").canonicalFile.toPath()
-        outputDir = File("../groovydoc-formatter/build/groovydoc/output").canonicalFile.toPath()
+        cacheDir = File("../groovydoc-runner/build/groovydoc/cache").canonicalFile.toPath()
+        outputDir = File("../groovydoc-runner/build/groovydoc/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }
@@ -56,8 +56,8 @@ class GroovydocJsonRunnerTest {
         try {
             val rootDoc = groovydocRunner.getRootDoc(
                 listOf(
-                    File("../groovydoc-formatter/src/test/java").canonicalFile.toPath(),
-                    File("../groovydoc-formatter/src/test/groovy").canonicalFile.toPath()
+                    File("../groovydoc-runner/src/example/java").canonicalFile.toPath(),
+                    File("../groovydoc-runner/src/example/groovy").canonicalFile.toPath()
                 ),
                 outputDir
             ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }

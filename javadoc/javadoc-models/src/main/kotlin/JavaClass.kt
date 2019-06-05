@@ -14,7 +14,7 @@ import kotlinx.serialization.json.JSON
  * KDoc commentComponents on the class.
  */
 @Serializable
-data class JavaClassDoc(
+data class JavaClass(
     @Transient
     val node: Any? = null,
 
@@ -39,12 +39,12 @@ data class JavaClassDoc(
     )
 
     companion object {
-        fun fromJson(json: String): JavaClassDoc {
-            return JSON.parse(JavaClassDoc.serializer(), json)
+        fun fromJson(json: String): JavaClass {
+            return JSON.parse(JavaClass.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(JavaClassDoc.serializer(), this)
+        return JSON.indented.stringify(JavaClass.serializer(), this)
     }
 }

@@ -1,25 +1,28 @@
 package com.copperleaf.groovydoc.json.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovydocMethod
-import com.copperleaf.groovydoc.json.models.GroovydocParameter
-import com.copperleaf.groovydoc.json.models.GroovydocReturnType
+import com.copperleaf.groovydoc.json.models.GroovyMethod
+import com.copperleaf.groovydoc.json.models.GroovyParameter
+import com.copperleaf.groovydoc.json.models.GroovyReturnType
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.ElementType
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyMethodDoc
 import org.codehaus.groovy.groovydoc.GroovyType
 
-fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovydocMethod {
+fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovyMethod {
     val modifiers = listOf(this.modifiers()).filterNotNull()
     val parameters = formatParameters(this.parameters(), this.findCommentTags().filter { it.name() == "parameters" })
     val returnType = this.returnType().real().toReturnType(this)
-    return GroovydocMethod(
+    return GroovyMethod(
         this,
         this.name(),
         this.name(),
-        this.findCommentText(),
-        emptyMap(),
         modifiers,
+        DocComment(
+            this.findCommentText(),
+            emptyMap()
+        ),
         parameters,
         returnType,
         this.methodSignature(
@@ -30,13 +33,16 @@ fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovydocMethod {
     )
 }
 
-fun GroovyType.toReturnType(parent: GroovyMethodDoc): GroovydocReturnType {
-    return GroovydocReturnType(
+fun GroovyType.toReturnType(parent: GroovyMethodDoc): GroovyReturnType {
+    return GroovyReturnType(
         this,
         this.simpleTypeName(),
         this.qualifiedTypeName(),
-        (parent.findCommentTags().firstOrNull { it.name() == "returns" }?.text() ?: "").asCommentText(),
-        emptyMap(),
+        emptyList(),
+        DocComment(
+            (parent.findCommentTags().firstOrNull { it.name() == "returns" }?.text() ?: "").asCommentText(),
+            emptyMap()
+        ),
         this.simpleTypeName(),
         this.qualifiedTypeName(),
         this.toTypeSignature()
@@ -45,7 +51,7 @@ fun GroovyType.toReturnType(parent: GroovyMethodDoc): GroovydocReturnType {
 
 fun GroovyMethodDoc.methodSignature(
     modifiers: List<String>,
-    parameters: List<GroovydocParameter>,
+    parameters: List<GroovyParameter>,
     returnType: ElementType
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()

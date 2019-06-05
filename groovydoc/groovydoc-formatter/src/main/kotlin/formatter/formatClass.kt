@@ -1,22 +1,25 @@
 package com.copperleaf.groovydoc.json.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovydocClassDoc
+import com.copperleaf.groovydoc.json.models.GroovyClass
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 
-fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovydocClassDoc {
+fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovyClass {
     val modifiers = listOf(this.modifiers()).filterNotNull()
 
-    return GroovydocClassDoc(
+    return GroovyClass(
         this,
         this.containingPackage().nameWithDots(),
-        modifiers,
         this.classKind,
         this.simpleTypeName(),
         this.qualifiedTypeName(),
-        this.findCommentText(),
-        emptyMap(),
+        modifiers,
+        DocComment(
+            this.findCommentText(),
+            emptyMap()
+        ),
         if (deep) this.constructors().map { it.toConstructor(this) } else emptyList(),
         if (deep) this.methods().map { it.toMethod(this) } else emptyList(),
         if (deep) this.fields().map { it.toField(this) } else emptyList(),

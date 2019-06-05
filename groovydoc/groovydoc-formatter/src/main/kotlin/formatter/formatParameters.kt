@@ -1,31 +1,35 @@
 package com.copperleaf.groovydoc.json.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovydocParameter
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
+import com.copperleaf.groovydoc.json.models.GroovyParameter as GroovyParameterDoc
 
-fun formatParameters(params: Array<GroovyParameter>, tags: List<GroovyTag>): List<GroovydocParameter> {
+fun formatParameters(params: Array<GroovyParameter>, tags: List<GroovyTag>): List<GroovyParameterDoc> {
     return params.map { param ->
         param.toParameter(tags.find { tag -> tag.param() == param.name() })
     }
 }
 
-fun GroovyParameter.toParameter(tag: GroovyTag?): GroovydocParameter {
-    return GroovydocParameter(
+fun GroovyParameter.toParameter(tag: GroovyTag?): GroovyParameterDoc {
+    return GroovyParameterDoc(
         this,
         this.name(),
         this.name(),
-        (tag?.text() ?: "").asCommentText(),
-        emptyMap(),
+        emptyList(),
+        DocComment(
+            (tag?.text() ?: "").asCommentText(),
+            emptyMap()
+        ),
         this.realType().simpleTypeName(),
         this.realType().qualifiedTypeName(),
         this.realType().toTypeSignature()
     )
 }
 
-fun List<GroovydocParameter>.toParameterListSignature(): List<CommentComponent> {
+fun List<GroovyParameterDoc>.toParameterListSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
     list.add(CommentComponent("punctuation", "("))
     this.forEachIndexed { index, parameter ->

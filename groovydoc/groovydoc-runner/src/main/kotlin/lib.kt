@@ -1,8 +1,8 @@
 package com.copperleaf.groovydoc.json
 
-import com.copperleaf.groovydoc.json.models.GroovydocClassDoc
-import com.copperleaf.groovydoc.json.models.GroovydocPackageDoc
-import com.copperleaf.groovydoc.json.models.GroovydocRootdoc
+import com.copperleaf.groovydoc.json.models.GroovyClass
+import com.copperleaf.groovydoc.json.models.GroovyPackage
+import com.copperleaf.groovydoc.json.models.GroovyRootDoc
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -16,9 +16,9 @@ interface GroovydocInvoker {
         destinationDir: Path,
         args: List<String> = emptyList(),
         callback: (InputStream) -> Runnable
-    ): GroovydocRootdoc?
+    ): GroovyRootDoc?
 
-    fun loadCachedRootDoc(destinationDir: Path): GroovydocRootdoc?
+    fun loadCachedRootDoc(destinationDir: Path): GroovyRootDoc?
 }
 
 class GroovydocInvokerImpl(
@@ -34,12 +34,12 @@ class GroovydocInvokerImpl(
         destinationDir: Path,
         args: List<String>,
         callback: (InputStream) -> Runnable
-    ): GroovydocRootdoc? {
+    ): GroovyRootDoc? {
         val success = executeGroovydoc(sourceDirs, destinationDir, args) { callback(it) }
         return if (success) getGroovydocRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): GroovydocRootdoc? {
+    override fun loadCachedRootDoc(destinationDir: Path): GroovyRootDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getGroovydocRootdoc(destinationDir)
         } else {
@@ -92,35 +92,35 @@ class GroovydocInvokerImpl(
 // Process Javadoc output to a model Orchid can use
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun getGroovydocRootdoc(destinationDir: Path): GroovydocRootdoc {
+    private fun getGroovydocRootdoc(destinationDir: Path): GroovyRootDoc {
         val sourceFiles = getGroovydocPackageDocs(destinationDir)
         val classes = getGroovydocClassDocs(destinationDir)
 
-        return GroovydocRootdoc(
+        return GroovyRootDoc(
             sourceFiles,
             classes
         )
     }
 
-    private fun getGroovydocPackageDocs(destinationDir: Path): List<GroovydocPackageDoc> {
-        val packagePagesList = ArrayList<GroovydocPackageDoc>()
+    private fun getGroovydocPackageDocs(destinationDir: Path): List<GroovyPackage> {
+        val packagePagesList = ArrayList<GroovyPackage>()
         destinationDir
             .toFile()
             .walkTopDown()
             .filter { it.isFile && it.name == "index.json" }
-            .map { GroovydocPackageDoc.fromJson(it.readText()) }
+            .map { GroovyPackage.fromJson(it.readText()) }
             .toCollection(packagePagesList)
 
         return packagePagesList
     }
 
-    private fun getGroovydocClassDocs(destinationDir: Path): List<GroovydocClassDoc> {
-        val classPagesList = ArrayList<GroovydocClassDoc>()
+    private fun getGroovydocClassDocs(destinationDir: Path): List<GroovyClass> {
+        val classPagesList = ArrayList<GroovyClass>()
         destinationDir
             .toFile()
             .walkTopDown()
             .filter { it.isFile && it.name != "index.json" }
-            .map { GroovydocClassDoc.fromJson(it.readText()) }
+            .map { GroovyClass.fromJson(it.readText()) }
             .toCollection(classPagesList)
 
         return classPagesList

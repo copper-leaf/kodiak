@@ -1,4 +1,4 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.groovydoc.json.models
 
 import com.copperleaf.json.common.AutoDocument
 import com.copperleaf.json.common.AutoDocumentNode
@@ -12,7 +12,7 @@ import kotlinx.serialization.Transient
  * The docs for a field or property in a class.
  */
 @Serializable
-data class JavaField(
+data class GroovyField(
     @Transient
     val node: Any? = null,
 
