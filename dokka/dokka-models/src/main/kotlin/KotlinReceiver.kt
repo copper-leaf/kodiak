@@ -1,4 +1,4 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.dokka.json.models
 
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * The docs for a parameter of a constructor or method
+ * The docs for a method receiver typeName
  */
 @Serializable
-data class JavaReturnType(
+data class KotlinReceiver(
     @Transient
     val node: Any? = null,
 
@@ -23,5 +23,5 @@ data class JavaReturnType(
     override val typeId: String,
     override val signature: List<CommentComponent>
 ) : ElementType {
-    override val kind = "ReturnType"
+    override val kind = "Receiver"
 }

@@ -16,7 +16,8 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.util.ArrayDeque
 
-class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) : NodeLocationAwareGenerator {
+class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) :
+    NodeLocationAwareGenerator {
 
     @set:Inject(optional = true)
     lateinit var formatService: FormatService
@@ -62,8 +63,7 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
                         it.write(formatService.format(location(items.first()), items))
                     }
                 }
-            }
-            catch (e: Throwable) {
+            } catch (e: Throwable) {
                 println(e)
             }
         }
@@ -92,13 +92,13 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
         return if (isPackage) {
             // leaf node, use file in owner's folder
             parts.joinToString("/") + (if (parts.none()) "" else "/") + "index"
-        }
-        else {
+        } else {
             parts.joinToString("/")
         }
     }
 
-    private fun absolutePathToNode(node: DocumentationNode) = absolutePathToNode(node.path.map { it.name }, node.kind == NodeKind.Package)
+    private fun absolutePathToNode(node: DocumentationNode) =
+        absolutePathToNode(node.path.map { it.name }, node.kind == NodeKind.Package)
 
     private fun overrideIdentifierToFilename(path: String): String {
         val escaped = path.replace('<', '-').replace('>', '-')

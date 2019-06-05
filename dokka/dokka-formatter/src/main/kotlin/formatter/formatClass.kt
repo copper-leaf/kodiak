@@ -1,27 +1,30 @@
 package com.copperleaf.dokka.json.generator.formatter
 
-import com.copperleaf.dokka.json.models.KotlinClassDoc
+import com.copperleaf.dokka.json.models.KotlinClass
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 
 val DocumentationNode.classLike: Boolean get() = NodeKind.classLike.contains(this.kind)
 
-fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClassDoc {
+fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClass {
     assert(this.classLike) { "node must be a Class-like" }
 
     val modifiers = this.modifiers
 
-    return KotlinClassDoc(
+    return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
         this.kind.toString(),
         this.simpleName,
         this.qualifiedName,
-        this.contentText,
-        this.contentTags,
         modifiers,
+        DocComment(
+            this.contentText,
+            this.contentTags
+        ),
         if (deep) this.members.filter { it.isConstructor }.map { it.toConstructor() } else emptyList(),
         if (deep) this.members.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
         if (deep) this.members.filter { it.isField }.map { it.toField() } else emptyList(),

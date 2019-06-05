@@ -3,6 +3,7 @@ package com.copperleaf.dokka.json.generator.formatter
 import com.copperleaf.dokka.json.models.KotlinConstructor
 import com.copperleaf.dokka.json.models.KotlinParameter
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -16,9 +17,11 @@ fun DocumentationNode.toConstructor(): KotlinConstructor {
         this,
         this.simpleName,
         this.qualifiedName,
-        this.contentText,
-        this.contentTags,
         modifiers,
+        DocComment(
+            this.contentText,
+            this.contentTags
+        ),
         parameters,
         this.constructorSignature(
             modifiers,

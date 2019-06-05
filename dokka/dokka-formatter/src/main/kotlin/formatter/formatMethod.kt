@@ -2,9 +2,10 @@ package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinMethod
 import com.copperleaf.dokka.json.models.KotlinParameter
-import com.copperleaf.dokka.json.models.KotlinReceiverType
+import com.copperleaf.dokka.json.models.KotlinReceiver
 import com.copperleaf.dokka.json.models.KotlinReturnType
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -14,22 +15,24 @@ fun DocumentationNode.toMethod(): KotlinMethod {
     assert(this.isMethod) { "node must be a Function" }
     val modifiers = this.modifiers
     val parameters = this.parameters
-    val receiverType = this.receiverType
+    val receiver = this.receiverType
     val returnType = this.returnType
     return KotlinMethod(
         this,
         this.simpleName,
         this.qualifiedName,
-        this.contentText,
-        this.contentTags,
         modifiers,
+        DocComment(
+            this.contentText,
+            this.contentTags
+        ),
+        receiver,
         parameters,
-        receiverType,
         returnType,
         this.methodSignature(
             modifiers,
             parameters,
-            receiverType,
+            receiver,
             returnType
         )
     )
@@ -38,7 +41,7 @@ fun DocumentationNode.toMethod(): KotlinMethod {
 fun DocumentationNode.methodSignature(
     modifiers: List<String>,
     parameters: List<KotlinParameter>,
-    receiverType: KotlinReceiverType?,
+    receiverType: KotlinReceiver?,
     returnType: KotlinReturnType
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
@@ -71,26 +74,32 @@ val DocumentationNode.returnType: KotlinReturnType
             it,
             it.simpleName,
             it.qualifiedName,
-            it.contentText("Return", null),
-            this.contentTags,
+            emptyList(),
+            DocComment(
+                it.contentText("Return", null),
+                this.contentTags
+            ),
             it.simpleType,
             it.qualifiedType,
             it.asType().toTypeSignature()
         )
     }
 
-val DocumentationNode.receiverType: KotlinReceiverType?
+val DocumentationNode.receiverType: KotlinReceiver?
     get() {
         val it = this.detailOrNull(NodeKind.Receiver)
         return if (it == null)
             null
         else
-            KotlinReceiverType(
+            KotlinReceiver(
                 it,
                 it.simpleName,
                 it.qualifiedName,
-                it.contentText("Receiver", null),
-                this.contentTags,
+                emptyList(),
+                DocComment(
+                    it.contentText("Receiver", null),
+                    this.contentTags
+                ),
                 it.simpleType,
                 it.qualifiedType,
                 it.asType().toTypeSignature()

@@ -1,5 +1,7 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.dokka.json.models
 
+import com.copperleaf.json.common.AutoDocument
+import com.copperleaf.json.common.AutoDocumentNode
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.ElementType
@@ -7,10 +9,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * The docs for a parameter of a constructor or method
+ * The docs for a field or property in a class.
  */
 @Serializable
-data class JavaReturnType(
+data class KotlinField(
     @Transient
     val node: Any? = null,
 
@@ -22,6 +24,9 @@ data class JavaReturnType(
     override val typeName: String,
     override val typeId: String,
     override val signature: List<CommentComponent>
-) : ElementType {
-    override val kind = "ReturnType"
+) : ElementType, AutoDocument {
+    override val kind = "Field"
+
+    @Transient
+    override val nodes = emptyList<AutoDocumentNode>()
 }

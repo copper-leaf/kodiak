@@ -2,6 +2,7 @@ package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinField
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -14,9 +15,11 @@ fun DocumentationNode.toField(): KotlinField {
         this,
         this.simpleName,
         this.qualifiedName,
-        this.contentText,
-        this.contentTags,
         modifiers,
+        DocComment(
+            this.contentText,
+            this.contentTags
+        ),
         this.simpleType,
         this.qualifiedType,
         this.fieldSignature(

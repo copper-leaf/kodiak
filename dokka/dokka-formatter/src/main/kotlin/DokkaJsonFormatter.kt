@@ -14,11 +14,9 @@ class DokkaJsonFormatter(val to: StringBuilder) : FormattedOutputBuilder {
 
         if (node.classLike) {
             to.append(node.toClassDoc(true).toJson())
-        }
-        else if (node.packageLike) {
+        } else if (node.packageLike) {
             to.append(node.toPackageDoc().toJson())
-        }
-        else {
+        } else {
             // ignore, we are only documenting classes and packages for now
         }
     }

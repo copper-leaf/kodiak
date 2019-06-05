@@ -1,4 +1,4 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.dokka.json.models
 
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 /**
- * The docs for a parameter of a constructor or method
+ * The docs for a method return typeName
  */
 @Serializable
-data class JavaReturnType(
+data class KotlinReturnType(
     @Transient
     val node: Any? = null,
 

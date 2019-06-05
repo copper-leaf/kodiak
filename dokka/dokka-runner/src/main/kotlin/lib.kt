@@ -1,8 +1,8 @@
 package com.copperleaf.dokka.json
 
-import com.copperleaf.dokka.json.models.KotlinClassDoc
-import com.copperleaf.dokka.json.models.KotlinPackageDoc
-import com.copperleaf.dokka.json.models.KotlinRootdoc
+import com.copperleaf.dokka.json.models.KotlinClass
+import com.copperleaf.dokka.json.models.KotlinPackage
+import com.copperleaf.dokka.json.models.KotlinRootDoc
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -16,9 +16,9 @@ interface KotlindocInvoker {
             destinationDir: Path,
             args: List<String> = emptyList(),
             callback: (InputStream) -> Runnable
-    ): KotlinRootdoc?
+    ): KotlinRootDoc?
 
-    fun loadCachedRootDoc(destinationDir: Path): KotlinRootdoc?
+    fun loadCachedRootDoc(destinationDir: Path): KotlinRootDoc?
 }
 
 class KotlindocInvokerImpl(
@@ -33,12 +33,12 @@ class KotlindocInvokerImpl(
             sourceDirs: List<Path>,
             destinationDir: Path,
             args: List<String>,
-            callback: (InputStream) -> Runnable): KotlinRootdoc? {
+            callback: (InputStream) -> Runnable): KotlinRootDoc? {
         val success = executeDokka(sourceDirs, destinationDir, args) { callback(it) }
         return if (success) getKotlinRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): KotlinRootdoc? {
+    override fun loadCachedRootDoc(destinationDir: Path): KotlinRootDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getKotlinRootdoc(destinationDir)
         }
@@ -94,35 +94,35 @@ class KotlindocInvokerImpl(
 // Process Dokka output to a model Orchid can use
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun getKotlinRootdoc(destinationDir: Path): KotlinRootdoc {
+    private fun getKotlinRootdoc(destinationDir: Path): KotlinRootDoc {
         val packages = getDokkaPackagePages(destinationDir)
         val classes = getDokkaClassPages(destinationDir)
 
-        return KotlinRootdoc(
+        return KotlinRootDoc(
                 packages,
                 classes
         )
     }
 
-    private fun getDokkaPackagePages(destinationDir: Path): List<KotlinPackageDoc> {
-        val packagePagesList = ArrayList<KotlinPackageDoc>()
+    private fun getDokkaPackagePages(destinationDir: Path): List<KotlinPackage> {
+        val packagePagesList = ArrayList<KotlinPackage>()
         destinationDir
                 .toFile()
                 .walkTopDown()
                 .filter { it.isFile && it.name == "index.json" }
-                .map { KotlinPackageDoc.fromJson(it.readText()) }
+                .map { KotlinPackage.fromJson(it.readText()) }
                 .toCollection(packagePagesList)
 
         return packagePagesList
     }
 
-    private fun getDokkaClassPages(destinationDir: Path): List<KotlinClassDoc> {
-        val classPagesList = ArrayList<KotlinClassDoc>()
+    private fun getDokkaClassPages(destinationDir: Path): List<KotlinClass> {
+        val classPagesList = ArrayList<KotlinClass>()
         destinationDir
                 .toFile()
                 .walkTopDown()
                 .filter { it.isFile && it.name != "index.json" }
-                .map { KotlinClassDoc.fromJson(it.readText()) }
+                .map { KotlinClass.fromJson(it.readText()) }
                 .toCollection(classPagesList)
 
         return classPagesList
