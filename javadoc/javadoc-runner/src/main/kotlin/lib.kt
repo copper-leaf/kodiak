@@ -3,42 +3,32 @@ package com.copperleaf.javadoc.json
 import com.copperleaf.javadoc.json.models.JavaClass
 import com.copperleaf.javadoc.json.models.JavaPackage
 import com.copperleaf.javadoc.json.models.JavaRootDoc
+import com.copperleaf.json.common.DocInvoker
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 
-interface JavadocInvoker {
-    fun getRootDoc(
-            sourceDirs: List<Path>,
-            destinationDir: Path,
-            args: List<String> = emptyList(),
-            callback: (InputStream) -> Runnable
-    ): JavaRootDoc?
-
-    fun loadCachedRootDoc(destinationDir: Path): JavaRootDoc?
-}
-
 class JavadocInvokerImpl(
         private val cacheDir: Path = Files.createTempDirectory("javadoc-runner"),
         private val startMemory: String = "256m",
         private val maxMemory: String = "1024m"
-) : JavadocInvoker {
+) : DocInvoker<JavaRootDoc> {
 
     val formatterJar = cacheDir.resolve("javadoc-formatter.jar")
 
-    override fun getRootDoc(
+    override fun getModuleDoc(
             sourceDirs: List<Path>,
             destinationDir: Path,
-            args: List<String>,
+            cliArgs: List<String>,
             callback: (InputStream) -> Runnable
     ): JavaRootDoc? {
-        val success = executeJavadoc(sourceDirs, destinationDir, args) { callback(it) }
+        val success = executeJavadoc(sourceDirs, destinationDir, cliArgs) { callback(it) }
         return if (success) getJavadocRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): JavaRootDoc? {
+    override fun loadCachedModuleDoc(destinationDir: Path): JavaRootDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getJavadocRootdoc(destinationDir)
         }

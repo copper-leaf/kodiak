@@ -1,5 +1,7 @@
 package com.copperleaf.dokka.json
 
+import com.copperleaf.dokka.json.models.KotlinModuleDoc
+import com.copperleaf.json.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +17,7 @@ class DokkaJsonRunnerTest {
 
     lateinit var cacheDir: Path
     lateinit var outputDir: Path
-    lateinit var dokkaRunner: KotlindocInvoker
+    lateinit var dokkaRunner: DocInvoker<KotlinModuleDoc>
 
     private val useTempDirs = false
 
@@ -54,7 +56,7 @@ class DokkaJsonRunnerTest {
     @Test
     fun testRunningDokka() {
         try {
-            val rootDoc = dokkaRunner.getRootDoc(
+            val rootDoc = dokkaRunner.getModuleDoc(
                 listOf(
                     File("../dokka-runner/src/example/java").canonicalFile.toPath(),
                     File("../dokka-runner/src/example/kotlin").canonicalFile.toPath()

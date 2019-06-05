@@ -8,6 +8,7 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
+    compile project(":common:common-models")
     // testing
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"

@@ -1,5 +1,7 @@
 package com.copperleaf.groovydoc.json
 
+import com.copperleaf.groovydoc.json.models.GroovyModuleDoc
+import com.copperleaf.json.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +17,7 @@ class GroovydocJsonRunnerTest {
 
     lateinit var cacheDir: Path
     lateinit var outputDir: Path
-    lateinit var groovydocRunner: GroovydocInvoker
+    lateinit var groovydocRunner: DocInvoker<GroovyModuleDoc>
 
     private val useTempDirs = false
 
@@ -54,7 +56,7 @@ class GroovydocJsonRunnerTest {
     @Test
     fun testRunningGroovydoc() {
         try {
-            val rootDoc = groovydocRunner.getRootDoc(
+            val rootDoc = groovydocRunner.getModuleDoc(
                 listOf(
                     File("../groovydoc-runner/src/example/java").canonicalFile.toPath(),
                     File("../groovydoc-runner/src/example/groovy").canonicalFile.toPath()

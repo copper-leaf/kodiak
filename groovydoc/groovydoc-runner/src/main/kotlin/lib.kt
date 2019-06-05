@@ -1,8 +1,9 @@
 package com.copperleaf.groovydoc.json
 
 import com.copperleaf.groovydoc.json.models.GroovyClass
+import com.copperleaf.groovydoc.json.models.GroovyModuleDoc
 import com.copperleaf.groovydoc.json.models.GroovyPackage
-import com.copperleaf.groovydoc.json.models.GroovyRootDoc
+import com.copperleaf.json.common.DocInvoker
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -10,36 +11,25 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 
-interface GroovydocInvoker {
-    fun getRootDoc(
-        sourceDirs: List<Path>,
-        destinationDir: Path,
-        args: List<String> = emptyList(),
-        callback: (InputStream) -> Runnable
-    ): GroovyRootDoc?
-
-    fun loadCachedRootDoc(destinationDir: Path): GroovyRootDoc?
-}
-
 class GroovydocInvokerImpl(
     private val cacheDir: Path = Files.createTempDirectory("groovydoc-runner"),
     private val startMemory: String = "256m",
     private val maxMemory: String = "1024m"
-) : GroovydocInvoker {
+) : DocInvoker<GroovyModuleDoc> {
 
     val formatterJar = cacheDir.resolve("groovydoc-formatter.jar")
 
-    override fun getRootDoc(
+    override fun getModuleDoc(
         sourceDirs: List<Path>,
         destinationDir: Path,
-        args: List<String>,
+        cliArgs: List<String>,
         callback: (InputStream) -> Runnable
-    ): GroovyRootDoc? {
-        val success = executeGroovydoc(sourceDirs, destinationDir, args) { callback(it) }
+    ): GroovyModuleDoc? {
+        val success = executeGroovydoc(sourceDirs, destinationDir, cliArgs) { callback(it) }
         return if (success) getGroovydocRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): GroovyRootDoc? {
+    override fun loadCachedModuleDoc(destinationDir: Path): GroovyModuleDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getGroovydocRootdoc(destinationDir)
         } else {
@@ -92,11 +82,11 @@ class GroovydocInvokerImpl(
 // Process Javadoc output to a model Orchid can use
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun getGroovydocRootdoc(destinationDir: Path): GroovyRootDoc {
+    private fun getGroovydocRootdoc(destinationDir: Path): GroovyModuleDoc {
         val sourceFiles = getGroovydocPackageDocs(destinationDir)
         val classes = getGroovydocClassDocs(destinationDir)
 
-        return GroovyRootDoc(
+        return GroovyModuleDoc(
             sourceFiles,
             classes
         )

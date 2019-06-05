@@ -1,8 +1,9 @@
 package com.copperleaf.dokka.json
 
 import com.copperleaf.dokka.json.models.KotlinClass
+import com.copperleaf.dokka.json.models.KotlinModuleDoc
 import com.copperleaf.dokka.json.models.KotlinPackage
-import com.copperleaf.dokka.json.models.KotlinRootDoc
+import com.copperleaf.json.common.DocInvoker
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -10,35 +11,24 @@ import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 
-interface KotlindocInvoker {
-    fun getRootDoc(
-            sourceDirs: List<Path>,
-            destinationDir: Path,
-            args: List<String> = emptyList(),
-            callback: (InputStream) -> Runnable
-    ): KotlinRootDoc?
-
-    fun loadCachedRootDoc(destinationDir: Path): KotlinRootDoc?
-}
-
 class KotlindocInvokerImpl(
     private val cacheDir: Path = Files.createTempDirectory("dokka-runner"),
     private val startMemory: String = "256m",
     private val maxMemory: String = "1024m"
-) : KotlindocInvoker {
+) : DocInvoker<KotlinModuleDoc> {
 
     val formatterJar = cacheDir.resolve("dokka-formatter-all.jar")
 
-    override fun getRootDoc(
+    override fun getModuleDoc(
             sourceDirs: List<Path>,
             destinationDir: Path,
-            args: List<String>,
-            callback: (InputStream) -> Runnable): KotlinRootDoc? {
-        val success = executeDokka(sourceDirs, destinationDir, args) { callback(it) }
+            cliArgs: List<String>,
+            callback: (InputStream) -> Runnable): KotlinModuleDoc? {
+        val success = executeDokka(sourceDirs, destinationDir, cliArgs) { callback(it) }
         return if (success) getKotlinRootdoc(destinationDir) else null
     }
 
-    override fun loadCachedRootDoc(destinationDir: Path): KotlinRootDoc? {
+    override fun loadCachedModuleDoc(destinationDir: Path): KotlinModuleDoc? {
         return if (Files.exists(destinationDir) && destinationDir.toFile().list().isNotEmpty()) {
             getKotlinRootdoc(destinationDir)
         }
@@ -94,11 +84,11 @@ class KotlindocInvokerImpl(
 // Process Dokka output to a model Orchid can use
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun getKotlinRootdoc(destinationDir: Path): KotlinRootDoc {
+    private fun getKotlinRootdoc(destinationDir: Path): KotlinModuleDoc {
         val packages = getDokkaPackagePages(destinationDir)
         val classes = getDokkaClassPages(destinationDir)
 
-        return KotlinRootDoc(
+        return KotlinModuleDoc(
                 packages,
                 classes
         )

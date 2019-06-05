@@ -1,5 +1,7 @@
 package com.copperleaf.javadoc.json
 
+import com.copperleaf.javadoc.json.models.JavaRootDoc
+import com.copperleaf.json.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +17,7 @@ class JavadocJsonRunnerTest {
 
     lateinit var cacheDir: Path
     lateinit var outputDir: Path
-    lateinit var javadocRunner: JavadocInvoker
+    lateinit var javadocRunner: DocInvoker<JavaRootDoc>
 
     private val useTempDirs = false
 
@@ -54,7 +56,7 @@ class JavadocJsonRunnerTest {
     @Test
     fun testRunningJavadoc() {
         try {
-            val rootDoc = javadocRunner.getRootDoc(
+            val rootDoc = javadocRunner.getModuleDoc(
                 listOf(File("../javadoc-runner/src/example/java").canonicalFile.toPath()),
                 outputDir
             ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
