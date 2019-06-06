@@ -1,6 +1,6 @@
 package com.copperleaf.json.common
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.api.expectThrows
@@ -37,10 +37,10 @@ class CommentTagTest {
             |}
             """.trimMargin()
 
-        val serialized = JSON.indented.stringify(CommentTag.serializer(), underTest)
+        val serialized = Json.indented.stringify(CommentTag.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = JSON.indented.parse(CommentTag.serializer(), json)
+        val parsed = Json.indented.parse(CommentTag.serializer(), json)
         expectThat(parsed)
             .and { get { values }.isNull() }
             .and { get { value }
@@ -72,8 +72,7 @@ class CommentTagTest {
                 |{
                 |    "value": null,
                 |    "values": {
-                |        "testKey":
-                |        [
+                |        "testKey": [
                 |            {
                 |                "kind": "testKind",
                 |                "text": "testText",
@@ -84,10 +83,10 @@ class CommentTagTest {
                 |}
                 """.trimMargin()
 
-        val serialized = JSON.indented.stringify(CommentTag.serializer(), underTest)
+        val serialized = Json.indented.stringify(CommentTag.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = JSON.indented.parse(CommentTag.serializer(), json)
+        val parsed = Json.indented.parse(CommentTag.serializer(), json)
         expectThat(parsed)
             .and { get { value }.isNull() }
             .and { get { values }

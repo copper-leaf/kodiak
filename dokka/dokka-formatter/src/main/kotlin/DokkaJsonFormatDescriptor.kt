@@ -18,7 +18,7 @@ import org.jetbrains.dokka.Utilities.toType
 
 class DokkaJsonFormatDescriptor : FormatDescriptor, DefaultAnalysisComponent {
 
-    override val descriptorSignatureProvider = KotlinAsKotlin.descriptorSignatureProvider
+    override val elementSignatureProvider = KotlinAsKotlin.elementSignatureProvider
     override val javaDocumentationBuilderClass = KotlinAsKotlin.javaDocumentationBuilderClass
     override val packageDocumentationBuilderClass = KotlinAsKotlin.packageDocumentationBuilderClass
     override val sampleProcessingService = KotlinAsKotlin.sampleProcessingService

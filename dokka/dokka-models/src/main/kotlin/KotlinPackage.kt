@@ -7,6 +7,7 @@ import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc comment on the
@@ -35,11 +36,11 @@ data class KotlinPackage(
 
     companion object {
         fun fromJson(json: String): KotlinPackage {
-            return JSON.parse(KotlinPackage.serializer(), json)
+            return Json.parse(KotlinPackage.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(KotlinPackage.serializer(), this)
+        return Json.indented.stringify(KotlinPackage.serializer(), this)
     }
 }

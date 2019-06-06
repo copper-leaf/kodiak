@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.3.21'
-    ext.serialization_version = '0.9.1'
+    ext.kotlin_version = '1.3.31'
+    ext.serialization_version = '0.11.0'
 
     repositories {
         jcenter()
@@ -41,7 +41,7 @@ ext {
     github_project = 'copper-leaf/dokka-json'
 
     // Orchid
-    orchid_version = '0.16.4'
+    orchid_version = '0.16.10'
     orchid_theme = 'Copper'
     base_url = 'https://copper-leaf.github.io/dokka-json'
     github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv('GITHUB_TOKEN')

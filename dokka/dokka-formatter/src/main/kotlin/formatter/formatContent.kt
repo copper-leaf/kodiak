@@ -60,6 +60,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun extractContent(content: ContentNode, topLevel: Boolean): String {
+        println("extractContent $content")
         when (content) {
             is ContentKeyword               -> return content.format(topLevel)
             is ContentIdentifier            -> return content.format(topLevel)
@@ -95,7 +96,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
             is ContentBlock                 -> return content.format(topLevel)
             is ContentEmpty                 -> return content.format(topLevel)
 
-            else                            -> println("Unhandled content node: $content")
+            else                            -> println("Unhandled content node: $content (${content.javaClass})")
         }
         return ""
     }
@@ -226,3 +227,45 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         block.children.joinToString("") { extractContent(it, topLevel = false) }
 
 }
+
+
+
+
+
+
+/*
+
+class NodeRenderContent(
+    val node: DocumentationNode,
+    val mode: LanguageService.RenderMode
+): ContentNode {
+    override val textLength: Int
+        get() = 0 //TODO: Clarify?
+}
+
+class LazyContentBlock(private val fillChildren: () -> List<ContentNode>) : ContentBlock() {
+    private var computed = false
+    override val children: ArrayList<ContentNode>
+        get() {
+            if (!computed) {
+                computed = true
+                children.addAll(fillChildren())
+            }
+            return super.children
+        }
+
+    override fun equals(other: Any?): Boolean {
+        return other is LazyContentBlock && other.fillChildren == fillChildren && super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode() + 31 * fillChildren.hashCode()
+    }
+}
+
+class ContentBlockSampleCode(language: String = "kotlin", val importsBlock: ContentBlockCode = ContentBlockCode(language)) : ContentBlockCode(language)
+
+data class ContentBookmark(val name: String): ContentBlock()
+data class ContentLocalLink(val href: String) : ContentBlock()
+
+ */

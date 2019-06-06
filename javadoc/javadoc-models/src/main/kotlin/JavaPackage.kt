@@ -7,6 +7,7 @@ import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc commentComponents on the
@@ -33,11 +34,11 @@ data class JavaPackage(
 
     companion object {
         fun fromJson(json: String): JavaPackage {
-            return JSON.parse(JavaPackage.serializer(), json)
+            return Json.parse(JavaPackage.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(JavaPackage.serializer(), this)
+        return Json.indented.stringify(JavaPackage.serializer(), this)
     }
 }

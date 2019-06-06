@@ -6,7 +6,7 @@ import com.copperleaf.json.common.DocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single package. Includes a list of the classes in the package, as well as the KDoc comment on the
@@ -33,11 +33,11 @@ data class GroovyPackage(
 
     companion object {
         fun fromJson(json: String): GroovyPackage {
-            return JSON.parse(GroovyPackage.serializer(), json)
+            return Json.parse(GroovyPackage.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(GroovyPackage.serializer(), this)
+        return Json.indented.stringify(GroovyPackage.serializer(), this)
     }
 }

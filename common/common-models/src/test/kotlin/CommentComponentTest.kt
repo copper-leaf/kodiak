@@ -1,6 +1,6 @@
 package com.copperleaf.json.common
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
@@ -23,10 +23,10 @@ class CommentComponentTest {
             |}
             """.trimMargin()
 
-        val serialized = JSON.indented.stringify(CommentComponent.serializer(), underTest)
+        val serialized = Json.indented.stringify(CommentComponent.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = JSON.indented.parse(CommentComponent.serializer(), json)
+        val parsed = Json.indented.parse(CommentComponent.serializer(), json)
         expectThat(parsed)
             .and { get { kind }.isEqualTo("testKind") }
             .and { get { text }.isEqualTo("testText") }
@@ -50,10 +50,10 @@ class CommentComponentTest {
             |}
             """.trimMargin()
 
-        val serialized = JSON.indented.stringify(CommentComponent.serializer(), underTest)
+        val serialized = Json.indented.stringify(CommentComponent.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = JSON.indented.parse(CommentComponent.serializer(), json)
+        val parsed = Json.indented.parse(CommentComponent.serializer(), json)
         expectThat(parsed)
             .and { get { kind }.isEqualTo("testKind") }
             .and { get { text }.isEqualTo("testText") }

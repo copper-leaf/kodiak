@@ -7,7 +7,7 @@ import com.copperleaf.json.common.DocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single class. Includes a list of the constructors, methods, and fields in the class, as well as the
@@ -40,11 +40,11 @@ data class JavaClass(
 
     companion object {
         fun fromJson(json: String): JavaClass {
-            return JSON.parse(JavaClass.serializer(), json)
+            return Json.parse(JavaClass.serializer(), json)
         }
     }
 
     fun toJson(): String {
-        return JSON.indented.stringify(JavaClass.serializer(), this)
+        return Json.indented.stringify(JavaClass.serializer(), this)
     }
 }
