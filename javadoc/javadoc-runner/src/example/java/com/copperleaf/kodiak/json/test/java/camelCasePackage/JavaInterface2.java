@@ -1,9 +1,9 @@
-package com.copperleaf.dokka.json.test.java;
+package com.copperleaf.kodiak.json.test.java.camelCasePackage;
 
 /**
  * This is a Kotlin interface
  */
-public interface JavaInterface {
+public interface JavaInterface2 {
 
     /**
      * This is a method defined in the interface body

@@ -1,6 +1,6 @@
-package com.copperleaf.dokka.json.test.java;
+package com.copperleaf.kodiak.json.test.java;
 
-import com.copperleaf.dokka.json.test.java.camelCasePackage.JavaClass2;
+import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaClass2;
 
 /**
  * Generators are what create the output pages within Orchid. Generators are run after all Options have been processed

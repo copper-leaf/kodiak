@@ -38,12 +38,12 @@ ext.ossLicenses = [
 
 ext {
     group = 'com.eden'
-    github_project = 'copper-leaf/dokka-json'
+    github_project = 'copper-leaf/kodiak'
 
     // Orchid
     orchid_version = '0.16.10'
     orchid_theme = 'Copper'
-    base_url = 'https://copper-leaf.github.io/dokka-json'
+    base_url = 'https://copper-leaf.github.io/kodiak'
     github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv('GITHUB_TOKEN')
     environment = "${project.hasProperty("env") ? project.property("env") : 'debug'}"
 
@@ -65,7 +65,7 @@ ext {
 
     // Project info
     project_name = 'Json Docs'
-    project_description = 'Wrappers around Dokka and Javadoc to produce JSON models as libraries'
+    project_description = 'Wrappers around code documentation tools to produce JSON models as libraries'
 
     license = rootProject.ext.ossLicenses['BSD']
 }

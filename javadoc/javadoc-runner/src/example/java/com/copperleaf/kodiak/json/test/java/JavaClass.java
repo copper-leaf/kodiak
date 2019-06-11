@@ -1,6 +1,6 @@
-package com.copperleaf.dokka.json.test.java;
+package com.copperleaf.kodiak.json.test.java;
 
-import com.copperleaf.dokka.json.test.java.camelCasePackage.JavaInterface2;
+import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaInterface2;
 
 import java.util.List;
 

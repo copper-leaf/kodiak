@@ -1,7 +1,7 @@
-package com.copperleaf.dokka.json.test.java.camelCasePackage;
+package com.copperleaf.kodiak.json.test.java.camelCasePackage;
 
-import com.copperleaf.dokka.json.test.java.JavaClass;
-import com.copperleaf.dokka.json.test.java.JavaInterface;
+import com.copperleaf.kodiak.json.test.java.JavaClass;
+import com.copperleaf.kodiak.json.test.java.JavaInterface;
 
 /**
  * This is a Java class

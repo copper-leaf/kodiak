@@ -1,4 +1,4 @@
-# JSON Documentation Formatters
+# Kodiak
 
 A collection wrappers around various code documentation tools which produces a common JSON output readable by Orchid.
 
@@ -61,7 +61,7 @@ It should contain no logic, and just creates the language-specific models.
 ## Usage
 
 The general usage for any of these formatters looks like like the following. See the 
-[official docs](https://copper-leaf.github.io/dokka-json) for specifics for each language.
+[official docs](https://copper-leaf.github.io/kodiak) for specifics for each language.
 
 1) Include the `-runner` dependency in your app:
 

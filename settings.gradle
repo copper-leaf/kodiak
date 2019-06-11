@@ -1,4 +1,4 @@
-rootProject.name = 'dokka-json'
+rootProject.name = 'kodiak'
 
 include ':docs'
 

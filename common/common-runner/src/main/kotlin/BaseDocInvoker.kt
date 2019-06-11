@@ -26,7 +26,7 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
         cliArgs: List<String>,
         callback: (InputStream) -> Runnable
     ): T? {
-        val success = executeDokka(sourceDirs, destinationDir, cliArgs) { callback(it) }
+        val success = execute(sourceDirs, destinationDir, cliArgs) { callback(it) }
         return if (success) loadModuleDocFromDisk(destinationDir) else null
     }
 
@@ -38,7 +38,7 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
         }
     }
 
-// Run Dokka
+// Run documentation runner
 //----------------------------------------------------------------------------------------------------------------------
 
     private fun cacheEmbeddedJar() {
@@ -50,7 +50,7 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
         )
     }
 
-    private fun executeDokka(
+    private fun execute(
         sourceDirs: List<Path>,
         destinationDir: Path,
         args: List<String>,
