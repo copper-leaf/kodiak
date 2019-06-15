@@ -11,11 +11,11 @@ dependencies {
     compile project(":common:common-models")
 
     // testing
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"
-    testCompile "io.strikt:strikt-core:0.14.3"
-    testCompile "com.eden:Common:1.11.4"
-    testCompile "com.eden:Clog4j:2.0.7"
+    testRuntimeOnly(Libs.junit_jupiter_engine)
+    testCompile(Libs.junit_jupiter_api)
+    testCompile(Libs.strikt_core)
+    testCompile(Libs.com_eden_common)
+    testCompile(Libs.clog4j)
 }
 
 compileKotlin {

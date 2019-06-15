@@ -62,8 +62,8 @@ class JavadocJsonRunnerTest {
 
         expectThat(rootDoc)
             .isNotNull()
-            .and { chain { it.packages }.isNotEmpty() }
-            .and { chain { it.classes }.isNotEmpty() }
+            .and { get { packages }.isNotEmpty() }
+            .and { get { classes }.isNotEmpty() }
     }
 
 }

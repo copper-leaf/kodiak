@@ -31,6 +31,8 @@ import org.jetbrains.dokka.ContentSymbol
 import org.jetbrains.dokka.ContentText
 import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
+import org.jetbrains.dokka.NodeRenderContent
+import org.jetbrains.dokka.KotlinLanguageService
 
 val DocumentationNode.contentText: List<CommentComponent> get() = DokkaContentFormatter(this).extractContent()
 fun DocumentationNode.contentText(sectionName: String, subjectName: String?): List<CommentComponent> =
@@ -81,6 +83,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
             is ContentNodeDirectLink        -> return content.format(topLevel)
             is ContentNodeLazyLink          -> return content.format(topLevel)
+            is NodeRenderContent            -> return content.format(topLevel)
             is ContentExternalLink          -> return content.format(topLevel)
             is ContentNodeLink              -> return content.format(topLevel)
 
@@ -186,6 +189,10 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun ContentNodeLazyLink.format(topLevel: Boolean): String {
         return joinChildren(this)
+    }
+
+    private fun NodeRenderContent.format(topLevel: Boolean): String {
+        return extractContent(listOf(KotlinLanguageService().render(node, mode)))
     }
 
     private fun ContentExternalLink.format(topLevel: Boolean): String {

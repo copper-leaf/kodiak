@@ -4,6 +4,7 @@ buildscript {
 
     repositories {
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 
@@ -12,8 +13,11 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath "de.fayard:buildSrcVersions:0.3.2"
     }
 }
+
+apply plugin: "de.fayard.buildSrcVersions"
 
 group 'com.eden'
 version '0.2.3'

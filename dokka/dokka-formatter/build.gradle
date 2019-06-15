@@ -5,6 +5,5 @@ dependencies {
     compile project(":common:common-formatter")
     compile project(':dokka:dokka-models')
 
-//    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.17'
-    compile 'org.jetbrains.dokka:dokka-fatjar:0.9.18'
+    compile(Libs.dokka_fatjar)
 }

@@ -5,6 +5,6 @@ dependencies {
     implementation project(":common:common-formatter")
     implementation project(':groovydoc:groovydoc-models')
     
-    implementation 'org.codehaus.groovy:groovy-all:2.5.6'
-    implementation 'org.jsoup:jsoup:1.11.3'
+    implementation(Libs.groovy_all)
+    implementation(Libs.jsoup)
 }

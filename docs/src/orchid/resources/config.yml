@@ -33,7 +33,7 @@ theme:
 services:
   publications:
     stages:
-      - type: ghPages
+      - type: githubPages
         repo: 'copper-leaf/kodiak'
         username: 'cjbrooks12'
       - type: githubReleases

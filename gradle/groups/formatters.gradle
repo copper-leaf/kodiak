@@ -8,13 +8,13 @@ version rootProject.version
 sourceCompatibility = 1.8
 
 dependencies {
-    api "com.eden:Common:1.11.4"
-    api "com.eden:Clog4j:2.0.7"
+    api(Libs.com_eden_common)
+    api(Libs.clog4j)
 
     // testing
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"
-    testCompile "io.strikt:strikt-core:0.14.3"
+    testRuntimeOnly(Libs.junit_jupiter_engine)
+    testCompile(Libs.junit_jupiter_api)
+    testCompile(Libs.strikt_core)
 }
 
 compileKotlin {
