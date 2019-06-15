@@ -1,7 +1,6 @@
 package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinPackage
-import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -24,10 +23,7 @@ fun DocumentationNode.toPackageDoc(): KotlinPackage {
         this.simpleName,
         this.qualifiedName,
         emptyList(),
-        DocComment(
-            this.contentText,
-            this.contentTags
-        ),
+        this.getComment(),
         this.members.filter { it.classLike }.map { it.toClassDoc(false) },
         internalMethods + externalMethods
     )

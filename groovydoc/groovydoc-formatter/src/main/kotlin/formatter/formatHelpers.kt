@@ -1,6 +1,7 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
 import org.codehaus.groovy.groovydoc.GroovyParameter
@@ -114,6 +115,20 @@ private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
     return GroovyCommentData(
         commentDoc.select("body").html().trimLines(),
         commentTags
+    )
+}
+
+fun GroovyDoc.getComment(): DocComment {
+    return DocComment(
+        this.findCommentText(),
+        emptyMap()
+    )
+}
+
+fun GroovyTag?.getComment(): DocComment {
+    return DocComment(
+        (this?.text() ?: "").asCommentText(),
+        emptyMap()
     )
 }
 

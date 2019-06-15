@@ -1,7 +1,6 @@
 package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -19,10 +18,7 @@ fun GroovyParameter.toParameter(tag: GroovyTag?): GroovyParameterDoc {
         this.name(),
         this.name(),
         emptyList(),
-        DocComment(
-            (tag?.text() ?: "").asCommentText(),
-            emptyMap()
-        ),
+        tag.getComment(),
         this.realType().simpleTypeName(),
         this.realType().qualifiedTypeName(),
         this.realType().toTypeSignature()

@@ -2,8 +2,24 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.CommentTag
+import com.copperleaf.json.common.DocComment
+import com.sun.javadoc.Doc
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
+
+fun Doc.getComment(): DocComment {
+    return DocComment(
+        this.inlineTags().asCommentComponents(),
+        this.tags().asCommentComponentsMap()
+    )
+}
+
+fun Tag?.getComment(): DocComment {
+    return DocComment(
+        if (this != null) arrayOf(this).asCommentComponents() else emptyList(),
+        if (this != null) arrayOf(this).asCommentComponentsMap() else emptyMap()
+    )
+}
 
 fun Array<Tag>.asCommentComponents(): List<CommentComponent> {
     return this.map(Tag::toCommentComponent)

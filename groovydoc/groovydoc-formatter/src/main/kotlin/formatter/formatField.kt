@@ -2,7 +2,6 @@ package com.copperleaf.groovydoc.json.formatter
 
 import com.copperleaf.groovydoc.json.models.GroovyField
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 import org.codehaus.groovy.groovydoc.GroovyType
 
@@ -13,10 +12,7 @@ fun GroovyFieldDoc.toField(): GroovyField {
         this.name(),
         this.name(),
         modifiers,
-        DocComment(
-            this.findCommentText(),
-            emptyMap()
-        ),
+        this.getComment(),
         this.type().real().simpleTypeName(),
         this.type().real().qualifiedTypeName(),
         this.fieldSignature(

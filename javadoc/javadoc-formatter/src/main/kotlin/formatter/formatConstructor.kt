@@ -3,7 +3,6 @@ package com.copperleaf.javadoc.json.formatter
 import com.copperleaf.javadoc.json.models.JavaConstructor
 import com.copperleaf.javadoc.json.models.JavaParameter
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ConstructorDoc
 
 fun ConstructorDoc.toConstructor(): JavaConstructor {
@@ -14,10 +13,7 @@ fun ConstructorDoc.toConstructor(): JavaConstructor {
         this.name(),
         this.qualifiedName(),
         modifiers,
-        DocComment(
-            this.inlineTags().asCommentComponents(),
-            this.tags().asCommentComponentsMap()
-        ),
+        this.getComment(),
         parameters,
         this.constructorSignature(
             modifiers,

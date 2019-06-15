@@ -4,7 +4,6 @@ import com.copperleaf.javadoc.json.models.JavaMethod
 import com.copperleaf.javadoc.json.models.JavaParameter
 import com.copperleaf.javadoc.json.models.JavaReturnType
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.MethodDoc
 import com.sun.javadoc.Tag
 import com.sun.javadoc.Type
@@ -18,10 +17,7 @@ fun MethodDoc.toMethod(): JavaMethod {
         this.name(),
         this.qualifiedName(),
         modifiers,
-        DocComment(
-            this.inlineTags().asCommentComponents(),
-            this.tags().asCommentComponentsMap()
-        ),
+        this.getComment(),
         parameters,
         returnType,
         this.methodSignature(
@@ -38,10 +34,7 @@ fun Type.toReturnType(returnTag: Tag?): JavaReturnType {
         this.simpleTypeName(),
         this.qualifiedTypeName(),
         emptyList(),
-        DocComment(
-            if (returnTag != null) arrayOf(returnTag).asCommentComponents() else emptyList(),
-            if (returnTag != null) arrayOf(returnTag).asCommentComponentsMap() else emptyMap()
-        ),
+        returnTag.getComment(),
         this.simpleTypeName(),
         this.qualifiedTypeName(),
         this.toTypeSignature()

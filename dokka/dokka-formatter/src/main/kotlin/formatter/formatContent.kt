@@ -3,6 +3,7 @@ package com.copperleaf.dokka.json.generator.formatter
 import com.caseyjbrooks.clog.Clog
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.CommentTag
+import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.ContentBlock
 import org.jetbrains.dokka.ContentBlockCode
 import org.jetbrains.dokka.ContentCode
@@ -33,6 +34,21 @@ import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeRenderContent
 import org.jetbrains.dokka.KotlinLanguageService
+import org.jetbrains.dokka.NodeKind
+
+fun DocumentationNode.getComment(): DocComment {
+    return DocComment(
+        this.contentText,
+        this.contentTags
+    )
+}
+
+fun DocumentationNode.getComment(it: DocumentationNode, sectionName: String, subjectName: String?): DocComment {
+    return DocComment(
+        it.contentText(sectionName, subjectName),
+        this.contentTags
+    )
+}
 
 val DocumentationNode.contentText: List<CommentComponent> get() = DokkaContentFormatter(this).extractContent()
 fun DocumentationNode.contentText(sectionName: String, subjectName: String?): List<CommentComponent> =

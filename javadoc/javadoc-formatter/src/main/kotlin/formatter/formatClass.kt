@@ -2,7 +2,6 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaClass
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ClassDoc
 
 fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
@@ -15,10 +14,7 @@ fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
         this.typeName(),
         this.qualifiedTypeName(),
         modifiers,
-        DocComment(
-            this.inlineTags().asCommentComponents(),
-            this.tags().asCommentComponentsMap()
-        ),
+        this.getComment(),
         if (deep) this.constructors().map { it.toConstructor() } else emptyList(),
         if (deep) this.methods().map { it.toMethod() } else emptyList(),
         if (deep) this.fields().map { it.toField() } else emptyList(),

@@ -3,7 +3,6 @@ package com.copperleaf.groovydoc.json.formatter
 import com.copperleaf.groovydoc.json.models.GroovyConstructor
 import com.copperleaf.groovydoc.json.models.GroovyParameter
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyConstructorDoc
 
@@ -15,10 +14,7 @@ fun GroovyConstructorDoc.toConstructor(parent: GroovyClassDoc): GroovyConstructo
         parent.simpleTypeName(),
         parent.qualifiedTypeName(),
         modifiers,
-        DocComment(
-            this.findCommentText(),
-            emptyMap()
-        ),
+        this.getComment(),
         parameters,
         this.constructorSignature(
             parent,

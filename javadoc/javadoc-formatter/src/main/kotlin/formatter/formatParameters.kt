@@ -2,10 +2,8 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaParameter
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
-import com.sun.javadoc.Tag
 import com.sun.javadoc.Type
 import com.sun.javadoc.TypeVariable
 
@@ -21,10 +19,7 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
         this.name(),
         this.name(),
         emptyList(),
-        DocComment(
-            if (tag != null) arrayOf<Tag>(tag).asCommentComponents() else emptyList(),
-            if (tag != null) arrayOf<Tag>(tag).asCommentComponentsMap() else emptyMap()
-        ),
+        tag.getComment(),
         this.type().simpleTypeName(),
         this.type().qualifiedTypeName(),
         this.type().toTypeSignature()

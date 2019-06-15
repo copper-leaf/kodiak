@@ -2,7 +2,6 @@ package com.copperleaf.javadoc.json.formatter
 
 import com.copperleaf.javadoc.json.models.JavaField
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.sun.javadoc.FieldDoc
 import com.sun.javadoc.Type
 
@@ -13,10 +12,7 @@ fun FieldDoc.toField(): JavaField {
         this.name(),
         this.qualifiedName(),
         modifiers,
-        DocComment(
-            this.inlineTags().asCommentComponents(),
-            this.tags().asCommentComponentsMap()
-        ),
+        this.getComment(),
         this.type().simpleTypeName(),
         this.type().qualifiedTypeName(),
         this.fieldSignature(

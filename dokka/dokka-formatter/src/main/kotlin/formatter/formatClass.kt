@@ -21,10 +21,7 @@ fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClass {
         this.simpleName,
         this.qualifiedName,
         modifiers,
-        DocComment(
-            this.contentText,
-            this.contentTags
-        ),
+        this.getComment(),
         if (deep) this.members.filter { it.isConstructor }.map { it.toConstructor() } else emptyList(),
         if (deep) this.members.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
         if (deep) this.members.filter { it.isField }.map { it.toField() } else emptyList(),

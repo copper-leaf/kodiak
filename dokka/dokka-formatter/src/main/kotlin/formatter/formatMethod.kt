@@ -5,7 +5,6 @@ import com.copperleaf.dokka.json.models.KotlinParameter
 import com.copperleaf.dokka.json.models.KotlinReceiver
 import com.copperleaf.dokka.json.models.KotlinReturnType
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -22,10 +21,7 @@ fun DocumentationNode.toMethod(): KotlinMethod {
         this.simpleName,
         this.qualifiedName,
         modifiers,
-        DocComment(
-            this.contentText,
-            this.contentTags
-        ),
+        this.getComment(),
         receiver,
         parameters,
         returnType,
@@ -75,10 +71,7 @@ val DocumentationNode.returnType: KotlinReturnType
             it.simpleName,
             it.qualifiedName,
             emptyList(),
-            DocComment(
-                it.contentText("Return", null),
-                this.contentTags
-            ),
+            this.getComment(it, "Return", null),
             it.simpleType,
             it.qualifiedType,
             it.asType().toTypeSignature()
@@ -96,10 +89,7 @@ val DocumentationNode.receiverType: KotlinReceiver?
                 it.simpleName,
                 it.qualifiedName,
                 emptyList(),
-                DocComment(
-                    it.contentText("Receiver", null),
-                    this.contentTags
-                ),
+                this.getComment(it, "Receiver", null),
                 it.simpleType,
                 it.qualifiedType,
                 it.asType().toTypeSignature()

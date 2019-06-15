@@ -4,7 +4,6 @@ import com.copperleaf.groovydoc.json.models.GroovyMethod
 import com.copperleaf.groovydoc.json.models.GroovyParameter
 import com.copperleaf.groovydoc.json.models.GroovyReturnType
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.ElementType
 import org.codehaus.groovy.groovydoc.GroovyMethodDoc
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -18,10 +17,7 @@ fun GroovyMethodDoc.toMethod(): GroovyMethod {
         this.name(),
         this.name(),
         modifiers,
-        DocComment(
-            this.findCommentText(),
-            emptyMap()
-        ),
+        this.getComment(),
         parameters,
         returnType,
         this.methodSignature(
@@ -33,15 +29,13 @@ fun GroovyMethodDoc.toMethod(): GroovyMethod {
 }
 
 fun GroovyType.toReturnType(parent: GroovyMethodDoc): GroovyReturnType {
+    val returnTag = parent.findCommentTags().firstOrNull { it.name() == "returns" }
     return GroovyReturnType(
         this,
         this.simpleTypeName(),
         this.qualifiedTypeName(),
         emptyList(),
-        DocComment(
-            (parent.findCommentTags().firstOrNull { it.name() == "returns" }?.text() ?: "").asCommentText(),
-            emptyMap()
-        ),
+        returnTag.getComment(),
         this.simpleTypeName(),
         this.qualifiedTypeName(),
         this.toTypeSignature()

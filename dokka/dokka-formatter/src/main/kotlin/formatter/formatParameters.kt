@@ -2,7 +2,6 @@ package com.copperleaf.dokka.json.generator.formatter
 
 import com.copperleaf.dokka.json.models.KotlinParameter
 import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -15,10 +14,7 @@ val DocumentationNode.parameters: List<KotlinParameter>
                     it.simpleName,
                     it.qualifiedName,
                     emptyList(),
-                    DocComment(
-                        it.contentText("Parameters", it.simpleName),
-                        this.contentTags
-                    ),
+                    this.getComment(it, "Parameters", it.simpleName),
                     it.simpleType,
                     it.qualifiedType,
                     it.asType().toTypeSignature(),
