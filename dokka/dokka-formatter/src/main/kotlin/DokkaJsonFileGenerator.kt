@@ -26,8 +26,8 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
         return FileLocation(fileForNode(node, formatService.linkExtension))
     }
 
-    private fun fileForNode(node: DocumentationNode, extension: String = ""): File {
-        return File(root, absolutePathToNode(node)).appendExtension(extension)
+    private fun fileForNode(node: DocumentationNode, subdirectory: String, extension: String = ""): File {
+        return File(root.resolve(subdirectory), absolutePathToNode(node)).appendExtension(extension)
     }
 
     override fun buildPages(nodes: Iterable<DocumentationNode>) {
@@ -49,12 +49,12 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
             }
         }
 
-        renderNodes(classes)
-        renderNodes(packages)
+        renderNodes(classes, "Class")
+        renderNodes(packages, "Package")
     }
 
-    private fun renderNodes(nodes: Iterable<DocumentationNode>) {
-        for ((file, items) in nodes.groupBy { fileForNode(it, formatService.extension) }) {
+    private fun renderNodes(nodes: Iterable<DocumentationNode>, subdirectory: String) {
+        for ((file, items) in nodes.groupBy { fileForNode(it, subdirectory, formatService.extension) }) {
 
             file.parentFile?.mkdirsOrFail()
             try {

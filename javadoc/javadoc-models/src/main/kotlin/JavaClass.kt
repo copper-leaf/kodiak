@@ -4,9 +4,11 @@ import com.copperleaf.json.common.AutoDocument
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.DocElement
+import com.copperleaf.json.common.SpecializedDocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -19,7 +21,7 @@ data class JavaClass(
     val node: Any? = null,
 
     val `package`: String,
-    override val kind: String,
+    override val subKind: String,
     override val name: String,
     override val id: String,
     override val modifiers: List<String>,
@@ -29,7 +31,9 @@ data class JavaClass(
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
     val signature: List<CommentComponent>
-) : DocElement, AutoDocument {
+) : DocElement, AutoDocument, SpecializedDocElement {
+
+    override val kind = "Class"
 
     @Transient
     override val nodes = listOf(
@@ -38,13 +42,8 @@ data class JavaClass(
         fromDocList(::methods)
     )
 
-    companion object {
-        fun fromJson(json: String): JavaClass {
-            return Json.parse(JavaClass.serializer(), json)
-        }
-    }
-
+    @UseExperimental(UnstableDefault::class)
     fun toJson(): String {
-        return Json.indented.stringify(JavaClass.serializer(), this)
+        return Json.indented.stringify(serializer(), this)
     }
 }

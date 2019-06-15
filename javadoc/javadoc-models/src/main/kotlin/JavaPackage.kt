@@ -6,7 +6,7 @@ import com.copperleaf.json.common.DocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -32,13 +32,8 @@ data class JavaPackage(
         fromDocList(::classes)
     )
 
-    companion object {
-        fun fromJson(json: String): JavaPackage {
-            return Json.parse(JavaPackage.serializer(), json)
-        }
-    }
-
+    @UseExperimental(UnstableDefault::class)
     fun toJson(): String {
-        return Json.indented.stringify(JavaPackage.serializer(), this)
+        return Json.indented.stringify(serializer(), this)
     }
 }

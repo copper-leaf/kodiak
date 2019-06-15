@@ -1,5 +1,7 @@
+@file:UseExperimental(UnstableDefault::class)
 package com.copperleaf.json.common
 
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat

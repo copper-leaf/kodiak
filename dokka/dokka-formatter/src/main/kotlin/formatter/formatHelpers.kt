@@ -1,5 +1,6 @@
 package com.copperleaf.dokka.json.generator.formatter
 
+import com.caseyjbrooks.clog.Clog
 import com.copperleaf.json.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -27,7 +28,7 @@ val DocumentationNode.qualifiedName: String
 
 fun DocumentationNode.asType(): DocumentationNode {
     return if (kind == NodeKind.Type) this else this.detailOrNull(NodeKind.Type) ?: {
-        println("other node requesting typeName: ${this.kind} ${this.name}")
+        Clog.i("other node requesting typeName: ${this.kind} ${this.name}")
         this
     }()
 }

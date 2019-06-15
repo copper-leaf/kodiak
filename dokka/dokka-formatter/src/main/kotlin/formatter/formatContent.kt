@@ -1,5 +1,6 @@
 package com.copperleaf.dokka.json.generator.formatter
 
+import com.caseyjbrooks.clog.Clog
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.CommentTag
 import org.jetbrains.dokka.ContentBlock
@@ -60,7 +61,6 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun extractContent(content: ContentNode, topLevel: Boolean): String {
-        println("extractContent $content")
         when (content) {
             is ContentKeyword               -> return content.format(topLevel)
             is ContentIdentifier            -> return content.format(topLevel)
@@ -96,7 +96,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
             is ContentBlock                 -> return content.format(topLevel)
             is ContentEmpty                 -> return content.format(topLevel)
 
-            else                            -> println("Unhandled content node: $content (${content.javaClass})")
+            else                            -> Clog.e("Unhandled content node: $content (${content.javaClass})")
         }
         return ""
     }

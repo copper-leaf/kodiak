@@ -32,40 +32,10 @@ class KotlindocInvokerImpl(
     }
 
     override fun loadModuleDocFromDisk(destinationDir: Path): KotlinModuleDoc {
-        val packages = getDokkaPackagePages(destinationDir)
-        val classes = getDokkaClassPages(destinationDir)
-
         return KotlinModuleDoc(
-            packages,
-            classes
+            getDocsInSubdirectory(destinationDir, "Package", KotlinPackage.serializer()),
+            getDocsInSubdirectory(destinationDir, "Class", KotlinClass.serializer())
         )
-    }
-
-// Process Dokka output to a model Orchid can use
-//----------------------------------------------------------------------------------------------------------------------
-
-    private fun getDokkaPackagePages(destinationDir: Path): List<KotlinPackage> {
-        val packagePagesList = ArrayList<KotlinPackage>()
-        destinationDir
-                .toFile()
-                .walkTopDown()
-                .filter { it.isFile && it.name == "index.json" }
-                .map { KotlinPackage.fromJson(it.readText()) }
-                .toCollection(packagePagesList)
-
-        return packagePagesList
-    }
-
-    private fun getDokkaClassPages(destinationDir: Path): List<KotlinClass> {
-        val classPagesList = ArrayList<KotlinClass>()
-        destinationDir
-                .toFile()
-                .walkTopDown()
-                .filter { it.isFile && it.name != "index.json" }
-                .map { KotlinClass.fromJson(it.readText()) }
-                .toCollection(classPagesList)
-
-        return classPagesList
     }
 
 }

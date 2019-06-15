@@ -1,5 +1,8 @@
 package com.copperleaf.json.common
 
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -67,6 +70,25 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
         val exitValue = process.waitFor()
         executor.shutdown()
         return exitValue == 0
+    }
+
+// Helper Functions
+//----------------------------------------------------------------------------------------------------------------------
+
+    @UseExperimental(UnstableDefault::class)
+    protected fun <T : Any> getDocsInSubdirectory(
+        destinationDir: Path,
+        subdirectory: String,
+        deserializer: DeserializationStrategy<T>
+    ): List<T> {
+        return destinationDir
+            .resolve(subdirectory)
+            .toFile()
+            .walkTopDown()
+            .filter { it.isFile }
+            .filter { it.exists() }
+            .mapNotNull { Json.parse(deserializer, it.readText()) }
+            .toList()
     }
 
 }

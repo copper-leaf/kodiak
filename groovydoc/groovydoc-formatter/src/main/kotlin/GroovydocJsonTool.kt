@@ -65,7 +65,7 @@ class GroovyDocJsonTool(
 
     private fun writeClassToOutput(output: OutputTool, classDoc: GroovyClassDoc, destdir: String) {
         val destFolder = destdir
-        val destFileName = "$destFolder/${classDoc.fullPathName}.json"
+        val destFileName = "$destFolder/Class/${classDoc.fullPathName}.json"
         Clog.d("Generating class file $destFileName")
         output.makeOutputArea(destFolder)
         output.writeToOutput(
@@ -83,7 +83,7 @@ class GroovyDocJsonTool(
     }
 
     private fun writePackageToOutput(output: OutputTool, packageDoc: GroovyPackageDoc, destdir: String) {
-        val destFolder = "$destdir/${packageDoc.name()}"
+        val destFolder = "$destdir/Package/${packageDoc.name()}"
         val destFileName = "$destFolder/index.json"
         output.makeOutputArea(destFolder)
         Clog.d("Generating package file $destFileName")

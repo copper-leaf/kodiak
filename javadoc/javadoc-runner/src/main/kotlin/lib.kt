@@ -35,40 +35,10 @@ class JavadocInvokerImpl(
     }
 
     override fun loadModuleDocFromDisk(destinationDir: Path): JavaRootDoc {
-        val packages = getJavadocPackagePages(destinationDir)
-        val classes = getJavadocClassPages(destinationDir)
-
         return JavaRootDoc(
-            packages,
-            classes
+            getDocsInSubdirectory(destinationDir, "Package", JavaPackage.serializer()),
+            getDocsInSubdirectory(destinationDir, "Class", JavaClass.serializer())
         )
-    }
-
-// Process Javadoc output to a model Orchid can use
-//----------------------------------------------------------------------------------------------------------------------
-
-    private fun getJavadocPackagePages(destinationDir: Path): List<JavaPackage> {
-        val packagePagesList = ArrayList<JavaPackage>()
-        destinationDir
-                .toFile()
-                .walkTopDown()
-                .filter { it.isFile && it.name == "index.json" }
-                .map { JavaPackage.fromJson(it.readText()) }
-                .toCollection(packagePagesList)
-
-        return packagePagesList
-    }
-
-    private fun getJavadocClassPages(destinationDir: Path): List<JavaClass> {
-        val classPagesList = ArrayList<JavaClass>()
-        destinationDir
-                .toFile()
-                .walkTopDown()
-                .filter { it.isFile && it.name != "index.json" }
-                .map { JavaClass.fromJson(it.readText()) }
-                .toCollection(classPagesList)
-
-        return classPagesList
     }
 
 }

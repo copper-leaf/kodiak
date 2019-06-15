@@ -55,23 +55,18 @@ class GroovydocJsonRunnerTest {
 
     @Test
     fun testRunningGroovydoc() {
-        try {
-            val rootDoc = groovydocRunner.getModuleDoc(
-                listOf(
-                    File("../groovydoc-runner/src/example/java").canonicalFile.toPath(),
-                    File("../groovydoc-runner/src/example/groovy").canonicalFile.toPath()
-                ),
-                outputDir
-            ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
+        val rootDoc = groovydocRunner.getModuleDoc(
+            listOf(
+                File("../groovydoc-runner/src/example/java").canonicalFile.toPath(),
+                File("../groovydoc-runner/src/example/groovy").canonicalFile.toPath()
+            ),
+            outputDir
+        ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
-            expectThat(rootDoc)
-                .isNotNull()
-                .and { chain { it.packages }.isNotEmpty() }
-                .and { chain { it.classes }.isNotEmpty() }
-        } catch (t: Throwable) {
-            println(t.message)
-            throw t
-        }
+        expectThat(rootDoc)
+            .isNotNull()
+            .and { chain { it.packages }.isNotEmpty() }
+            .and { chain { it.classes }.isNotEmpty() }
     }
 
 }

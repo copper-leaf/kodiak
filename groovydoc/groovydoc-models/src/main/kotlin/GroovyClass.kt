@@ -7,7 +7,7 @@ import com.copperleaf.json.common.DocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -39,12 +39,7 @@ data class GroovyClass(
         fromDocList(::methods)
     )
 
-    companion object {
-        fun fromJson(json: String): GroovyClass {
-            return Json.parse(GroovyClass.serializer(), json)
-        }
-    }
-
+    @UseExperimental(UnstableDefault::class)
     fun toJson(): String {
         return Json.indented.stringify(GroovyClass.serializer(), this)
     }

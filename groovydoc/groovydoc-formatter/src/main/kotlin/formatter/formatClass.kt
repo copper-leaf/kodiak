@@ -21,8 +21,8 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovyClass {
             emptyMap()
         ),
         if (deep) this.constructors().map { it.toConstructor(this) } else emptyList(),
-        if (deep) this.methods().map { it.toMethod(this) } else emptyList(),
-        if (deep) this.fields().map { it.toField(this) } else emptyList(),
+        if (deep) this.methods().map { it.toMethod() } else emptyList(),
+        if (deep) this.fields().map { it.toField() } else emptyList(),
         this.classSignature(
             modifiers
         )

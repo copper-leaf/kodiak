@@ -29,40 +29,10 @@ class GroovydocInvokerImpl(
     }
 
     override fun loadModuleDocFromDisk(destinationDir: Path): GroovyModuleDoc {
-        val sourceFiles = getGroovydocPackageDocs(destinationDir)
-        val classes = getGroovydocClassDocs(destinationDir)
-
         return GroovyModuleDoc(
-            sourceFiles,
-            classes
+            getDocsInSubdirectory(destinationDir, "Package", GroovyPackage.serializer()),
+            getDocsInSubdirectory(destinationDir, "Class", GroovyClass.serializer())
         )
-    }
-
-// Process Javadoc output to a model Orchid can use
-//----------------------------------------------------------------------------------------------------------------------
-
-    private fun getGroovydocPackageDocs(destinationDir: Path): List<GroovyPackage> {
-        val packagePagesList = ArrayList<GroovyPackage>()
-        destinationDir
-            .toFile()
-            .walkTopDown()
-            .filter { it.isFile && it.name == "index.json" }
-            .map { GroovyPackage.fromJson(it.readText()) }
-            .toCollection(packagePagesList)
-
-        return packagePagesList
-    }
-
-    private fun getGroovydocClassDocs(destinationDir: Path): List<GroovyClass> {
-        val classPagesList = ArrayList<GroovyClass>()
-        destinationDir
-            .toFile()
-            .walkTopDown()
-            .filter { it.isFile && it.name != "index.json" }
-            .map { GroovyClass.fromJson(it.readText()) }
-            .toCollection(classPagesList)
-
-        return classPagesList
     }
 
 }

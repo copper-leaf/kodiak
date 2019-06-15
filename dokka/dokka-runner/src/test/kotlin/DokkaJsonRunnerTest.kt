@@ -55,23 +55,18 @@ class DokkaJsonRunnerTest {
 
     @Test
     fun testRunningDokka() {
-        try {
-            val rootDoc = dokkaRunner.getModuleDoc(
-                listOf(
-                    File("../dokka-runner/src/example/java").canonicalFile.toPath(),
-                    File("../dokka-runner/src/example/kotlin").canonicalFile.toPath()
-                ),
-                outputDir
-            ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
+        val rootDoc = dokkaRunner.getModuleDoc(
+            listOf(
+                File("../dokka-runner/src/example/java").canonicalFile.toPath(),
+                File("../dokka-runner/src/example/kotlin").canonicalFile.toPath()
+            ),
+            outputDir
+        ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
-            expectThat(rootDoc)
-                .isNotNull()
-                .and { chain { it.packages }.isNotEmpty() }
-                .and { chain { it.classes }.isNotEmpty() }
-        } catch (t: Throwable) {
-            println(t.message)
-            throw t
-        }
+        expectThat(rootDoc)
+            .isNotNull()
+            .and { chain { it.packages }.isNotEmpty() }
+            .and { chain { it.classes }.isNotEmpty() }
     }
 
 }

@@ -3,11 +3,10 @@ package com.copperleaf.groovydoc.json.formatter
 import com.copperleaf.groovydoc.json.models.GroovyField
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
-import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 import org.codehaus.groovy.groovydoc.GroovyType
 
-fun GroovyFieldDoc.toField(parent: GroovyClassDoc): GroovyField {
+fun GroovyFieldDoc.toField(): GroovyField {
     val modifiers = listOf(this.modifiers()).filterNotNull()
     return GroovyField(
         this,

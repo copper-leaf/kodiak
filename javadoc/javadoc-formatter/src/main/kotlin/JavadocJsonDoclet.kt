@@ -1,5 +1,6 @@
 package com.copperleaf.javadoc.json
 
+import com.caseyjbrooks.clog.Clog
 import com.copperleaf.javadoc.json.formatter.toClassDoc
 import com.copperleaf.javadoc.json.formatter.toPackageDoc
 import com.sun.javadoc.ClassDoc
@@ -56,8 +57,8 @@ class JavadocJsonDoclet {
             }
 
             for (classdoc in classes) {
-                println("Loading classdoc [${classdoc.name()}]")
-                val file = File("$destinationDir/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
+                Clog.i("Loading classdoc [${classdoc.name()}]")
+                val file = File("$destinationDir/Class/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
                 if (!file.parentFile.exists()) {
                     file.parentFile.mkdirs()
                 }
@@ -65,13 +66,13 @@ class JavadocJsonDoclet {
                     file.writeText(classdoc.toClassDoc(true).toJson())
                 }
                 catch (e: Exception) {
-                    println("Failed to create json for classdoc [${classdoc.name()}]: ${e.message}")
+                    Clog.e("Failed to create json for classdoc [${classdoc.name()}]: ${e.message}")
                 }
             }
 
             for (packagedoc in packages) {
-                println("Loading packagedoc [${packagedoc.name()}]")
-                val file = File("$destinationDir/${packagedoc.name().replace(".", "/")}/index.json")
+                Clog.i("Loading packagedoc [${packagedoc.name()}]")
+                val file = File("$destinationDir/Package/${packagedoc.name().replace(".", "/")}/index.json")
                 if (!file.parentFile.exists()) {
                     file.parentFile.mkdirs()
                 }
@@ -79,7 +80,7 @@ class JavadocJsonDoclet {
                     file.writeText(packagedoc.toPackageDoc().toJson())
                 }
                 catch (e: Exception) {
-                    println("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
+                    Clog.e("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
                 }
             }
 

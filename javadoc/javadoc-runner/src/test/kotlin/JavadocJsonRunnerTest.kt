@@ -55,20 +55,15 @@ class JavadocJsonRunnerTest {
 
     @Test
     fun testRunningJavadoc() {
-        try {
-            val rootDoc = javadocRunner.getModuleDoc(
-                listOf(File("../javadoc-runner/src/example/java").canonicalFile.toPath()),
-                outputDir
-            ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
+        val rootDoc = javadocRunner.getModuleDoc(
+            listOf(File("../javadoc-runner/src/example/java").canonicalFile.toPath()),
+            outputDir
+        ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
-            expectThat(rootDoc)
-                .isNotNull()
-                .and { chain { it.packages }.isNotEmpty() }
-                .and { chain { it.classes }.isNotEmpty() }
-        } catch (t: Throwable) {
-            println(t.message)
-            throw t
-        }
+        expectThat(rootDoc)
+            .isNotNull()
+            .and { chain { it.packages }.isNotEmpty() }
+            .and { chain { it.classes }.isNotEmpty() }
     }
 
 }

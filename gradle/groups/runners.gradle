@@ -14,14 +14,21 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.1.0"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"
     testCompile "io.strikt:strikt-core:0.14.3"
-    testCompile 'com.eden:Common:1.11.2'
+    testCompile "com.eden:Common:1.11.4"
+    testCompile "com.eden:Clog4j:2.0.7"
 }
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+    }
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+    }
 }
 test {
     useJUnitPlatform()

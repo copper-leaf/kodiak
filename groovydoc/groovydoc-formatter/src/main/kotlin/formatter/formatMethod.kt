@@ -6,11 +6,10 @@ import com.copperleaf.groovydoc.json.models.GroovyReturnType
 import com.copperleaf.json.common.CommentComponent
 import com.copperleaf.json.common.DocComment
 import com.copperleaf.json.common.ElementType
-import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyMethodDoc
 import org.codehaus.groovy.groovydoc.GroovyType
 
-fun GroovyMethodDoc.toMethod(parent: GroovyClassDoc): GroovyMethod {
+fun GroovyMethodDoc.toMethod(): GroovyMethod {
     val modifiers = listOf(this.modifiers()).filterNotNull()
     val parameters = formatParameters(this.parameters(), this.findCommentTags().filter { it.name() == "parameters" })
     val returnType = this.returnType().real().toReturnType(this)

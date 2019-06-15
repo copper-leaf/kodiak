@@ -6,7 +6,7 @@ import com.copperleaf.json.common.DocElement
 import com.copperleaf.json.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -34,12 +34,14 @@ data class KotlinPackage(
         fromDocList(::methods)
     )
 
+    @UseExperimental(UnstableDefault::class)
     companion object {
         fun fromJson(json: String): KotlinPackage {
             return Json.parse(KotlinPackage.serializer(), json)
         }
     }
 
+    @UseExperimental(UnstableDefault::class)
     fun toJson(): String {
         return Json.indented.stringify(KotlinPackage.serializer(), this)
     }

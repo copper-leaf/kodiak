@@ -1,5 +1,6 @@
 package com.copperleaf.json.common
 
+import com.caseyjbrooks.clog.Clog
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KProperty
@@ -25,15 +26,8 @@ class AutoDocumentTest {
 
     @Test
     fun testAutoDocument() {
-        println("before create")
         val underTest = TestMethodDoc(receiver, parameters, typeParameters, returnValue)
-        println("after create")
-
-        val nodes = underTest.nodes
-
-        nodes.forEach { println("node name=${it.prop.name} with ${it.getter().size} elements") }
-
-        println("after assert")
+        underTest.nodes.forEach { Clog.d("node name=${it.prop.name} with ${it.getter().size} elements") }
     }
 
 // Helpers
