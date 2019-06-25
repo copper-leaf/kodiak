@@ -1,9 +1,13 @@
-package com.copperleaf.javadoc.json
+package com.copperleaf.kodiak.java
 
-import com.copperleaf.javadoc.json.models.JavaClass
-import com.copperleaf.javadoc.json.models.JavaPackage
-import com.copperleaf.javadoc.json.models.JavaRootDoc
-import com.copperleaf.json.common.BaseDocInvoker
+import com.copperleaf.kodiak.java.models.JavaClass
+import com.copperleaf.kodiak.java.models.JavaPackage
+import com.copperleaf.kodiak.java.models.JavaRootDoc
+import com.copperleaf.kodiak.common.BaseDocInvoker
+import com.copperleaf.kodiak.common.DocInvokerDescriptor
+import com.copperleaf.kodiak.common.modules.ModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -13,6 +17,13 @@ class JavadocInvokerImpl(
         private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<JavaRootDoc>(cacheDir) {
     override val formatterJarName = "javadoc-formatter-all"
+
+    override fun describe(): DocInvokerDescriptor {
+        return DocInvokerDescriptor(
+            ModuleLocator.from(GradleModuleLocator(), MavenModuleLocator()),
+            listOf("java")
+        )
+    }
 
     override fun createProcessArgs(sourceDirs: List<Path>, destinationDir: Path, args: List<String>): Array<String> {
         val allFiles = mutableListOf<String>()
@@ -27,7 +38,7 @@ class JavadocInvokerImpl(
             "javadoc",
             "-J-Xms$startMemory", "-J-Xmx$maxMemory",
             "-d", destinationDir.toFile().absolutePath,                 // where Orchid will find them later
-            "-doclet", "com.copperleaf.javadoc.json.JavadocJsonDoclet",
+            "-doclet", "com.copperleaf.kodiak.java.JavadocJsonDoclet",
             "-docletpath", formatterJar.toFile().absolutePath,          // classpath of embedded formatter jar
             *args.toTypedArray(),                                       // allow additional arbitrary args
             *allFiles.toTypedArray()                                    // the sources to process

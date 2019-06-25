@@ -1,8 +1,8 @@
-package com.copperleaf.dokka.json.generator.formatter
+package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.dokka.json.models.KotlinClass
-import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.DocComment
+import com.copperleaf.kodiak.kotlin.models.KotlinClass
+import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.DocComment
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path

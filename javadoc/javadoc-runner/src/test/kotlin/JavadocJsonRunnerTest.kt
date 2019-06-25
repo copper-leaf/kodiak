@@ -1,7 +1,7 @@
-package com.copperleaf.javadoc.json
+package com.copperleaf.kodiak.java
 
-import com.copperleaf.javadoc.json.models.JavaRootDoc
-import com.copperleaf.json.common.DocInvoker
+import com.copperleaf.kodiak.java.models.JavaRootDoc
+import com.copperleaf.kodiak.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

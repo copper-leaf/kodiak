@@ -1,5 +1,5 @@
 @file:UseExperimental(UnstableDefault::class)
-package com.copperleaf.json.common
+package com.copperleaf.kodiak.common
 
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json

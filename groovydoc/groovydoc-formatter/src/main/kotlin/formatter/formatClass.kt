@@ -1,7 +1,7 @@
-package com.copperleaf.groovydoc.json.formatter
+package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovyClass
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.groovy.models.GroovyClass
+import com.copperleaf.kodiak.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 

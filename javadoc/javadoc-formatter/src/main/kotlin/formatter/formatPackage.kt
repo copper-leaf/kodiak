@@ -1,6 +1,6 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.javadoc.json.models.JavaPackage
+import com.copperleaf.kodiak.java.models.JavaPackage
 import com.sun.javadoc.PackageDoc
 
 fun PackageDoc.toPackageDoc(): JavaPackage {

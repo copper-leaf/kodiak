@@ -1,4 +1,4 @@
-package com.copperleaf.groovydoc.json
+package com.copperleaf.kodiak.groovy
 
 import com.caseyjbrooks.clog.Clog
 import com.eden.orchid.api.cli.Cli

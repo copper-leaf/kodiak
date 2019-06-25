@@ -1,7 +1,7 @@
-package com.copperleaf.groovydoc.json
+package com.copperleaf.kodiak.groovy
 
-import com.copperleaf.groovydoc.json.models.GroovyModuleDoc
-import com.copperleaf.json.common.DocInvoker
+import com.copperleaf.kodiak.groovy.models.GroovyModuleDoc
+import com.copperleaf.kodiak.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

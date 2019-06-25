@@ -1,7 +1,7 @@
-package com.copperleaf.javadoc.json.models
+package com.copperleaf.kodiak.java.models
 
-import com.copperleaf.json.common.ModuleDoc
-import com.copperleaf.json.common.fromDocList
+import com.copperleaf.kodiak.common.ModuleDoc
+import com.copperleaf.kodiak.common.fromDocList
 
 /**
  * The result of executing Javadoc and transforming the results to JSON.

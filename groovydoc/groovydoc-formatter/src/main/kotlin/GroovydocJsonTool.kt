@@ -1,8 +1,8 @@
-package com.copperleaf.groovydoc.json
+package com.copperleaf.kodiak.groovy
 
 import com.caseyjbrooks.clog.Clog
-import com.copperleaf.groovydoc.json.formatter.toClassDoc
-import com.copperleaf.groovydoc.json.formatter.toPackageDoc
+import com.copperleaf.kodiak.groovy.formatter.toClassDoc
+import com.copperleaf.kodiak.groovy.formatter.toPackageDoc
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyPackageDoc
 import org.codehaus.groovy.groovydoc.GroovyRootDoc

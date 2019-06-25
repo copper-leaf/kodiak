@@ -1,9 +1,9 @@
-package com.copperleaf.dokka.json.generator.formatter
+package com.copperleaf.kodiak.kotlin.formatter
 
 import com.caseyjbrooks.clog.Clog
-import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.CommentTag
-import com.copperleaf.json.common.DocComment
+import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentTag
+import com.copperleaf.kodiak.common.DocComment
 import org.jetbrains.dokka.ContentBlock
 import org.jetbrains.dokka.ContentBlockCode
 import org.jetbrains.dokka.ContentCode

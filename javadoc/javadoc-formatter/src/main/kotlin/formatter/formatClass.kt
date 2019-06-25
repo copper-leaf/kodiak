@@ -1,7 +1,7 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.javadoc.json.models.JavaClass
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.java.models.JavaClass
+import com.copperleaf.kodiak.common.CommentComponent
 import com.sun.javadoc.ClassDoc
 
 fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {

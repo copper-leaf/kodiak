@@ -1,4 +1,4 @@
-package com.copperleaf.json.common
+package com.copperleaf.kodiak.common
 
 import com.caseyjbrooks.clog.Clog
 import org.junit.jupiter.api.BeforeEach

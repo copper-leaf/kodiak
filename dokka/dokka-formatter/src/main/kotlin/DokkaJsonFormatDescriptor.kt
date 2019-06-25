@@ -1,4 +1,4 @@
-package com.copperleaf.dokka.json.generator
+package com.copperleaf.kodiak.kotlin
 
 import com.google.inject.Binder
 import org.jetbrains.dokka.FormatService

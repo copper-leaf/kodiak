@@ -1,9 +1,13 @@
-package com.copperleaf.dokka.json
+package com.copperleaf.kodiak.kotlin
 
-import com.copperleaf.dokka.json.models.KotlinClass
-import com.copperleaf.dokka.json.models.KotlinModuleDoc
-import com.copperleaf.dokka.json.models.KotlinPackage
-import com.copperleaf.json.common.BaseDocInvoker
+import com.copperleaf.kodiak.common.BaseDocInvoker
+import com.copperleaf.kodiak.common.DocInvokerDescriptor
+import com.copperleaf.kodiak.common.modules.ModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.kotlin.models.KotlinClass
+import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
+import com.copperleaf.kodiak.kotlin.models.KotlinPackage
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -14,6 +18,13 @@ class KotlindocInvokerImpl(
     private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<KotlinModuleDoc>(cacheDir) {
     override val formatterJarName = "dokka-formatter-all"
+
+    override fun describe(): DocInvokerDescriptor {
+        return DocInvokerDescriptor(
+            ModuleLocator.from(GradleModuleLocator(), MavenModuleLocator()),
+            listOf("kt", "java")
+        )
+    }
 
     override fun createProcessArgs(sourceDirs: List<Path>, destinationDir: Path, args: List<String>): Array<String> {
         return arrayOf(

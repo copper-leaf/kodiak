@@ -1,10 +1,10 @@
-package com.copperleaf.groovydoc.json.formatter
+package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
-import com.copperleaf.groovydoc.json.models.GroovyParameter as GroovyParameterDoc
+import com.copperleaf.kodiak.groovy.models.GroovyParameter as GroovyParameterDoc
 
 fun formatParameters(params: Array<GroovyParameter>, tags: List<GroovyTag>): List<GroovyParameterDoc> {
     return params.map { param ->

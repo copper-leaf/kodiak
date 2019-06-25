@@ -1,9 +1,9 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.javadoc.json.models.JavaMethod
-import com.copperleaf.javadoc.json.models.JavaParameter
-import com.copperleaf.javadoc.json.models.JavaReturnType
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.java.models.JavaMethod
+import com.copperleaf.kodiak.java.models.JavaParameter
+import com.copperleaf.kodiak.java.models.JavaReturnType
+import com.copperleaf.kodiak.common.CommentComponent
 import com.sun.javadoc.MethodDoc
 import com.sun.javadoc.Tag
 import com.sun.javadoc.Type

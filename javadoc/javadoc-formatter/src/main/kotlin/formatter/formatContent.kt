@@ -1,2 +1,2 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 

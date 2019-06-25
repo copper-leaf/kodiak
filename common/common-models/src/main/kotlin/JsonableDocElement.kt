@@ -1,4 +1,4 @@
-package com.copperleaf.json.common
+package com.copperleaf.kodiak.common
 
 /**
  * Indicates that this doc element can be serialized to JSON

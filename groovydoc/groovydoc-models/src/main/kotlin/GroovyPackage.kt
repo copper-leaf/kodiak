@@ -1,9 +1,9 @@
-package com.copperleaf.groovydoc.json.models
+package com.copperleaf.kodiak.groovy.models
 
-import com.copperleaf.json.common.AutoDocument
-import com.copperleaf.json.common.DocComment
-import com.copperleaf.json.common.DocElement
-import com.copperleaf.json.common.fromDocList
+import com.copperleaf.kodiak.common.AutoDocument
+import com.copperleaf.kodiak.common.DocComment
+import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.UnstableDefault

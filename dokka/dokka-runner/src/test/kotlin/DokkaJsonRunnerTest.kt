@@ -1,7 +1,7 @@
-package com.copperleaf.dokka.json
+package com.copperleaf.kodiak.kotlin
 
-import com.copperleaf.dokka.json.models.KotlinModuleDoc
-import com.copperleaf.json.common.DocInvoker
+import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
+import com.copperleaf.kodiak.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

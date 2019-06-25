@@ -1,10 +1,10 @@
-package com.copperleaf.groovydoc.json.formatter
+package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.groovydoc.json.models.GroovyMethod
-import com.copperleaf.groovydoc.json.models.GroovyParameter
-import com.copperleaf.groovydoc.json.models.GroovyReturnType
-import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.ElementType
+import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.ElementType
+import com.copperleaf.kodiak.groovy.models.GroovyMethod
+import com.copperleaf.kodiak.groovy.models.GroovyParameter
+import com.copperleaf.kodiak.groovy.models.GroovyReturnType
 import org.codehaus.groovy.groovydoc.GroovyMethodDoc
 import org.codehaus.groovy.groovydoc.GroovyType
 

@@ -1,7 +1,7 @@
-package com.copperleaf.dokka.json.models
+package com.copperleaf.kodiak.kotlin.models
 
-import com.copperleaf.json.common.ModuleDoc
-import com.copperleaf.json.common.fromDocList
+import com.copperleaf.kodiak.common.ModuleDoc
+import com.copperleaf.kodiak.common.fromDocList
 
 /**
  * The result of executing Dokka and transforming the results to JSON.

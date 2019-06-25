@@ -1,8 +1,8 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.json.common.CommentComponent
-import com.copperleaf.json.common.CommentTag
-import com.copperleaf.json.common.DocComment
+import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentTag
+import com.copperleaf.kodiak.common.DocComment
 import com.sun.javadoc.Doc
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag

@@ -1,8 +1,8 @@
-package com.copperleaf.javadoc.json
+package com.copperleaf.kodiak.java
 
 import com.caseyjbrooks.clog.Clog
-import com.copperleaf.javadoc.json.formatter.toClassDoc
-import com.copperleaf.javadoc.json.formatter.toPackageDoc
+import com.copperleaf.kodiak.java.formatter.toClassDoc
+import com.copperleaf.kodiak.java.formatter.toPackageDoc
 import com.sun.javadoc.ClassDoc
 import com.sun.javadoc.LanguageVersion
 import com.sun.javadoc.PackageDoc

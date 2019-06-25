@@ -1,4 +1,4 @@
-package com.copperleaf.groovydoc.json
+package com.copperleaf.kodiak.groovy
 
 import org.codehaus.groovy.tools.groovydoc.FileOutputTool
 import java.nio.file.Path

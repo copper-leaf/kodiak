@@ -1,9 +1,13 @@
-package com.copperleaf.groovydoc.json
+package com.copperleaf.kodiak.groovy
 
-import com.copperleaf.groovydoc.json.models.GroovyClass
-import com.copperleaf.groovydoc.json.models.GroovyModuleDoc
-import com.copperleaf.groovydoc.json.models.GroovyPackage
-import com.copperleaf.json.common.BaseDocInvoker
+import com.copperleaf.kodiak.common.BaseDocInvoker
+import com.copperleaf.kodiak.common.DocInvokerDescriptor
+import com.copperleaf.kodiak.common.modules.ModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
+import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.groovy.models.GroovyClass
+import com.copperleaf.kodiak.groovy.models.GroovyModuleDoc
+import com.copperleaf.kodiak.groovy.models.GroovyPackage
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -15,12 +19,19 @@ class GroovydocInvokerImpl(
 ) : BaseDocInvoker<GroovyModuleDoc>(cacheDir) {
     override val formatterJarName = "groovydoc-formatter-all"
 
+    override fun describe(): DocInvokerDescriptor {
+        return DocInvokerDescriptor(
+            ModuleLocator.from(GradleModuleLocator(), MavenModuleLocator()),
+            listOf("groovy", "java")
+        )
+    }
+
     override fun createProcessArgs(sourceDirs: List<Path>, destinationDir: Path, args: List<String>): Array<String> {
         return arrayOf(
             "java",
             "-Xms$startMemory", "-Xmx$maxMemory",
             "-classpath", formatterJar.toFile().absolutePath,    // classpath of embedded formatter jar
-            "com.copperleaf.groovydoc.json.MainKt",              // Groovydoc Formatter main class
+            "com.copperleaf.kodiak.groovy.MainKt",              // Groovydoc Formatter main class
             "--src", sourceDirs.map { it.toFile().absolutePath }
                 .joinToString(separator = File.pathSeparator),   // the sources to process
             "--output", destinationDir.toFile().absolutePath,    // where Orchid will find them later

@@ -1,7 +1,7 @@
-package com.copperleaf.dokka.json.generator.formatter
+package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.dokka.json.models.KotlinParameter
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.kotlin.models.KotlinParameter
+import com.copperleaf.kodiak.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 

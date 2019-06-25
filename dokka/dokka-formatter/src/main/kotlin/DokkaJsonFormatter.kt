@@ -1,9 +1,9 @@
-package com.copperleaf.dokka.json.generator
+package com.copperleaf.kodiak.kotlin
 
-import com.copperleaf.dokka.json.generator.formatter.classLike
-import com.copperleaf.dokka.json.generator.formatter.packageLike
-import com.copperleaf.dokka.json.generator.formatter.toClassDoc
-import com.copperleaf.dokka.json.generator.formatter.toPackageDoc
+import com.copperleaf.kodiak.kotlin.formatter.classLike
+import com.copperleaf.kodiak.kotlin.formatter.packageLike
+import com.copperleaf.kodiak.kotlin.formatter.toClassDoc
+import com.copperleaf.kodiak.kotlin.formatter.toPackageDoc
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.FormattedOutputBuilder
 

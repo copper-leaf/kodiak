@@ -1,7 +1,7 @@
-package com.copperleaf.javadoc.json.formatter
+package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.javadoc.json.models.JavaParameter
-import com.copperleaf.json.common.CommentComponent
+import com.copperleaf.kodiak.java.models.JavaParameter
+import com.copperleaf.kodiak.common.CommentComponent
 import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
 import com.sun.javadoc.Type
