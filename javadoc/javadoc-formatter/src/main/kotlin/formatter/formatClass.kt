@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.kodiak.java.models.JavaClass
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.java.models.JavaClass
 import com.sun.javadoc.ClassDoc
 
 fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
@@ -20,7 +20,9 @@ fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
         if (deep) this.fields().map { it.toField() } else emptyList(),
         this.classSignature(
             modifiers
-        )
+        ),
+
+        if(deep && this.isEnum) this.enumConstants().map { it.toEnumConstant() } else emptyList()
     )
 }
 

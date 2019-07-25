@@ -30,13 +30,16 @@ data class JavaClass(
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
-    val signature: List<CommentComponent>
+    val signature: List<CommentComponent>,
+
+    val enumItems: List<JavaEnumConstant>
 ) : DocElement, AutoDocument, SpecializedDocElement {
 
     override val kind = "Class"
 
     @Transient
     override val nodes = listOf(
+        fromDocList(::enumItems),
         fromDocList(::fields),
         fromDocList(::constructors),
         fromDocList(::methods)

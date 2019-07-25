@@ -1,4 +1,4 @@
-package com.copperleaf.kodiak.java;
+package com.copperleaf.kodiak;
 
 import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaClass2;
 

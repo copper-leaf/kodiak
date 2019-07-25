@@ -39,6 +39,7 @@ data class KotlinClass(
 
     @Transient
     override val nodes = listOf(
+        fromDocList(::enumItems),
         fromDocList(::fields),
         fromDocList(::constructors),
         fromDocList(::methods),
