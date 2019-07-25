@@ -26,6 +26,7 @@ fun DocumentationNode.toPackageDoc(): KotlinPackage {
         this.getComment(),
         this.members.filter { it.classLike }.map { it.toClassDoc(false) },
         internalMethods + externalMethods,
-        this.members.filter { it.isField }.map { it.toField() }
+        this.members.filter { it.isField }.map { it.toField() },
+        this.members.filter { it.isTypealias }.map { it.toTypealiasDoc() }
     )
 }

@@ -25,13 +25,15 @@ data class KotlinPackage(
 
     val classes: List<KotlinClass>,
     val methods: List<KotlinMethod>,
-    val fields: List<KotlinField>
+    val fields: List<KotlinField>,
+    val typealiases: List<KotlinTypealias>
 ) : DocElement, AutoDocument {
     override val kind = "Package"
 
     @Transient
     override val nodes = listOf(
         fromDocList(::classes),
+        fromDocList(::typealiases),
         fromDocList(::fields),
         fromDocList(::methods)
     )

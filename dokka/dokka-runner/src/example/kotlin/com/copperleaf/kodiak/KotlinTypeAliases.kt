@@ -1,3 +1,5 @@
 package com.copperleaf.kodiak
 
-typealias CustomString = String
+typealias TypealiasedString = String
+
+typealias TypealiasedKotlinClass = KotlinClass
