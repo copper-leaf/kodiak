@@ -1,8 +1,7 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.DocComment
+import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
@@ -28,7 +27,9 @@ fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClass {
         if (deep) this.extensions.filter { it.isMethod }.map { it.toMethod() } else emptyList(),
         this.classSignature(
             modifiers
-        )
+        ),
+        if (deep && this.hasCompanionObject) this.toCompanionObjectDoc() else null,
+        if (deep) this.members.filter { it.isEnumItem }.map { it.toEnumConstantDoc() } else emptyList()
     )
 }
 
@@ -37,8 +38,20 @@ fun DocumentationNode.classSignature(
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent("keyword", "class "))
+    when(this.kind) {
+        NodeKind.Object -> {
+            list.addAll(modifiers.toModifierListSignature())
+            list.add(CommentComponent("keyword", "object "))
+        }
+        NodeKind.Interface -> {
+            list.addAll((modifiers - "abstract").toModifierListSignature())
+            list.add(CommentComponent("keyword", "interface "))
+        }
+        else -> {
+            list.addAll(modifiers.toModifierListSignature())
+            list.add(CommentComponent("keyword", "class "))
+        }
+    }
     list.add(CommentComponent("typeName", this.simpleName, this.qualifiedName))
 //    list.addAll(this.toTypeParameterDeclarationSignature())
 //    list.addAll(this.toSuperclassDeclarationSignature())

@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.fromDoc
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -30,7 +31,10 @@ data class KotlinClass(
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
     val extensions: List<KotlinMethod>,
-    val signature: List<CommentComponent>
+    val signature: List<CommentComponent>,
+
+    val companionObject: KotlinClass?,
+    val enumItems: List<KotlinEnumConstant>
 ) : DocElement, AutoDocument {
 
     @Transient
@@ -38,7 +42,8 @@ data class KotlinClass(
         fromDocList(::fields),
         fromDocList(::constructors),
         fromDocList(::methods),
-        fromDocList(::extensions)
+        fromDocList(::extensions),
+        fromDoc(::companionObject)
     )
 
     @UseExperimental(UnstableDefault::class)

@@ -27,10 +27,14 @@ val DocumentationNode.qualifiedName: String
     }
 
 fun DocumentationNode.asType(): DocumentationNode {
-    return if (kind == NodeKind.Type) this else this.detailOrNull(NodeKind.Type) ?: {
-        Clog.i("other node requesting typeName: ${this.kind} ${this.name}")
+    return if (kind in listOf(NodeKind.Type, NodeKind.UpperBound)) {
         this
-    }()
+    } else {
+        this.detailOrNull(NodeKind.Type) ?: {
+            Clog.i("other node requesting typeName: ${this.kind} ${this.name}")
+            this
+        }()
+    }
 }
 
 val DocumentationNode.simpleType: String

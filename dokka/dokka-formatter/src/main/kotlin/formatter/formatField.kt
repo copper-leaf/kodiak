@@ -1,14 +1,15 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.kodiak.kotlin.models.KotlinField
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.kotlin.models.KotlinField
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
-val DocumentationNode.isField: Boolean get() = this.kind == NodeKind.Field || this.kind == NodeKind.Property
+val DocumentationNode.isField: Boolean get() = this.kind in listOf(NodeKind.Field, NodeKind.Property)
+val DocumentationNode.isCompanionField: Boolean get() = this.kind in listOf(NodeKind.CompanionObjectProperty)
 
 fun DocumentationNode.toField(): KotlinField {
-    assert(this.isField) { "node must be a Field or Property" }
+    assert(this.isField || this.isCompanionField) { "node must be a Field or Property" }
     val modifiers = this.modifiers
     return KotlinField(
         this,

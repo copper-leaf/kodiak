@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.kotlin
 
-import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
 import com.copperleaf.kodiak.common.DocInvoker
+import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -57,7 +57,7 @@ class DokkaJsonRunnerTest {
     fun testRunningDokka() {
         val rootDoc = dokkaRunner.getModuleDoc(
             listOf(
-                File("../dokka-runner/src/example/java").canonicalFile.toPath(),
+                File("../../javadoc/javadoc-runner/src/example/java").canonicalFile.toPath(),
                 File("../dokka-runner/src/example/kotlin").canonicalFile.toPath()
             ),
             outputDir

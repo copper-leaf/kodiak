@@ -1,17 +1,18 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
+import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.kotlin.models.KotlinMethod
 import com.copperleaf.kodiak.kotlin.models.KotlinParameter
 import com.copperleaf.kodiak.kotlin.models.KotlinReceiver
 import com.copperleaf.kodiak.kotlin.models.KotlinReturnType
-import com.copperleaf.kodiak.common.CommentComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
-val DocumentationNode.isMethod: Boolean get() = this.kind == NodeKind.Function
+val DocumentationNode.isMethod: Boolean get() = this.kind in listOf(NodeKind.Function)
+val DocumentationNode.isCompanionMethod: Boolean get() = this.kind in listOf(NodeKind.CompanionObjectFunction)
 
 fun DocumentationNode.toMethod(): KotlinMethod {
-    assert(this.isMethod) { "node must be a Function" }
+    assert(this.isMethod || this.isCompanionMethod) { "node must be a Function" }
     val modifiers = this.modifiers
     val parameters = this.parameters
     val receiver = this.receiverType

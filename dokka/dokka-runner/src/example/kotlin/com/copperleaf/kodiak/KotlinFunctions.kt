@@ -1,4 +1,4 @@
-package com.copperleaf.kodiak.kotlin
+package com.copperleaf.kodiak
 
 /**
  * A normal method defined outside of any class, just in the package.

@@ -1,4 +1,4 @@
-package com.copperleaf.kodiak.kotlin
+package com.copperleaf.kodiak
 
 /**
  * Generators are what create the output pages within Orchid. Generators are run after all Options have been processed
