@@ -32,7 +32,13 @@ fun DocumentationNode.fieldSignature(
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.addAll(modifiers.toModifierListSignature())
+    if(modifiers.isEmpty()) {
+        list.add(CommentComponent("modifier", "val "))
+    }
+    else {
+        list.addAll(modifiers.toModifierListSignature())
+    }
+
     list.add(CommentComponent("name", this.simpleName))
     list.add(CommentComponent("punctuation", ": "))
     list.addAll(type.asType().toTypeSignature())

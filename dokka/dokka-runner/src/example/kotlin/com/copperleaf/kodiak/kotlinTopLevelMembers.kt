@@ -1,7 +1,9 @@
 package com.copperleaf.kodiak
 
-val topLevelProperty: String = ""
+val topLevelValProperty: String = ""
+
+var topLevelVarProperty: String = ""
 
 fun topLevelFunction(): String {
-    return topLevelProperty
+    return topLevelValProperty
 }
