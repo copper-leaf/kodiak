@@ -3,4 +3,4 @@
  *
  * For a more full description, read this section here. And also here.
  */
-package com.copperleaf.kodiak.groovy.java;
+package com.copperleaf.kodiak

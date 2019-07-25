@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.groovy.models.GroovyClass
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.groovy.models.GroovyClass
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 
@@ -21,7 +21,8 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovyClass {
         if (deep) this.fields().map { it.toField() } else emptyList(),
         this.classSignature(
             modifiers
-        )
+        ),
+        if (deep && this.isEnum) this.enumConstants().map { it.toEnumConstant() } else emptyList()
     )
 }
 

@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.groovy
 
-import com.copperleaf.kodiak.groovy.models.GroovyModuleDoc
 import com.copperleaf.kodiak.common.DocInvoker
+import com.copperleaf.kodiak.groovy.models.GroovyModuleDoc
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -57,7 +57,7 @@ class GroovydocJsonRunnerTest {
     fun testRunningGroovydoc() {
         val rootDoc = groovydocRunner.getModuleDoc(
             listOf(
-                File("../groovydoc-runner/src/example/java").canonicalFile.toPath(),
+                File("../../javadoc/javadoc-runner/src/example/java").canonicalFile.toPath(),
                 File("../groovydoc-runner/src/example/groovy").canonicalFile.toPath()
             ),
             outputDir

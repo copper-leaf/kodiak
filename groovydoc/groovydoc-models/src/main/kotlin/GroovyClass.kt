@@ -29,11 +29,14 @@ data class GroovyClass(
     val constructors: List<GroovyConstructor>,
     val methods: List<GroovyMethod>,
     val fields: List<GroovyField>,
-    val signature: List<CommentComponent>
+    val signature: List<CommentComponent>,
+
+    val enumItems: List<GroovyEnumConstant>
 ) : DocElement, AutoDocument {
 
     @Transient
     override val nodes = listOf(
+        fromDocList(::enumItems),
         fromDocList(::fields),
         fromDocList(::constructors),
         fromDocList(::methods)
