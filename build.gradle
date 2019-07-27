@@ -16,7 +16,7 @@ buildscript {
 
 apply plugin: "de.fayard.buildSrcVersions"
 
-group 'com.eden'
+group 'com.eden.kodiak'
 version '0.3.0'
 
 // Config Values
@@ -30,7 +30,6 @@ ext.ossLicenses = [
 ]
 
 ext {
-    group = 'com.eden.kodiak'
     github_project = 'copper-leaf/kodiak'
 
     // Orchid
