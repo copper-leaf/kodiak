@@ -17,7 +17,7 @@ buildscript {
 apply plugin: "de.fayard.buildSrcVersions"
 
 group 'com.eden'
-version '0.2.3'
+version '0.3.0'
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------
