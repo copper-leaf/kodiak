@@ -1,7 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.3.31'
-    ext.serialization_version = '0.11.0'
-
     repositories {
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -9,11 +6,11 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        classpath "de.fayard:buildSrcVersions:0.3.2"
+        classpath(Libs.kotlin_gradle_plugin)
+        classpath(Libs.kotlin_serialization)
+        classpath(Libs.shadow)
+        classpath(Libs.gradle_bintray_plugin)
+        classpath(Libs.buildsrcversions)
     }
 }
 
@@ -21,14 +18,6 @@ apply plugin: "de.fayard.buildSrcVersions"
 
 group 'com.eden'
 version '0.2.3'
-
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url 'https://jitpack.io' }
-    }
-}
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------
@@ -41,11 +30,11 @@ ext.ossLicenses = [
 ]
 
 ext {
-    group = 'com.eden'
+    group = 'com.eden.kodiak'
     github_project = 'copper-leaf/kodiak'
 
     // Orchid
-    orchid_version = '0.16.10'
+    orchid_version = '0.17.1'
     orchid_theme = 'Copper'
     base_url = 'https://copper-leaf.github.io/kodiak'
     github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv('GITHUB_TOKEN')
@@ -68,8 +57,8 @@ ext {
     developer_email = 'cjbrooks12@gmail.com'
 
     // Project info
-    project_name = 'Json Docs'
-    project_description = 'Wrappers around code documentation tools to produce JSON models as libraries'
+    project_name = 'Kodiak'
+    project_description = 'Wrappers around code documentation CLI tools to produce JSON models, usable as libraries'
 
     license = rootProject.ext.ossLicenses['BSD']
 }

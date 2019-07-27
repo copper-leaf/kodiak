@@ -7,6 +7,12 @@ version rootProject.version
 
 sourceCompatibility = 1.8
 
+repositories {
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     api(Libs.com_eden_common)
     api(Libs.clog4j)

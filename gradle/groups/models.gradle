@@ -8,6 +8,12 @@ version rootProject.version
 
 sourceCompatibility = 1.8
 
+repositories {
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
     compile(Libs.kotlin_stdlib_jdk8)
     compile(Libs.kotlin_reflect)

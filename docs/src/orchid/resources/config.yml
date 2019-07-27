@@ -1,7 +1,7 @@
 site:
   about:
     siteName: Kodiak
-    siteDescription: A collection wrappers around various code documentation tools which produces a common JSON output readable by Orchid.
+    siteDescription: Wrappers around code documentation CLI tools to produce JSON models, usable as libraries
 
 theme:
   social:
