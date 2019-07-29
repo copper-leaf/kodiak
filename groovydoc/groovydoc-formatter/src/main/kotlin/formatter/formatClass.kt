@@ -33,7 +33,7 @@ val GroovyClassDoc.classKind: String
             isInterface                        -> "interface"
             isAnnotationType                   -> "@interface"
             isEnum                             -> "enum"
-            isExceptionClass()                 -> "exception"
+            isExceptionClass()                 -> "class"
             this is SimpleGroovyDoc && isTrait -> "trait"
             else                               -> "class"
         }

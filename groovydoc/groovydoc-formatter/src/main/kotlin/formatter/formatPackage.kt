@@ -12,7 +12,7 @@ fun GroovyPackageDoc.toPackageDoc(): GroovyPackage {
         this.nameWithDots(),
         emptyList(),
         DocComment(
-            this.description().asCommentText(),
+            this.description().parseCommentToValues().commentText,
             emptyMap()
         ),
         this.allClasses().map { it.toClassDoc(false) },

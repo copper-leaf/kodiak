@@ -1,6 +1,9 @@
 package com.copperleaf.kodiak.groovy.formatter
 
+import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
@@ -56,23 +59,23 @@ class PrimitiveFieldTypeWrapper(val field: GroovyParameter) : GroovyType {
 tailrec fun GroovyClassDoc.isExceptionClass(): Boolean {
     return when {
         this.qualifiedTypeName() == Throwable::class.java.name -> true
-        this.superclass() != null                              -> this.superclass().isExceptionClass()
-        else                                                   -> false
+        this.superclass() != null -> this.superclass().isExceptionClass()
+        else -> false
     }
 }
 
 // Process comment text
 //----------------------------------------------------------------------------------------------------------------------
 
-private data class GroovyCommentData(
-    val commentText: String,
+data class GroovyCommentData(
+    val commentText: List<CommentComponent>,
     val commentTags: Map<String, List<Pair<String, String>>>
 )
 
-private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
+fun String.parseCommentToValues(): GroovyCommentData {
     val commentTags = mutableMapOf<String, List<Pair<String, String>>>()
 
-    val commentDoc = Jsoup.parse(this.commentText().trim())
+    val commentDoc = Jsoup.parse(this.trim())
     commentDoc.outputSettings(Document.OutputSettings().apply {
         indentAmount(2)
         prettyPrint(true)
@@ -112,8 +115,57 @@ private fun GroovyDoc.parseCommentToValues(): GroovyCommentData {
         commentTags[dlName] = tagValues
     }
 
+    val commentComponents = mutableListOf<CommentComponent>()
+
+    val originalCommentText = commentDoc.select("body").html().trimLines()
+    val linkRegex = "<a(.*?)>(.*?)</a>".toRegex()
+
+    var currentIndex = 0
+
+    linkRegex.findAll(originalCommentText).forEach { match ->
+        val (wholeMatch, attrs, text) = match.groupValues
+        val aTag = Jsoup.parseBodyFragment(wholeMatch).select("a")
+        val href = aTag.attr("href")
+        val title = aTag.attr("title")
+
+        if(!(href.startsWith("http://") || href.startsWith("https://"))) {
+            // internal link, add it as a TYPE_NAME commentComponent
+
+            Clog.v("Appending current text: currentText={}", originalCommentText.substring(currentIndex, match.range.first))
+            commentComponents.add(
+                CommentComponent(
+                    TEXT,
+                    originalCommentText.substring(currentIndex, match.range.first),
+                    ""
+                )
+            )
+
+            val linkedId = href.replace("../", "").replace(".html", "").replace("/", ".")
+
+            Clog.v("also appending link component: text={}, title={}, linkedId={}", text, title, linkedId)
+            commentComponents.add(
+                CommentComponent(
+                    TYPE_NAME,
+                    text,
+                    linkedId
+                )
+            )
+        }
+
+        currentIndex = match.range.last + 1
+    }
+
+    Clog.v("Appending final text: currentText={}", originalCommentText.substring(currentIndex))
+    commentComponents.add(
+        CommentComponent(
+            TEXT,
+            originalCommentText.substring(currentIndex),
+            ""
+        )
+    )
+
     return GroovyCommentData(
-        commentDoc.select("body").html().trimLines(),
+        commentComponents,
         commentTags
     )
 }
@@ -127,21 +179,13 @@ fun GroovyDoc.getComment(): DocComment {
 
 fun GroovyTag?.getComment(): DocComment {
     return DocComment(
-        (this?.text() ?: "").asCommentText(),
+        (this?.text() ?: "").parseCommentToValues().commentText,
         emptyMap()
     )
 }
 
 fun GroovyDoc.findCommentText(): List<CommentComponent> {
-    return listOf(
-        CommentComponent(CommentComponent.TEXT, parseCommentToValues().commentText)
-    )
-}
-
-fun String.asCommentText(): List<CommentComponent> {
-    return listOf(
-        CommentComponent(CommentComponent.TEXT, this.trim())
-    )
+    return this.commentText().parseCommentToValues().commentText
 }
 
 fun GroovyDoc.findCommentTags(): List<GroovyTag> {
@@ -151,7 +195,7 @@ fun GroovyDoc.findCommentTags(): List<GroovyTag> {
         groovyTagsList.addAll(this.tags())
     }
 
-    parseCommentToValues().commentTags.forEach { tagName, values ->
+    this.commentText().parseCommentToValues().commentTags.forEach { tagName, values ->
         if (values.any { it.first.isNotBlank() }) {
             // convert values into tags with name
             values.forEach {
