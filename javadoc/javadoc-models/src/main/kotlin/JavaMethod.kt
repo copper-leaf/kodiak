@@ -24,7 +24,7 @@ data class JavaMethod(
 
     val parameters: List<JavaParameter>,
     val returnValue: JavaReturnType,
-    val signature: List<CommentComponent>
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Method"
 

@@ -1,7 +1,9 @@
 package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.kodiak.java.models.JavaParameter
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.java.models.JavaParameter
 import com.sun.javadoc.ParamTag
 import com.sun.javadoc.Parameter
 import com.sun.javadoc.Type
@@ -19,10 +21,10 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
         this.name(),
         this.name(),
         emptyList(),
-        tag.getComment(),
+        tag.getComment(this.name()),
         this.type().simpleTypeName(),
         this.type().qualifiedTypeName(),
-        this.type().toTypeSignature()
+        this.parameterSignature()
     )
 }
 
@@ -31,8 +33,6 @@ fun List<JavaParameter>.toParameterListSignature(): List<CommentComponent> {
     list.add(CommentComponent("punctuation", "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
-
-        list.add(CommentComponent("name", " ${parameter.name}"))
 
         if (index < this.size - 1) {
             list.add(CommentComponent("punctuation", ", "))
@@ -46,7 +46,7 @@ fun List<JavaParameter>.toParameterListSignature(): List<CommentComponent> {
 fun Type.toTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent("typeName", this.simpleTypeName(), this.qualifiedTypeName()))
+    list.add(CommentComponent(TYPE_NAME, this.simpleTypeName(), this.qualifiedTypeName()))
 
     val wildcard = this.asWildcardType()
     if (wildcard != null) {
@@ -84,6 +84,21 @@ fun Type.toTypeSignature(): List<CommentComponent> {
         }
         list.add(CommentComponent("punctuation", ">"))
     }
+
+    return list
+}
+
+fun Parameter.parameterSignature(): List<CommentComponent> {
+    val list = mutableListOf<CommentComponent>()
+
+    list.addAll(this.type().toTypeSignature())
+    list.add(
+        CommentComponent(
+            TEXT,
+            " ${this.name()}",
+            ""
+        )
+    )
 
     return list
 }

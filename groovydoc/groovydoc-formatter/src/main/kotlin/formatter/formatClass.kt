@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.groovy.models.GroovyClass
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
@@ -45,7 +46,7 @@ fun GroovyClassDoc.classSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.add(CommentComponent("name", "${this.classKind} "))
-    list.add(CommentComponent("typeName", "" + this.simpleTypeName(), "" + this.qualifiedTypeName()))
+    list.add(CommentComponent(TYPE_NAME, "" + this.simpleTypeName(), "" + this.qualifiedTypeName()))
 //    list.addAll(this.typeParameters().toWildcardSignature())
 
     if (this.isInterface) {

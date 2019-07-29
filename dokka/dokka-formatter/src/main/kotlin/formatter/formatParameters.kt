@@ -1,7 +1,8 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.kodiak.kotlin.models.KotlinParameter
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.kotlin.models.KotlinParameter
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -68,7 +69,7 @@ fun DocumentationNode.toTypeSignature(): List<CommentComponent> {
 fun DocumentationNode.toNonFunctionalTypeSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent("typeName", this.simpleType, this.qualifiedType))
+    list.add(CommentComponent(TYPE_NAME, this.simpleType, this.qualifiedType))
 
     this.details(NodeKind.Type).toListSignature(
         childMapper = { it.toTypeSignature() },

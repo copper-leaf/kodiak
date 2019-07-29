@@ -1,6 +1,8 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
 import com.sun.javadoc.Doc
@@ -14,40 +16,42 @@ fun Doc.getComment(): DocComment {
     )
 }
 
-fun Tag?.getComment(): DocComment {
+fun Tag?.getComment(commentTrim: String = ""): DocComment {
     return DocComment(
-        if (this != null) arrayOf(this).asCommentComponents() else emptyList(),
-        if (this != null) arrayOf(this).asCommentComponentsMap() else emptyMap()
+        if (this != null) arrayOf(this).asCommentComponents(commentTrim) else emptyList(),
+        if (this != null) arrayOf(this).asCommentComponentsMap(commentTrim) else emptyMap()
     )
 }
 
-fun Array<Tag>.asCommentComponents(): List<CommentComponent> {
-    return this.map(Tag::toCommentComponent)
+fun Array<Tag>.asCommentComponents(commentTrim: String = ""): List<CommentComponent> {
+    return this.flatMap { it.toCommentComponent(commentTrim) }
 }
 
-fun Array<Tag>.asCommentComponentsMap(): Map<String, CommentTag> {
+fun Array<Tag>.asCommentComponentsMap(commentTrim: String = ""): Map<String, CommentTag> {
     return this.map { tag ->
-        val commentComponent = tag.toCommentComponent()
+        val commentComponent = tag.toCommentComponent(commentTrim).first()
         commentComponent.kind to commentComponent.toCommentTag()
     }.toMap()
 }
 
-fun Tag.toCommentComponent(): CommentComponent {
-    val key = kind().let { if (it.startsWith("@")) it.drop(1) else it }
-    val name: String
-    val qualifiedName: String
+fun Tag.toCommentComponent(commentTrim: String = ""): List<CommentComponent> {
+    val key: String
+    val text: String
+    val value: String
     if (this is SeeTag && referencedClass() != null) {
-        name = referencedClass().simpleTypeName()
-        qualifiedName = referencedClass().qualifiedTypeName()
+        key = TYPE_NAME
+        text = referencedClass().simpleTypeName()
+        value = referencedClass().qualifiedTypeName()
     } else {
-        name = text()
-        qualifiedName = text()
+        key = kind().let { if (it.startsWith("@")) it.drop(1) else it }
+        text = text().trim().removePrefix(commentTrim).trim()
+        value = ""
     }
     return CommentComponent(
         key,
-        name,
-        qualifiedName
-    )
+        text,
+        value
+    ).expandUnparsedInlineTags()
 }
 
 fun CommentComponent.toCommentTag(): CommentTag {
@@ -56,4 +60,43 @@ fun CommentComponent.toCommentTag(): CommentTag {
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
     return this.map { CommentComponent("modifier", "$it ") }
+}
+
+fun CommentComponent.expandUnparsedInlineTags(): List<CommentComponent> {
+
+    val regex = "\\{@(\\w+)(.*?)\\}".toRegex()
+
+    if (regex.containsMatchIn(this.text)) {
+        val matches = regex.findAll(this.text)
+
+        val expanded = mutableListOf<CommentComponent>()
+
+        var lastIndex = 0
+        for (match in matches) {
+            val (wholeMatch, tagType, tagValue) = match.groupValues
+            println("inline tag: tagType=$tagType, tagValue=$tagValue")
+
+            expanded += CommentComponent(
+                TEXT,
+                this.text.substring(lastIndex, match.range.first),
+                ""
+            )
+            expanded += CommentComponent(
+                if (tagType == "link") TYPE_NAME else tagType,
+                tagValue.trim(),
+                tagValue.trim()
+            )
+            lastIndex = match.range.last + 1
+        }
+
+        expanded += CommentComponent(
+            TEXT,
+            this.text.substring(lastIndex).trim(),
+            ""
+        )
+
+        return expanded
+    } else {
+        return listOf(this)
+    }
 }

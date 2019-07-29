@@ -18,7 +18,7 @@ data class KotlinEnumConstant(
     override val id: String,
     override val modifiers: List<String>,
     override val comment: DocComment,
-    val signature: List<CommentComponent>
+    override val signature: List<CommentComponent>
 ) : DocElement {
 
     override val kind: String = "enumConstant"

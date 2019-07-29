@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.groovy.models.GroovyConstructor
 import com.copperleaf.kodiak.groovy.models.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
@@ -33,7 +34,7 @@ fun GroovyConstructorDoc.constructorSignature(
 
     list.addAll(modifiers.toModifierListSignature())
 //    list.addAll(this.typeParameters().toWildcardSignature())
-    list.add(CommentComponent("typeName", parent.simpleTypeName(), parent.qualifiedTypeName()))
+    list.add(CommentComponent(TYPE_NAME, parent.simpleTypeName(), parent.qualifiedTypeName()))
     list.addAll(parameters.toParameterListSignature())
 
     return list

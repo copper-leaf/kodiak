@@ -30,7 +30,7 @@ data class JavaClass(
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
-    val signature: List<CommentComponent>,
+    override val signature: List<CommentComponent>,
 
     val enumItems: List<JavaEnumConstant>
 ) : DocElement, AutoDocument, SpecializedDocElement {

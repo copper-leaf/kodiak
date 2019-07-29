@@ -18,6 +18,6 @@ data class CommentComponent(
 ) {
     companion object {
         const val TEXT = "text"
-        const val LINK = "link"
+        const val TYPE_NAME = "typeName"
     }
 }

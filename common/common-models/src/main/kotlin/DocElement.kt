@@ -27,4 +27,10 @@ interface DocElement {
      * The comment metadata for this element.
      */
     val comment: DocComment
+
+    /**
+     * A simple, rich signature for this type which, when concatenated together, creates the full declaration of this
+     * element.
+     */
+    val signature: List<CommentComponent>
 }

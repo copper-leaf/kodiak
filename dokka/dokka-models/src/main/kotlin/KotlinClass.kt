@@ -31,7 +31,7 @@ data class KotlinClass(
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
     val extensions: List<KotlinMethod>,
-    val signature: List<CommentComponent>,
+    override val signature: List<CommentComponent>,
 
     val companionObject: KotlinClass?,
     val enumItems: List<KotlinEnumConstant>

@@ -1,5 +1,6 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
+import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -27,6 +28,14 @@ fun DocumentationNode.toPackageDoc(): KotlinPackage {
         this.members.filter { it.classLike }.map { it.toClassDoc(false) },
         internalMethods + externalMethods,
         this.members.filter { it.isField }.map { it.toField() },
-        this.members.filter { it.isTypealias }.map { it.toTypealiasDoc() }
+        this.members.filter { it.isTypealias }.map { it.toTypealiasDoc() },
+        this.packageSignature()
+    )
+}
+
+fun DocumentationNode.packageSignature(): List<CommentComponent> {
+    return listOf(
+        CommentComponent("keyword", "package "),
+        CommentComponent(CommentComponent.TYPE_NAME, this.simpleName, this.qualifiedName)
     )
 }

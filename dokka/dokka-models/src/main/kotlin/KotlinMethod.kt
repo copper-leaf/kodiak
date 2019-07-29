@@ -25,7 +25,7 @@ data class KotlinMethod(
     val receiver: KotlinReceiver? = null,
     val parameters: List<KotlinParameter>,
     val returnValue: KotlinReturnType,
-    val signature: List<CommentComponent>
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Method"
 

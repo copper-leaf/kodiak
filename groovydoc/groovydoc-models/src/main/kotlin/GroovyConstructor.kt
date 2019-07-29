@@ -22,7 +22,7 @@ data class GroovyConstructor(
     override val comment: DocComment,
 
     val parameters: List<GroovyParameter>,
-    val signature: List<CommentComponent>
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Constructor"
 

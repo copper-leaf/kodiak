@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.java.models
 
 import com.copperleaf.kodiak.common.AutoDocument
+import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.fromDocList
@@ -23,7 +24,8 @@ data class JavaPackage(
     override val modifiers: List<String>,
     override val comment: DocComment,
 
-    val classes: List<JavaClass>
+    val classes: List<JavaClass>,
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Package"
 

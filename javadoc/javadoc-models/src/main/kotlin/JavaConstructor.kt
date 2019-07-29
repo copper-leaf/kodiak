@@ -1,12 +1,9 @@
 package com.copperleaf.kodiak.java.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
-import com.copperleaf.kodiak.common.ElementType
-import com.copperleaf.kodiak.common.fromDoc
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -25,7 +22,7 @@ data class JavaConstructor(
     override val comment: DocComment,
 
     val parameters: List<JavaParameter>,
-    val signature: List<CommentComponent>
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Constructor"
 

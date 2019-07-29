@@ -1,8 +1,9 @@
 package com.copperleaf.kodiak.java.formatter
 
+import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaConstructor
 import com.copperleaf.kodiak.java.models.JavaParameter
-import com.copperleaf.kodiak.common.CommentComponent
 import com.sun.javadoc.ConstructorDoc
 
 fun ConstructorDoc.toConstructor(): JavaConstructor {
@@ -32,7 +33,7 @@ fun ConstructorDoc.constructorSignature(
     list.addAll(this.typeParameters().toWildcardSignature())
     list.add(
         CommentComponent(
-            "typeName",
+            TYPE_NAME,
             this.containingClass().simpleTypeName(),
             this.containingClass().qualifiedName()
         )

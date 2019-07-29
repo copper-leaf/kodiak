@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaClass
 import com.sun.javadoc.ClassDoc
 
@@ -45,7 +46,7 @@ fun ClassDoc.classSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.add(CommentComponent("name", "${this.classKind} "))
-    list.add(CommentComponent("typeName", this.name(), this.qualifiedName()))
+    list.add(CommentComponent(TYPE_NAME, this.name(), this.qualifiedName()))
     list.addAll(this.typeParameters().toWildcardSignature())
 
     if (this.isInterface) {

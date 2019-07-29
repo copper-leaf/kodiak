@@ -29,7 +29,7 @@ data class GroovyClass(
     val constructors: List<GroovyConstructor>,
     val methods: List<GroovyMethod>,
     val fields: List<GroovyField>,
-    val signature: List<CommentComponent>,
+    override val signature: List<CommentComponent>,
 
     val enumItems: List<GroovyEnumConstant>
 ) : DocElement, AutoDocument {

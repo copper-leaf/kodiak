@@ -60,6 +60,7 @@ class AutoDocumentTest {
                         )
                     }
                 )
+            override val signature: List<CommentComponent> = emptyList()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.kotlin.models
 
 import com.copperleaf.kodiak.common.AutoDocument
+import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.fromDocList
@@ -26,7 +27,8 @@ data class KotlinPackage(
     val classes: List<KotlinClass>,
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
-    val typealiases: List<KotlinTypealias>
+    val typealiases: List<KotlinTypealias>,
+    override val signature: List<CommentComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Package"
 
