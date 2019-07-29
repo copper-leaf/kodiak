@@ -2,6 +2,8 @@ package com.copperleaf.kodiak.kotlin.formatter
 
 import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
 import org.jetbrains.dokka.ContentBlock
@@ -37,258 +39,238 @@ import org.jetbrains.dokka.KotlinLanguageService
 import org.jetbrains.dokka.NodeKind
 
 fun DocumentationNode.getComment(): DocComment {
+    val formatter = DokkaContentFormatter(this).apply { extractContent() }
     return DocComment(
-        this.contentText,
-        this.contentTags
+        formatter.components,
+        formatter.tags
     )
 }
 
-fun DocumentationNode.getComment(it: DocumentationNode, sectionName: String, subjectName: String?): DocComment {
+fun DocumentationNode.getComment(sectionName: String, subjectName: String?): DocComment {
+    val formatter = DokkaContentFormatter(this).apply { extractContentFromSection(sectionName, subjectName) }
     return DocComment(
-        it.contentText(sectionName, subjectName),
-        this.contentTags
+        formatter.components,
+        formatter.tags
     )
 }
-
-val DocumentationNode.contentText: List<CommentComponent> get() = DokkaContentFormatter(this).extractContent()
-fun DocumentationNode.contentText(sectionName: String, subjectName: String?): List<CommentComponent> =
-    DokkaContentFormatter(this).extractContentFromSection(sectionName, subjectName)
-
-val DocumentationNode.contentTags: Map<String, CommentTag> get() = emptyMap()
 
 @Suppress("UNUSED_PARAMETER")
 class DokkaContentFormatter(val node: DocumentationNode) {
 
-    fun extractContentFromSection(sectionName: String, subjectName: String?): List<CommentComponent> {
+    private var used = false
+    val components = mutableListOf<CommentComponent>()
+    val tags = mutableMapOf<String, CommentTag>()
+
+    var currentText = ""
+
+    fun extractContentFromSection(sectionName: String, subjectName: String?) {
+        check(!used) { "DokkaContentFormatter cannot be reused!" }
+        used = true
+
         for (section in node.owner!!.content.sections) {
             if (section.tag == sectionName && section.subjectName == subjectName) {
-                return listOf(CommentComponent(CommentComponent.TEXT, extractContent(section.children)))
+                extractContentInternal(section.children)
+                components.add(CommentComponent(CommentComponent.TEXT, currentText))
+                return
             }
         }
-
-        return listOf(CommentComponent(CommentComponent.TEXT, ""))
+        components.add(CommentComponent(CommentComponent.TEXT, ""))
     }
 
-    fun extractContent(): List<CommentComponent> {
-        val content = this.extractContent(node.content.children)
-        return listOf(CommentComponent(CommentComponent.TEXT, content))
+    fun extractContent() {
+        check(!used) { "DokkaContentFormatter cannot be reused!" }
+        used = true
+
+        this.extractContentInternal(node.content.children)
+        components.add(CommentComponent(CommentComponent.TEXT, currentText))
     }
 
-    private fun extractContent(content: List<ContentNode>): String {
-        return content.mapIndexed { index, it -> extractContent(it, topLevel = index == 0) }.joinToString("")
+    private fun extractContentInternal(content: List<ContentNode>) {
+        content.mapIndexed { index, it -> extractContentInternal(it, topLevel = index == 0) }
     }
 
-    private fun extractContent(content: ContentNode, topLevel: Boolean): String {
+    private fun extractContentInternal(content: ContentNode, topLevel: Boolean) {
         when (content) {
-            is ContentKeyword               -> return content.format(topLevel)
-            is ContentIdentifier            -> return content.format(topLevel)
-            is ContentSymbol                -> return content.format(topLevel)
-            is ContentEntity                -> return content.format(topLevel)
+            is ContentKeyword               -> content.format(topLevel)
+            is ContentIdentifier            -> content.format(topLevel)
+            is ContentSymbol                -> content.format(topLevel)
+            is ContentEntity                -> content.format(topLevel)
 
-            is ContentNonBreakingSpace      -> return content.format(topLevel)
-            is ContentSoftLineBreak         -> return content.format(topLevel)
-            is ContentIndentedSoftLineBreak -> return content.format(topLevel)
-            is ContentHardLineBreak         -> return content.format(topLevel)
+            is ContentNonBreakingSpace      -> content.format(topLevel)
+            is ContentSoftLineBreak         -> content.format(topLevel)
+            is ContentIndentedSoftLineBreak -> content.format(topLevel)
+            is ContentHardLineBreak         -> content.format(topLevel)
 
-            is ContentEmphasis              -> return content.format(topLevel)
-            is ContentStrong                -> return content.format(topLevel)
-            is ContentStrikethrough         -> return content.format(topLevel)
+            is ContentEmphasis              -> content.format(topLevel)
+            is ContentStrong                -> content.format(topLevel)
+            is ContentStrikethrough         -> content.format(topLevel)
 
-            is ContentCode                  -> return content.format(topLevel)
-            is ContentBlockCode             -> return content.format(topLevel)
+            is ContentCode                  -> content.format(topLevel)
+            is ContentBlockCode             -> content.format(topLevel)
 
-            is ContentNodeDirectLink        -> return content.format(topLevel)
-            is ContentNodeLazyLink          -> return content.format(topLevel)
-            is NodeRenderContent            -> return content.format(topLevel)
-            is ContentExternalLink          -> return content.format(topLevel)
-            is ContentNodeLink              -> return content.format(topLevel)
+            is ContentNodeDirectLink        -> content.format(topLevel)
+            is ContentNodeLazyLink          -> content.format(topLevel)
+            is NodeRenderContent            -> content.format(topLevel)
+            is ContentExternalLink          -> content.format(topLevel)
+            is ContentNodeLink              -> content.format(topLevel)
 
-            is ContentUnorderedList         -> return content.format(topLevel)
-            is ContentOrderedList           -> return content.format(topLevel)
-            is ContentListItem              -> return content.format(topLevel)
+            is ContentUnorderedList         -> content.format(topLevel)
+            is ContentOrderedList           -> content.format(topLevel)
+            is ContentListItem              -> content.format(topLevel)
 
-            is ContentHeading               -> return content.format(topLevel)
-            is ContentSection               -> return content.format(topLevel)
-            is ContentParagraph             -> return content.format(topLevel)
+            is ContentHeading               -> content.format(topLevel)
+            is ContentSection               -> content.format(topLevel)
+            is ContentParagraph             -> content.format(topLevel)
 
-            is ContentText                  -> return content.format(topLevel)
-            is ContentBlock                 -> return content.format(topLevel)
-            is ContentEmpty                 -> return content.format(topLevel)
+            is ContentText                  -> content.format(topLevel)
+            is ContentBlock                 -> content.format(topLevel)
+            is ContentEmpty                 -> content.format(topLevel)
 
-            else                            -> Clog.e("Unhandled content node: $content (${content.javaClass})")
+            else                            -> {
+                Clog.e("Unhandled content node: $content (${content.javaClass})")
+                ""
+            }
         }
-        return ""
     }
 
 // Content Node typeName Handlers
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun ContentEmpty.format(topLevel: Boolean): String {
-        return ""
+    private fun ContentEmpty.format(topLevel: Boolean) {
+        append("")
     }
 
-    private fun ContentBlock.format(topLevel: Boolean): String {
-        return joinChildren(this)
+    private fun ContentBlock.format(topLevel: Boolean) {
+        joinChildren(this)
     }
 
-    private fun ContentText.format(topLevel: Boolean): String {
-        return this.text
+    private fun ContentText.format(topLevel: Boolean) {
+        append(this.text)
     }
 
-    private fun ContentKeyword.format(topLevel: Boolean): String {
-        return this.text
+    private fun ContentKeyword.format(topLevel: Boolean) {
+        append(this.text)
     }
 
-    private fun ContentIdentifier.format(topLevel: Boolean): String {
-        return this.text
+    private fun ContentIdentifier.format(topLevel: Boolean) {
+        append(this.text)
     }
 
-    private fun ContentSymbol.format(topLevel: Boolean): String {
-        return this.text
+    private fun ContentSymbol.format(topLevel: Boolean) {
+        append(this.text)
     }
 
-    private fun ContentEntity.format(topLevel: Boolean): String {
-        return this.text
+    private fun ContentEntity.format(topLevel: Boolean) {
+        append(this.text)
     }
 
-    private fun ContentNonBreakingSpace.format(topLevel: Boolean): String {
-        return "&nbsp;"
+    private fun ContentNonBreakingSpace.format(topLevel: Boolean) {
+        append("&nbsp;")
     }
 
-    private fun ContentSoftLineBreak.format(topLevel: Boolean): String {
-        return "<br>"
+    private fun ContentSoftLineBreak.format(topLevel: Boolean) {
+        append("<br>")
     }
 
-    private fun ContentIndentedSoftLineBreak.format(topLevel: Boolean): String {
-        return "  <br>"
+    private fun ContentIndentedSoftLineBreak.format(topLevel: Boolean) {
+        append("  <br>")
     }
 
-    private fun ContentParagraph.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<p>", "</p>", joinChildren(this))
+    private fun ContentParagraph.format(topLevel: Boolean) {
+        if (topLevel) joinChildren(this) else wrap("<p>", "</p>") { joinChildren(this) }
     }
 
-    private fun ContentEmphasis.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<i>", "</i>", joinChildren(this))
+    private fun ContentEmphasis.format(topLevel: Boolean) {
+        if (topLevel) joinChildren(this) else wrap("<i>", "</i>") { joinChildren(this) }
     }
 
-    private fun ContentStrong.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<b>", "</b>", joinChildren(this))
+    private fun ContentStrong.format(topLevel: Boolean) {
+        if (topLevel) joinChildren(this) else wrap("<b>", "</b>") { joinChildren(this) }
     }
 
-    private fun ContentStrikethrough.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<del>", "</del>", joinChildren(this))
+    private fun ContentStrikethrough.format(topLevel: Boolean) {
+        if (topLevel) joinChildren(this) else wrap("<del>", "</del>") { joinChildren(this) }
     }
 
-    private fun ContentCode.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap("<code>", "</code>", joinChildren(this))
+    private fun ContentCode.format(topLevel: Boolean) {
+        if (topLevel) joinChildren(this) else wrap("<code>", "</code>") { joinChildren(this) }
     }
 
-    private fun ContentBlockCode.format(topLevel: Boolean): String {
-        return if (topLevel) joinChildren(this) else wrap(
-            "<pre><code class=\"language-${this.language}\">",
-            "</code></pre>",
+    private fun ContentBlockCode.format(topLevel: Boolean) {
+        if (topLevel) {
             joinChildren(this)
-        )
-    }
-
-    private fun ContentNodeLink.format(topLevel: Boolean): String {
-        return joinChildren(this)
-    }
-
-    private fun ContentHardLineBreak.format(topLevel: Boolean): String {
-        return "<br>"
-    }
-
-    private fun ContentNodeDirectLink.format(topLevel: Boolean): String {
-        return joinChildren(this)
-    }
-
-    private fun ContentNodeLazyLink.format(topLevel: Boolean): String {
-        return joinChildren(this)
-    }
-
-    private fun NodeRenderContent.format(topLevel: Boolean): String {
-        return extractContent(listOf(KotlinLanguageService().render(node, mode)))
-    }
-
-    private fun ContentExternalLink.format(topLevel: Boolean): String {
-        return wrap("<a href=\"${this.href}\">", "</a>", joinChildren(this))
-    }
-
-    private fun ContentUnorderedList.format(topLevel: Boolean): String {
-        return wrap("<ul>", "</ul>", joinChildren(this))
-    }
-
-    private fun ContentOrderedList.format(topLevel: Boolean): String {
-        return wrap("<ol>", "</ol>", joinChildren(this))
-    }
-
-    private fun ContentListItem.format(topLevel: Boolean): String {
-        val child = this.children.singleOrNull()
-        return if (child is ContentParagraph) {
-            // Ignore paragraph if item is nested underneath an item
-            wrap("<li>", "</li>", joinChildren(child))
         } else {
-            wrap("<li>", "</li>", joinChildren(this))
+            wrap(
+                "<pre><code class=\"language-${this.language}\">",
+                "</code></pre>"
+            ) { joinChildren(this) }
         }
     }
 
-    private fun ContentHeading.format(topLevel: Boolean): String {
-        return wrap("<h${this.level}>", "</h${this.level}>", joinChildren(this))
+    private fun ContentNodeLink.format(topLevel: Boolean) {
+        if (node != null) {
+            components.add(CommentComponent(TEXT, currentText, ""))                        // append current text to components list
+            currentText = ""                                                               // get fresh text content
+            joinChildren(this)                                                             // have children append themselved to the context
+            components.add(CommentComponent(TYPE_NAME, currentText, node!!.qualifiedName)) // convert that text to the text of the link component
+            currentText = ""                                                               // prepare to continue with later components
+        } else {
+            joinChildren(this)
+        }
     }
 
-    private fun ContentSection.format(topLevel: Boolean): String {
-        return wrap("<${this.tag}>", "</${this.tag}>", joinChildren(this))
+    private fun ContentHardLineBreak.format(topLevel: Boolean) {
+        append("<br>")
+    }
+
+    private fun NodeRenderContent.format(topLevel: Boolean) {
+        extractContentInternal(listOf(KotlinLanguageService().render(node, mode)))
+    }
+
+    private fun ContentExternalLink.format(topLevel: Boolean) {
+        wrap("<a href=\"${this.href}\">", "</a>") { joinChildren(this)}
+    }
+
+    private fun ContentUnorderedList.format(topLevel: Boolean) {
+        wrap("<ul>", "</ul>") { joinChildren(this) }
+    }
+
+    private fun ContentOrderedList.format(topLevel: Boolean) {
+        wrap("<ol>", "</ol>") { joinChildren(this) }
+    }
+
+    private fun ContentListItem.format(topLevel: Boolean) {
+        val child = this.children.singleOrNull()
+        if (child is ContentParagraph) {
+            // Ignore paragraph if item is nested underneath an item
+            wrap("<li>", "</li>") { joinChildren(child)}
+        } else {
+            wrap("<li>", "</li>") { joinChildren(this)}
+        }
+    }
+
+    private fun ContentHeading.format(topLevel: Boolean) {
+        return wrap("<h${this.level}>", "</h${this.level}>") { joinChildren(this) }
+    }
+
+    private fun ContentSection.format(topLevel: Boolean) {
+        wrap("<${this.tag}>", "</${this.tag}>") { joinChildren(this) }
     }
 
 // Helper Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    private fun wrap(prefix: String, suffix: String, body: String): String = "$prefix$body$suffix"
-
-    private fun joinChildren(block: ContentBlock): String =
-        block.children.joinToString("") { extractContent(it, topLevel = false) }
-
-}
-
-
-
-
-
-
-/*
-
-class NodeRenderContent(
-    val node: DocumentationNode,
-    val mode: LanguageService.RenderMode
-): ContentNode {
-    override val textLength: Int
-        get() = 0 //TODO: Clarify?
-}
-
-class LazyContentBlock(private val fillChildren: () -> List<ContentNode>) : ContentBlock() {
-    private var computed = false
-    override val children: ArrayList<ContentNode>
-        get() {
-            if (!computed) {
-                computed = true
-                children.addAll(fillChildren())
-            }
-            return super.children
-        }
-
-    override fun equals(other: Any?): Boolean {
-        return other is LazyContentBlock && other.fillChildren == fillChildren && super.equals(other)
+    private fun append(text: String) {
+        currentText += text
+    }
+    private fun wrap(prefix: String, suffix: String, body: ()->Unit) {
+        append(prefix)
+        body()
+        append(suffix)
     }
 
-    override fun hashCode(): Int {
-        return super.hashCode() + 31 * fillChildren.hashCode()
+    private fun joinChildren(block: ContentBlock) {
+        block.children.forEach { extractContentInternal(it, topLevel = false) }
     }
+
 }
-
-class ContentBlockSampleCode(language: String = "kotlin", val importsBlock: ContentBlockCode = ContentBlockCode(language)) : ContentBlockCode(language)
-
-data class ContentBookmark(val name: String): ContentBlock()
-data class ContentLocalLink(val href: String) : ContentBlock()
-
- */

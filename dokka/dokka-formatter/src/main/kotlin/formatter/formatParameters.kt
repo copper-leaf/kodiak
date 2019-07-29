@@ -15,7 +15,7 @@ val DocumentationNode.parameters: List<KotlinParameter>
                     it.simpleName,
                     it.qualifiedName,
                     emptyList(),
-                    this.getComment(it, "Parameters", it.simpleName),
+                    it.getComment("Parameters", it.simpleName),
                     it.simpleType,
                     it.qualifiedType,
                     it.asType().toTypeSignature(),

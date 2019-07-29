@@ -1,6 +1,5 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
@@ -130,8 +129,6 @@ fun String.parseCommentToValues(): GroovyCommentData {
 
         if(!(href.startsWith("http://") || href.startsWith("https://"))) {
             // internal link, add it as a TYPE_NAME commentComponent
-
-            Clog.v("Appending current text: currentText={}", originalCommentText.substring(currentIndex, match.range.first))
             commentComponents.add(
                 CommentComponent(
                     TEXT,
@@ -141,8 +138,6 @@ fun String.parseCommentToValues(): GroovyCommentData {
             )
 
             val linkedId = href.replace("../", "").replace(".html", "").replace("/", ".")
-
-            Clog.v("also appending link component: text={}, title={}, linkedId={}", text, title, linkedId)
             commentComponents.add(
                 CommentComponent(
                     TYPE_NAME,
@@ -155,7 +150,6 @@ fun String.parseCommentToValues(): GroovyCommentData {
         currentIndex = match.range.last + 1
     }
 
-    Clog.v("Appending final text: currentText={}", originalCommentText.substring(currentIndex))
     commentComponents.add(
         CommentComponent(
             TEXT,

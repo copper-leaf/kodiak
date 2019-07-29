@@ -73,9 +73,7 @@ fun CommentComponent.expandUnparsedInlineTags(): List<CommentComponent> {
 
         var lastIndex = 0
         for (match in matches) {
-            val (wholeMatch, tagType, tagValue) = match.groupValues
-            println("inline tag: tagType=$tagType, tagValue=$tagValue")
-
+            val (_, tagType, tagValue) = match.groupValues
             expanded += CommentComponent(
                 TEXT,
                 this.text.substring(lastIndex, match.range.first),

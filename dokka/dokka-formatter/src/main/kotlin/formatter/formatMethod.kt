@@ -72,7 +72,7 @@ val DocumentationNode.returnType: KotlinReturnType
             it.simpleName,
             it.qualifiedName,
             emptyList(),
-            this.getComment(it, "Return", null),
+            it.getComment("Return", null),
             it.simpleType,
             it.qualifiedType,
             it.asType().toTypeSignature()
@@ -90,7 +90,7 @@ val DocumentationNode.receiverType: KotlinReceiver?
                 it.simpleName,
                 it.qualifiedName,
                 emptyList(),
-                this.getComment(it, "Receiver", null),
+                it.getComment("Receiver", null),
                 it.simpleType,
                 it.qualifiedType,
                 it.asType().toTypeSignature()
