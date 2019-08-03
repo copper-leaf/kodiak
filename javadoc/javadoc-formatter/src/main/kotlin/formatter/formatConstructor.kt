@@ -8,7 +8,7 @@ import com.sun.javadoc.ConstructorDoc
 
 fun ConstructorDoc.toConstructor(): JavaConstructor {
     val modifiers = listOf(this.modifiers())
-    val parameters = formatParameters(this.parameters(), this.paramTags())
+    val parameters = formatParameters(this.parameters(), this.paramTags(), this.isVarArgs)
     return JavaConstructor(
         this,
         this.name(),

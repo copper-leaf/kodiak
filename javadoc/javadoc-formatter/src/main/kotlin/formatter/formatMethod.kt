@@ -1,16 +1,18 @@
 package com.copperleaf.kodiak.java.formatter
 
+import com.caseyjbrooks.clog.Clog
+import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.java.models.JavaMethod
 import com.copperleaf.kodiak.java.models.JavaParameter
 import com.copperleaf.kodiak.java.models.JavaReturnType
-import com.copperleaf.kodiak.common.CommentComponent
 import com.sun.javadoc.MethodDoc
 import com.sun.javadoc.Tag
 import com.sun.javadoc.Type
 
 fun MethodDoc.toMethod(): JavaMethod {
+    Clog.v("Formatting method: {}", this.qualifiedName())
     val modifiers = listOf(this.modifiers())
-    val parameters = formatParameters(this.parameters(), this.paramTags())
+    val parameters = formatParameters(this.parameters(), this.paramTags(), this.isVarArgs)
     val returnType = this.returnType().toReturnType(this.tags().find { it.name() == "@return" })
     return JavaMethod(
         this,

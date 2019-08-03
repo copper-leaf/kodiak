@@ -1,5 +1,6 @@
 package com.copperleaf.kodiak.java.formatter
 
+import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
@@ -9,13 +10,22 @@ import com.sun.javadoc.Parameter
 import com.sun.javadoc.Type
 import com.sun.javadoc.TypeVariable
 
-fun formatParameters(params: Array<Parameter>, tags: Array<ParamTag>): List<JavaParameter> {
+fun formatParameters(
+    params: Array<Parameter>,
+    tags: Array<ParamTag>,
+    lastParamIsVarArgs: Boolean
+): List<JavaParameter> {
+    val paramWithVararg = if(lastParamIsVarArgs) params.lastOrNull { it.type().dimension().isNotBlank() } else null
+
     return params.map { param ->
-        param.toParameter(tags.find { tag -> tag.parameterName() == param.name() })
+        param.toParameter(
+            tags.find { tag -> tag.parameterName() == param.name() },
+            paramWithVararg != null && param === paramWithVararg
+        )
     }
 }
 
-fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
+fun Parameter.toParameter(tag: ParamTag?, isVarArg: Boolean): JavaParameter {
     return JavaParameter(
         this,
         this.name(),
@@ -24,7 +34,7 @@ fun Parameter.toParameter(tag: ParamTag?): JavaParameter {
         tag.getComment(this.name()),
         this.type().simpleTypeName(),
         this.type().qualifiedTypeName(),
-        this.parameterSignature()
+        this.parameterSignature(isVarArg)
     )
 }
 
@@ -88,10 +98,20 @@ fun Type.toTypeSignature(): List<CommentComponent> {
     return list
 }
 
-fun Parameter.parameterSignature(): List<CommentComponent> {
+fun Parameter.parameterSignature(isVarArg: Boolean): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
     list.addAll(this.type().toTypeSignature())
+
+    val parameterDimension = this.type().dimension()
+    if (parameterDimension.isNotBlank()) {
+        if (isVarArg) {
+            list.add(CommentComponent(TEXT, parameterDimension.removeSuffix("[]") + "...", ""))
+        } else {
+            list.add(CommentComponent(TEXT, parameterDimension, ""))
+        }
+    }
+
     list.add(
         CommentComponent(
             TEXT,
@@ -99,6 +119,7 @@ fun Parameter.parameterSignature(): List<CommentComponent> {
             ""
         )
     )
+
 
     return list
 }

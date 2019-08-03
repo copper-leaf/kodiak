@@ -1,7 +1,5 @@
 package com.copperleaf.kodiak;
 
-import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaClass2;
-
 /**
  * Generators are what create the output pages within Orchid. Generators are run after all Options have been processed
  * as part of a OrchidTask. When a OrchidTask is chosen that builds the output site, it happens in two phases: the **indexing
@@ -14,7 +12,7 @@ import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaClass2;
  *
  * * 'name' - the display name of the page
  * * 'url' - the url of the target page. This should be absolute using the set baseUrl OrchidOption, which is done automatically
- * by OrchidReference {@link String} is how to link to {@link JavaClass2}.
+ * by OrchidReference {@link String} is how to link to {@link JavaClass}.
  *
  * This JSONElement is then placed into the root JSONObject under the key specified by `getKey()`. At generation time,
  * this index will be used to create deep-links throughout the site, typically through the page navigation or from
@@ -33,7 +31,6 @@ import com.copperleaf.kodiak.json.test.java.camelCasePackage.JavaClass2;
  * layouts, which should typically be 'templates/layouts/index.peb'.
  *
  * @since v1.0.0
- * @orchidApi extensible
  */
 public class JavaMarkdown {
 

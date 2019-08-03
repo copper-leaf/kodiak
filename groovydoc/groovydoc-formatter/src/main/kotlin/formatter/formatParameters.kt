@@ -5,9 +5,13 @@ import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
+import org.codehaus.groovy.tools.groovydoc.SimpleGroovyParameter
 import com.copperleaf.kodiak.groovy.models.GroovyParameter as GroovyParameterDoc
 
-fun formatParameters(params: Array<GroovyParameter>, tags: List<GroovyTag>): List<GroovyParameterDoc> {
+fun formatParameters(
+    params: Array<GroovyParameter>,
+    tags: List<GroovyTag>
+): List<GroovyParameterDoc> {
     return params.map { param ->
         param.toParameter(tags.find { tag -> tag.param() == param.name() })
     }
@@ -55,6 +59,12 @@ fun GroovyParameter.parameterSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
     list.addAll(this.realType().toTypeSignature())
+
+    val dimension = this.dimension()
+    if(dimension.isNotBlank()) {
+        list.add(CommentComponent(CommentComponent.TEXT, dimension, ""))
+    }
+
     list.add(
         CommentComponent(
             CommentComponent.TEXT,
@@ -64,4 +74,32 @@ fun GroovyParameter.parameterSignature(): List<CommentComponent> {
     )
 
     return list
+}
+
+private fun GroovyParameter.dimension() : String {
+    val thisTypeName: String
+    if(this is SimpleGroovyParameter) {
+        val currentType = this.type()
+        this.setType(null)
+        thisTypeName = this.typeName()
+        this.setType(currentType)
+    }
+    else {
+        thisTypeName = ""
+    }
+
+    if(thisTypeName.contains("[]")) {
+        val trimmed = thisTypeName.replaceBefore('[', "")
+
+        if(this is SimpleGroovyParameter && this.vararg()) {
+            val vararged = trimmed.replaceAfterLast("[]", "...")
+            return vararged
+        }
+        else {
+            return trimmed
+        }
+    }
+    else {
+        return ""
+    }
 }

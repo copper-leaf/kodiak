@@ -25,4 +25,8 @@ constructor(s1: String) {
     fun doThing(s1: String): String {
         return ""
     }
+
+    fun methodWithVarargs(vararg strings: String): String {
+        return ""
+    }
 }

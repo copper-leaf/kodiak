@@ -11,3 +11,6 @@ tasks.assemble.dependsOn project(':javadoc:javadoc-formatter').tasks.assemble
 processResources {
     from "${project(':javadoc:javadoc-formatter').buildDir}/libs/javadoc-formatter-all.zip"
 }
+
+tasks.javadoc.source = file("$projectDir/src/example/java")
+tasks.javadoc.destinationDir = file("$buildDir/javadoc/example")

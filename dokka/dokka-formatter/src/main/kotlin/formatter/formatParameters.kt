@@ -14,23 +14,31 @@ val DocumentationNode.parameters: List<KotlinParameter>
                     it,
                     it.simpleName,
                     it.qualifiedName,
-                    emptyList(),
+                    it.modifiers,
                     it.getComment("Parameters", it.simpleName),
                     it.simpleType,
                     it.qualifiedType,
-                    it.asType().toTypeSignature(),
+                    it.parameterSignature(it.modifiers),
                     it.detailOrNull(NodeKind.Value)?.name
                 )
             }
     }
 
+fun DocumentationNode.parameterSignature(
+    modifiers: List<String>
+): List<CommentComponent> {
+    return listOf(
+        *modifiers.toModifierListSignature().toTypedArray(),
+        CommentComponent("name", this.name),
+        CommentComponent("punctuation", ": "),
+        *this.asType().toTypeSignature().toTypedArray()
+    )
+}
+
 fun List<KotlinParameter>.toParameterListSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
     list.add(CommentComponent("punctuation", "("))
     this.forEachIndexed { index, parameter ->
-        list.add(CommentComponent("name", parameter.name))
-        list.add(CommentComponent("punctuation", ": "))
-
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
