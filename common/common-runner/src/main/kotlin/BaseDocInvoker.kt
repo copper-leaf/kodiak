@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption
 import java.util.concurrent.Executors
 
 abstract class BaseDocInvoker<T : ModuleDoc>(
-    private val cacheDir: Path
+    protected val cacheDir: Path
 ) : DocInvoker<T> {
 
     protected abstract val formatterJarName: String

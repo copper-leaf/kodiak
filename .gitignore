@@ -25,10 +25,12 @@ proguard/
 
 # Intellij
 *.iml
-.idea/workspace.xml
+.idea/
 
 # Keystore files
 *.jks
 
 # Google Analytics
 /**/templates/meta.*
+
+.DS_Store

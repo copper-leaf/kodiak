@@ -61,3 +61,8 @@ ext {
 
     license = rootProject.ext.ossLicenses['BSD']
 }
+
+wrapper {
+    gradleVersion = Versions.gradleLatestVersion
+    distributionType = Wrapper.DistributionType.ALL
+}

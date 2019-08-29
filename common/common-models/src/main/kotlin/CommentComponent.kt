@@ -19,5 +19,7 @@ data class CommentComponent(
     companion object {
         const val TEXT = "text"
         const val TYPE_NAME = "typeName"
+        const val LINK = "link"
+        const val PUNCTUATION = "punctuation"
     }
 }

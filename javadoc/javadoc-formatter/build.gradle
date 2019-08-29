@@ -5,5 +5,8 @@ dependencies {
     compile project(":common:common-formatter")
     compile project(':javadoc:javadoc-models')
 
-    shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+    def tj = org.gradle.internal.jvm.Jvm.current().toolsJar
+    if(tj != null) {
+        shadow files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+    }
 }
