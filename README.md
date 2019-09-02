@@ -111,13 +111,15 @@ complete functionality for that language's formatter.
 Test source files for each language should go in the appropriate `-formatter` `test/` sourceroot. 
 
 - `:javadoc:javadoc-runner` tests sources from:
-    - `javadoc/javadoc-formatter/test/java`
+    - `javadoc/javadoc-formatter/src/example/java`
 - `:dokka:dokka-runner` tests sources from:
-    - `dokka/dokka-formatter/test/java`
-    - `dokka/dokka-formatter/test/kotlin`
+    - `javadoc/javadoc-formatter/src/example/java`
+    - `dokka/dokka-formatter/src/example/kotlin`
 - `:groovydoc:groovydoc-runner` tests sources from:
-    - `groovydoc/groovydoc-formatter/test/java`
-    - `groovydoc/groovydoc-formatter/test/groovy`
+    - `javadoc/javadoc-formatter/src/example/java`
+    - `groovydoc/groovydoc-formatter/src/example/groovy`
+- `:swiftdoc:swiftdoc-runner` tests sources from:
+    - `swiftdoc/swiftdoc-formatter/src/example/swift`
 
 To build and serve docs locally:
 

@@ -13,7 +13,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile 'com.eden:groovydoc-runner:{latest version}'
+    compile 'com.eden.kodiak:groovydoc-runner:{latest version}'
 }
 ```
 

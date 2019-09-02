@@ -1,0 +1,7 @@
+apply from: "${rootProject.rootDir}/gradle/groups/formatters.gradle"
+apply from: "${rootProject.rootDir}/gradle/actions/shadow.gradle"
+
+dependencies {
+    compile project(":common:common-formatter")
+    compile project(':swiftdoc:swiftdoc-models')
+}

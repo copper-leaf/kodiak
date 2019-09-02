@@ -13,7 +13,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile 'com.eden:dokka-runner:{latest version}'
+    compile 'com.eden.kodiak:dokka-runner:{latest version}'
 }
 ```
 

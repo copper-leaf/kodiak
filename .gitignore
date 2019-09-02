@@ -34,3 +34,5 @@ proguard/
 /**/templates/meta.*
 
 .DS_Store
+
+!swiftdoc/swiftdoc-formatter/src/main/resources/bin

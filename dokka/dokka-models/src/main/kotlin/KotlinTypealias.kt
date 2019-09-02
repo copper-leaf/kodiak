@@ -21,5 +21,5 @@ data class KotlinTypealias(
     override val signature: List<CommentComponent>
 ) : DocElement {
 
-    override val kind: String = "enumConstant"
+    override val kind: String = "typealias"
 }

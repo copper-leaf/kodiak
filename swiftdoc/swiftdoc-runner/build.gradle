@@ -1,0 +1,13 @@
+apply from: "${rootProject.rootDir}/gradle/groups/runners.gradle"
+
+dependencies {
+    compile project(":common:common-runner")
+    compile project(':swiftdoc:swiftdoc-models')
+}
+
+// wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
+// in this project
+tasks.assemble.dependsOn project(':swiftdoc:swiftdoc-formatter').tasks.assemble
+processResources {
+    from "${project(':swiftdoc:swiftdoc-formatter').buildDir}/libs/swiftdoc-formatter-all.zip"
+}

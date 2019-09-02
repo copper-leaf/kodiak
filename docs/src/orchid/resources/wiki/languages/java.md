@@ -13,7 +13,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile 'com.eden:javadoc-runner:{latest version}'
+    compile 'com.eden.kodiak:javadoc-runner:{latest version}'
 }
 ```
 
