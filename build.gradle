@@ -17,7 +17,7 @@ buildscript {
 apply plugin: "de.fayard.buildSrcVersions"
 
 group 'com.eden.kodiak'
-version '0.3.3'
+version '0.3.4'
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------

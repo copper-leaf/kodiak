@@ -1,6 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.models.SwiftTypealias
 
@@ -18,17 +21,17 @@ fun SourceKittenSubstructure.toTypealiasDoc(structure: SourceKittenSubstructure)
 fun SourceKittenSubstructure.typealiasSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent(CommentComponent.TEXT, this.kind.kindName))
-    list.add(CommentComponent(CommentComponent.TEXT, " ${this.name}"))
+    list.add(CommentComponent(TEXT, this.kind.kindName))
+    list.add(CommentComponent(TYPE_NAME, " ${this.name}", this.name))
 
     if(this.inheritedtypes.isNotEmpty()) {
-        list.add(CommentComponent(CommentComponent.PUNCTUATION, ":"))
+        list.add(CommentComponent(PUNCTUATION, ":"))
 
         this.inheritedtypes.forEachIndexed { index, type ->
-            list.add(CommentComponent(CommentComponent.TEXT, " ${type.name}", type.name))
+            list.add(CommentComponent(TYPE_NAME, " ${type.name}", type.name))
 
             if (index < this.inheritedtypes.size - 1) {
-                list.add(CommentComponent(CommentComponent.PUNCTUATION, ", "))
+                list.add(CommentComponent(PUNCTUATION, ", "))
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
@@ -62,12 +63,12 @@ fun GroovyParameter.parameterSignature(): List<CommentComponent> {
 
     val dimension = this.dimension()
     if(dimension.isNotBlank()) {
-        list.add(CommentComponent(CommentComponent.TEXT, dimension, ""))
+        list.add(CommentComponent(TEXT, dimension, ""))
     }
 
     list.add(
         CommentComponent(
-            CommentComponent.TEXT,
+            TEXT,
             " ${this.name()}",
             ""
         )

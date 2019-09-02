@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.kotlin.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -36,6 +37,6 @@ fun DocumentationNode.toPackageDoc(): KotlinPackage {
 fun DocumentationNode.packageSignature(): List<CommentComponent> {
     return listOf(
         CommentComponent("keyword", "package "),
-        CommentComponent(CommentComponent.TYPE_NAME, this.simpleName, this.qualifiedName)
+        CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName)
     )
 }

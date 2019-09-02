@@ -3,6 +3,7 @@ package com.copperleaf.kodiak.swift.formatter
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
 import com.copperleaf.kodiak.swift.models.SwiftMethod
@@ -51,7 +52,7 @@ fun SourceKittenSubstructure.toReturnType(): SwiftReturnType {
 fun SourceKittenSubstructure.returnValueSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent(TEXT, " ${this.typenameRawValue}", this.typename))
+    list.add(CommentComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
 
     return list
 }

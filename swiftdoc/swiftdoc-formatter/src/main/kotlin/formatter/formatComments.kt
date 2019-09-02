@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.swift.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
@@ -27,7 +28,7 @@ fun SourceKittenSubstructure.getComment(): DocComment {
 }
 
 fun String.findCommentText(): List<CommentComponent> {
-    return listOf(CommentComponent(CommentComponent.TEXT, parseCommentToValues().commentText))
+    return listOf(CommentComponent(TEXT, parseCommentToValues().commentText))
 }
 
 fun String.findCommentTags(): Map<String, CommentTag> {

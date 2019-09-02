@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.common
 
 import com.caseyjbrooks.clog.Clog
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.reflect.KProperty
@@ -47,13 +48,13 @@ class AutoDocumentTest {
             override val modifiers = emptyList<String>()
             override val comment: DocComment
                 get() = DocComment(
-                    components = listOf(CommentComponent(CommentComponent.TEXT, commentText)),
+                    components = listOf(CommentComponent(TEXT, commentText)),
                     tags =
                     commentTags.mapValues {
                         CommentTag(
                             value = listOf(
                                 CommentComponent(
-                                    CommentComponent.TEXT,
+                                    TEXT,
                                     it.value
                                 )
                             )
@@ -78,8 +79,8 @@ class AutoDocumentTest {
             id,
             modifiers,
             DocComment(
-                listOf(CommentComponent(CommentComponent.TEXT, commentText)),
-                commentTags.mapValues { CommentTag(value = listOf(CommentComponent(CommentComponent.TEXT, it.value))) }
+                listOf(CommentComponent(TEXT, commentText)),
+                commentTags.mapValues { CommentTag(value = listOf(CommentComponent(TEXT, it.value))) }
             )
         )
     }

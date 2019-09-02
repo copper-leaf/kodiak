@@ -1,6 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenFile
@@ -15,7 +18,7 @@ import java.io.File
 fun SourceKittenFile.toSourceFile(sourceFileStructures: Map<Class<DocElement>, List<DocElement>>): SwiftSourceFile {
     return SwiftSourceFile(
         this,
-        "${File(sourceFile).parentFile?.path ?: ""}/${File(sourceFile).nameWithoutExtension}".trim('/'),
+        sourceFile,
         "${File(sourceFile).parentFile?.path ?: ""}/${File(sourceFile).nameWithoutExtension}".trim('/'),
         emptyList(),
         DocComment(
@@ -34,9 +37,9 @@ fun SourceKittenFile.toSourceFile(sourceFileStructures: Map<Class<DocElement>, L
 fun SourceKittenFile.sourceFileSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent(CommentComponent.TEXT, "Source File"))
-    list.add(CommentComponent(CommentComponent.PUNCTUATION, " :"))
-    list.add(CommentComponent(CommentComponent.TEXT, " $sourceFile"))
+    list.add(CommentComponent(TEXT, "Source File"))
+    list.add(CommentComponent(PUNCTUATION, " :"))
+    list.add(CommentComponent(TYPE_NAME, " $sourceFile", sourceFile))
 
     return list
 }

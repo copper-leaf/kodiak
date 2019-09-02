@@ -70,11 +70,11 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         for (section in node.owner!!.content.sections) {
             if (section.tag == sectionName && section.subjectName == subjectName) {
                 extractContentInternal(section.children)
-                components.add(CommentComponent(CommentComponent.TEXT, currentText))
+                components.add(CommentComponent(TEXT, currentText))
                 return
             }
         }
-        components.add(CommentComponent(CommentComponent.TEXT, ""))
+        components.add(CommentComponent(TEXT, ""))
     }
 
     fun extractContent() {
@@ -82,7 +82,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         used = true
 
         this.extractContentInternal(node.content.children)
-        components.add(CommentComponent(CommentComponent.TEXT, currentText))
+        components.add(CommentComponent(TEXT, currentText))
     }
 
     private fun extractContentInternal(content: List<ContentNode>) {
