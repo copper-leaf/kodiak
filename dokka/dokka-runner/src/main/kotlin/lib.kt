@@ -5,6 +5,7 @@ import com.copperleaf.kodiak.common.DocInvokerDescriptor
 import com.copperleaf.kodiak.common.modules.ModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.common.version
 import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
@@ -17,7 +18,7 @@ class KotlindocInvokerImpl(
     private val startMemory: String = "256m",
     private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<KotlinModuleDoc>(cacheDir) {
-    override val formatterJarName = "dokka-formatter-all"
+    override val formatterJarName = "dokka-formatter-$version-all"
 
     override fun describe(): DocInvokerDescriptor {
         return DocInvokerDescriptor(

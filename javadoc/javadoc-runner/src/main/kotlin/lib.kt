@@ -1,13 +1,14 @@
 package com.copperleaf.kodiak.java
 
-import com.copperleaf.kodiak.java.models.JavaClass
-import com.copperleaf.kodiak.java.models.JavaPackage
-import com.copperleaf.kodiak.java.models.JavaRootDoc
 import com.copperleaf.kodiak.common.BaseDocInvoker
 import com.copperleaf.kodiak.common.DocInvokerDescriptor
 import com.copperleaf.kodiak.common.modules.ModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.common.version
+import com.copperleaf.kodiak.java.models.JavaClass
+import com.copperleaf.kodiak.java.models.JavaPackage
+import com.copperleaf.kodiak.java.models.JavaRootDoc
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -16,7 +17,7 @@ class JavadocInvokerImpl(
         private val startMemory: String = "256m",
         private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<JavaRootDoc>(cacheDir) {
-    override val formatterJarName = "javadoc-formatter-all"
+    override val formatterJarName = "javadoc-formatter-$version-all"
 
     override fun describe(): DocInvokerDescriptor {
         return DocInvokerDescriptor(

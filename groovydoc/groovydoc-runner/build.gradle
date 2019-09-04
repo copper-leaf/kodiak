@@ -9,5 +9,5 @@ dependencies {
 // in this project
 tasks.assemble.dependsOn project(':groovydoc:groovydoc-formatter').tasks.assemble
 processResources {
-    from "${project(':groovydoc:groovydoc-formatter').buildDir}/libs/groovydoc-formatter-all.zip"
+    from "${project(':groovydoc:groovydoc-formatter').buildDir}/libs/groovydoc-formatter-$version-all.zip"
 }

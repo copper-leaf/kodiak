@@ -5,6 +5,7 @@ import com.copperleaf.kodiak.common.DocInvokerDescriptor
 import com.copperleaf.kodiak.common.modules.ModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.common.version
 import com.copperleaf.kodiak.groovy.models.GroovyClass
 import com.copperleaf.kodiak.groovy.models.GroovyModuleDoc
 import com.copperleaf.kodiak.groovy.models.GroovyPackage
@@ -17,7 +18,7 @@ class GroovydocInvokerImpl(
     private val startMemory: String = "256m",
     private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<GroovyModuleDoc>(cacheDir) {
-    override val formatterJarName = "groovydoc-formatter-all"
+    override val formatterJarName = "groovydoc-formatter-$version-all"
 
     override fun describe(): DocInvokerDescriptor {
         return DocInvokerDescriptor(

@@ -9,7 +9,7 @@ dependencies {
 // in this project
 tasks.assemble.dependsOn project(':javadoc:javadoc-formatter').tasks.assemble
 processResources {
-    from "${project(':javadoc:javadoc-formatter').buildDir}/libs/javadoc-formatter-all.zip"
+    from "${project(':javadoc:javadoc-formatter').buildDir}/libs/javadoc-formatter-$version-all.zip"
 }
 
 tasks.javadoc.source = file("$projectDir/src/example/java")

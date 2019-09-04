@@ -9,5 +9,5 @@ dependencies {
 // in this project
 tasks.assemble.dependsOn project(':swiftdoc:swiftdoc-formatter').tasks.assemble
 processResources {
-    from "${project(':swiftdoc:swiftdoc-formatter').buildDir}/libs/swiftdoc-formatter-all.zip"
+    from "${project(':swiftdoc:swiftdoc-formatter').buildDir}/libs/swiftdoc-formatter-$version-all.zip"
 }

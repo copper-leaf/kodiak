@@ -13,7 +13,7 @@ dependencies {
 // in this project
 tasks.assemble.dependsOn project(':dokka:dokka-formatter').tasks.assemble
 processResources {
-    from "${project(':dokka:dokka-formatter').buildDir}/libs/dokka-formatter-all.zip"
+    from "${project(':dokka:dokka-formatter').buildDir}/libs/dokka-formatter-$version-all.zip"
 }
 
 dokka {

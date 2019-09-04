@@ -5,6 +5,7 @@ import com.copperleaf.kodiak.common.DocInvokerDescriptor
 import com.copperleaf.kodiak.common.modules.ModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.GradleModuleLocator
 import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocator
+import com.copperleaf.kodiak.common.version
 import com.copperleaf.kodiak.swift.models.SwiftClass
 import com.copperleaf.kodiak.swift.models.SwiftModuleDoc
 import com.copperleaf.kodiak.swift.models.SwiftSourceFile
@@ -17,7 +18,7 @@ class SwiftdocInvokerImpl(
     private val startMemory: String = "256m",
     private val maxMemory: String = "1024m"
 ) : BaseDocInvoker<SwiftModuleDoc>(cacheDir) {
-    override val formatterJarName = "swiftdoc-formatter-all"
+    override val formatterJarName = "swiftdoc-formatter-$version-all"
 
     override fun describe(): DocInvokerDescriptor {
         return DocInvokerDescriptor(
