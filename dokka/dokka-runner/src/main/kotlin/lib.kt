@@ -9,7 +9,6 @@ import com.copperleaf.kodiak.common.version
 import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
-import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -33,11 +32,11 @@ class KotlindocInvokerImpl(
             "-Xms$startMemory", "-Xmx$maxMemory",
             "-classpath", formatterJar.toFile().absolutePath,   // classpath of embedded formatter jar
             "org.jetbrains.dokka.MainKt",                       // Dokka main class
+            "-pass",
             "-format", "json",                                  // JSON format (so we can pick up results afterwards)
             "-noStdlibLink",
-            "-impliedPlatforms", "JVM",
-            "-src", sourceDirs.map { it.toFile().absolutePath }
-                .joinToString(separator = File.pathSeparator),  // the sources to process
+            "-analysisPlatform", "JVM",
+            *sourceDirs.flatMap { listOf("-src", it.toFile().absolutePath) }.toTypedArray(), // the sources to process
             "-output", destinationDir.toFile().absolutePath,    // where Orchid will find them later
             *args.toTypedArray()                                // allow additional arbitrary args
         )

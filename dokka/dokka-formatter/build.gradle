@@ -5,7 +5,5 @@ dependencies {
     compile project(":common:common-formatter")
     compile project(':dokka:dokka-models')
 
-//    compile("org.jetbrains.dokka:dokka-fatjar:0.9.17")
-//    compile(Libs.dokka_fatjar)
     compile fileTree(include: ['*.jar'], dir: 'libs') // use locally-compiled version of Dokka with the `<ERROR CLASS>` bug fixed, until it's published
 }

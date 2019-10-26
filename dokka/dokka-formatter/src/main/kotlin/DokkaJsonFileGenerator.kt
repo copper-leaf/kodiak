@@ -16,8 +16,7 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.util.ArrayDeque
 
-class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) :
-    NodeLocationAwareGenerator {
+class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) : NodeLocationAwareGenerator {
 
     @set:Inject(optional = true)
     lateinit var formatService: FormatService
