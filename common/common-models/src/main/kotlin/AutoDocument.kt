@@ -15,15 +15,21 @@ interface AutoDocument {
     val nodes: List<AutoDocumentNode>
 }
 
-data class AutoDocumentNode(
-    val prop: KProperty<Any?>,
-    val getter: () -> List<DocElement>
-)
+interface AutoDocumentNode {
+    val name: String
+    val elements: List<DocElement>
+}
 
 fun fromDoc(prop: KProperty<DocElement?>): AutoDocumentNode {
-    return AutoDocumentNode(prop) { prop.getter.call()?.let { listOf(it) } ?: emptyList() }
+    return object : AutoDocumentNode {
+        override val name: String = prop.name
+        override val elements get() = prop.getter.call()?.let { listOf(it) } ?: emptyList()
+    }
 }
 
 fun fromDocList(prop: KProperty<List<DocElement>>): AutoDocumentNode {
-    return AutoDocumentNode(prop) { prop.getter.call() }
+    return object : AutoDocumentNode {
+        override val name: String = prop.name
+        override val elements get() = prop.getter.call()
+    }
 }

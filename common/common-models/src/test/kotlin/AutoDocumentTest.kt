@@ -4,7 +4,6 @@ import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import kotlin.reflect.KProperty
 
 class AutoDocumentTest {
 
@@ -28,7 +27,7 @@ class AutoDocumentTest {
     @Test
     fun testAutoDocument() {
         val underTest = TestMethodDoc(receiver, parameters, typeParameters, returnValue)
-        underTest.nodes.forEach { Clog.d("node name=${it.prop.name} with ${it.getter().size} elements") }
+        underTest.nodes.forEach { Clog.d("node name=${it.name} with ${it.elements.size} elements") }
     }
 
 // Helpers
@@ -117,13 +116,4 @@ internal data class TestTypeElement(
     override val typeName: String = name,
     override val typeId: String = id,
     override val signature: List<CommentComponent> = emptyList()
-) : ElementType {
-}
-
-fun fromDoc(prop: KProperty<DocElement?>): AutoDocumentNode {
-    return AutoDocumentNode(prop) { prop.getter.call()?.let { listOf(it) } ?: emptyList() }
-}
-
-fun fromDocList(prop: KProperty<List<DocElement>>): AutoDocumentNode {
-    return AutoDocumentNode(prop) { prop.getter.call() }
-}
+) : ElementType

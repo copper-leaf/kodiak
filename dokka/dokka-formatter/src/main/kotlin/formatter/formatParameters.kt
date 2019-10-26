@@ -79,10 +79,12 @@ fun DocumentationNode.toNonFunctionalTypeSignature(): List<CommentComponent> {
 
     list.add(CommentComponent(TYPE_NAME, this.simpleType, this.qualifiedType))
 
-    this.details(NodeKind.Type).toListSignature(
-        childMapper = { it.toTypeSignature() },
-        prefix = listOf(CommentComponent("punctuation", "<")),
-        postfix = listOf(CommentComponent("punctuation", ">"))
+    list.addAll(
+        this.details(NodeKind.Type).toListSignature(
+            childMapper = { it.toTypeSignature() },
+            prefix = listOf(CommentComponent("punctuation", "<")),
+            postfix = listOf(CommentComponent("punctuation", ">"))
+        )
     )
 
     if (this.nullable) {
