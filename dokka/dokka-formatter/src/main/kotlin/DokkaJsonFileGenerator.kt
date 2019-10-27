@@ -1,28 +1,27 @@
 package com.copperleaf.kodiak.kotlin
 
+import com.caseyjbrooks.clog.Clog
+import com.copperleaf.kodiak.common.connectAllToParents
+import com.copperleaf.kodiak.kotlin.formatter.qualifiedName
+import com.copperleaf.kodiak.kotlin.formatter.toClassDoc
+import com.copperleaf.kodiak.kotlin.formatter.toPackageDoc
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.FileLocation
-import org.jetbrains.dokka.FormatService
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.NodeLocationAwareGenerator
 import org.jetbrains.dokka.appendExtension
-import org.jetbrains.dokka.format
 import org.jetbrains.dokka.path
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStreamWriter
 import java.util.ArrayDeque
 
-class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) : NodeLocationAwareGenerator {
-
-    @set:Inject(optional = true)
-    lateinit var formatService: FormatService
+class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) :
+    NodeLocationAwareGenerator {
 
     override fun location(node: DocumentationNode): FileLocation {
-        return FileLocation(fileForNode(node, formatService.linkExtension))
+        return FileLocation(fileForNode(node, "json"))
     }
 
     private fun fileForNode(node: DocumentationNode, subdirectory: String, extension: String = ""): File {
@@ -44,24 +43,52 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
 
             when {
                 NodeKind.classLike.contains(node.kind) -> classes.add(node)
-                node.kind == NodeKind.Package          -> packages.add(node)
+                node.kind == NodeKind.Package -> packages.add(node)
             }
         }
 
-        renderNodes(classes, "Class")
-        renderNodes(packages, "Package")
+        renderClassNodes(classes)
+        renderPackageNodes(packages)
     }
 
-    private fun renderNodes(nodes: Iterable<DocumentationNode>, subdirectory: String) {
-        for ((file, items) in nodes.groupBy { fileForNode(it, subdirectory, formatService.extension) }) {
+    private fun renderClassNodes(nodes: Iterable<DocumentationNode>) {
+        nodes
+            .forEach { itemInFile ->
+                val file = fileForNode(itemInFile, "Class", "json")
+                file.parentFile?.mkdirsOrFail()
+                try {
+                    file.writeText(itemInFile.toClassDoc(true).toJson())
+                } catch (e: Throwable) {
+                    println(e)
+                }
+            }
+    }
 
+    private fun renderPackageNodes(nodes: Iterable<DocumentationNode>) {
+        connectAllToParents(
+            // create initial packages, use common functionality to connect parent-child structures
+            nodes.mapNotNull { packagedoc ->
+                Clog.i("Loading packagedoc [${packagedoc.qualifiedName}]")
+                try {
+                    packagedoc.toPackageDoc(true)
+                } catch (e: Exception) {
+                    Clog.e("Failed to create json for packagedoc [${packagedoc.qualifiedName}]: ${e.message}")
+                    null
+                }
+            },
+            {
+                it.item.copy(
+                    parent = it.parentId ?: "",
+                    subpackages = it.children.map { (it.item.node as DocumentationNode).toPackageDoc(false) }
+                )
+            },
+            { it.id }
+        ).forEach {
+            // write package files to disk
+            val file = fileForNode((it.node as DocumentationNode), "Package", "json")
             file.parentFile?.mkdirsOrFail()
             try {
-                FileOutputStream(file).use {
-                    OutputStreamWriter(it, Charsets.UTF_8).use {
-                        it.write(formatService.format(location(items.first()), items))
-                    }
-                }
+                file.writeText(it.toJson())
             } catch (e: Throwable) {
                 println(e)
             }
