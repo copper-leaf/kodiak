@@ -6,18 +6,20 @@ import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.groovy.models.GroovyPackage
 import org.codehaus.groovy.groovydoc.GroovyPackageDoc
 
-fun GroovyPackageDoc.toPackageDoc(): GroovyPackage {
+fun GroovyPackageDoc.toPackageDoc(deep: Boolean = true): GroovyPackage {
     return GroovyPackage(
         this,
         this.nameWithDots(),
         this.nameWithDots(),
+        "",
         emptyList(),
         DocComment(
             this.description().parseCommentToValues().commentText,
             emptyMap()
         ),
+        this.packageSignature(),
         this.allClasses().map { it.toClassDoc(false) },
-        this.packageSignature()
+        emptyList()
     )
 }
 

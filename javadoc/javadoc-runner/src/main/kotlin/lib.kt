@@ -8,7 +8,7 @@ import com.copperleaf.kodiak.common.modules.impl.modulelocator.MavenModuleLocato
 import com.copperleaf.kodiak.common.version
 import com.copperleaf.kodiak.java.models.JavaClass
 import com.copperleaf.kodiak.java.models.JavaPackage
-import com.copperleaf.kodiak.java.models.JavaRootDoc
+import com.copperleaf.kodiak.java.models.JavaModuleDoc
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -16,7 +16,7 @@ class JavadocInvokerImpl(
         cacheDir: Path = Files.createTempDirectory("javadoc-runner"),
         private val startMemory: String = "256m",
         private val maxMemory: String = "1024m"
-) : BaseDocInvoker<JavaRootDoc>(cacheDir) {
+) : BaseDocInvoker<JavaModuleDoc>(cacheDir) {
     override val formatterJarName = "javadoc-formatter-$version-all"
 
     override fun describe(): DocInvokerDescriptor {
@@ -46,8 +46,8 @@ class JavadocInvokerImpl(
         )
     }
 
-    override fun loadModuleDocFromDisk(destinationDir: Path): JavaRootDoc {
-        return JavaRootDoc(
+    override fun loadModuleDocFromDisk(destinationDir: Path): JavaModuleDoc {
+        return JavaModuleDoc(
             getDocsInSubdirectory(destinationDir, "Package", JavaPackage.serializer()),
             getDocsInSubdirectory(destinationDir, "Class", JavaClass.serializer())
         )

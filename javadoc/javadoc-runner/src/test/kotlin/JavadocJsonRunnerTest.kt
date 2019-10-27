@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.java
 
-import com.copperleaf.kodiak.java.models.JavaRootDoc
+import com.copperleaf.kodiak.java.models.JavaModuleDoc
 import com.copperleaf.kodiak.common.DocInvoker
 import com.eden.common.util.IOStreamUtils
 import org.junit.jupiter.api.AfterEach
@@ -17,7 +17,7 @@ class JavadocJsonRunnerTest {
 
     lateinit var cacheDir: Path
     lateinit var outputDir: Path
-    lateinit var javadocRunner: DocInvoker<JavaRootDoc>
+    lateinit var javadocRunner: DocInvoker<JavaModuleDoc>
 
     private val useTempDirs = false
 

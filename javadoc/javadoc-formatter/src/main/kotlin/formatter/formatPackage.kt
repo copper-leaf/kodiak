@@ -5,15 +5,17 @@ import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaPackage
 import com.sun.javadoc.PackageDoc
 
-fun PackageDoc.toPackageDoc(): JavaPackage {
+fun PackageDoc.toPackageDoc(deep: Boolean): JavaPackage {
     return JavaPackage(
         this,
         this.name(),
         this.name(),
+        "", // this will be populated later via .copy()
         emptyList(),
         this.getComment(),
-        this.allClasses().map { it.toClassDoc(false) },
-        this.packageSignature()
+        this.packageSignature(),
+        if(deep) this.allClasses().map { it.toClassDoc(false) } else emptyList(),
+        emptyList() // this will be populated later via .copy()
     )
 }
 

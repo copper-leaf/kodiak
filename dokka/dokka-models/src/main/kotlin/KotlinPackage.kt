@@ -21,10 +21,12 @@ data class KotlinPackage(
 
     override val name: String,
     override val id: String,
+    val parent: String,
     override val modifiers: List<String>,
     override val comment: DocComment,
 
     val classes: List<KotlinClass>,
+    val subpackages: List<KotlinPackage>,
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
     val typealiases: List<KotlinTypealias>,
@@ -35,6 +37,7 @@ data class KotlinPackage(
     @Transient
     override val nodes = listOf(
         fromDocList(::classes),
+        fromDocList(::subpackages),
         fromDocList(::typealiases),
         fromDocList(::fields),
         fromDocList(::methods)

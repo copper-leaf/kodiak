@@ -21,17 +21,19 @@ data class JavaPackage(
 
     override val name: String,
     override val id: String,
+    val parent: String,
     override val modifiers: List<String>,
     override val comment: DocComment,
-
+    override val signature: List<CommentComponent>,
     val classes: List<JavaClass>,
-    override val signature: List<CommentComponent>
+    val subpackages: List<JavaPackage>
 ) : DocElement, AutoDocument {
     override val kind = "Package"
 
     @Transient
     override val nodes = listOf(
-        fromDocList(::classes)
+        fromDocList(::classes),
+        fromDocList(::subpackages)
     )
 
     @UseExperimental(UnstableDefault::class)

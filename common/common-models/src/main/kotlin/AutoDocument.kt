@@ -27,9 +27,9 @@ fun fromDoc(prop: KProperty<DocElement?>): AutoDocumentNode {
     }
 }
 
-fun fromDocList(prop: KProperty<List<DocElement>>): AutoDocumentNode {
+fun fromDocList(prop: KProperty<List<DocElement>?>): AutoDocumentNode {
     return object : AutoDocumentNode {
         override val name: String = prop.name
-        override val elements get() = prop.getter.call()
+        override val elements get() = prop.getter.call() ?: emptyList()
     }
 }

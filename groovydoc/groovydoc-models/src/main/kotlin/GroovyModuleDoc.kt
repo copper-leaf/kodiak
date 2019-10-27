@@ -1,5 +1,6 @@
 package com.copperleaf.kodiak.groovy.models
 
+import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.ModuleDoc
 import com.copperleaf.kodiak.common.fromDocList
 
@@ -15,4 +16,8 @@ class GroovyModuleDoc(
         fromDocList(::packages),
         fromDocList(::classes)
     )
+
+    override fun roots(): List<DocElement> {
+        return packages.filter { it.parent.isBlank() }
+    }
 }

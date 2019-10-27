@@ -1,5 +1,6 @@
 package com.copperleaf.kodiak.swift.models
 
+import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.ModuleDoc
 import com.copperleaf.kodiak.common.fromDocList
 
@@ -16,4 +17,7 @@ class SwiftModuleDoc(
         fromDocList(::classes)
     )
 
+    override fun roots(): List<DocElement> {
+        return emptyList()
+    }
 }

@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.java
 
 import com.caseyjbrooks.clog.Clog
+import com.copperleaf.kodiak.common.connectAllToParents
 import com.copperleaf.kodiak.java.formatter.toClassDoc
 import com.copperleaf.kodiak.java.formatter.toPackageDoc
 import com.sun.javadoc.ClassDoc
@@ -9,7 +10,6 @@ import com.sun.javadoc.PackageDoc
 import com.sun.javadoc.RootDoc
 import com.sun.tools.doclets.standard.Standard
 import java.io.File
-
 
 class JavadocJsonDoclet {
     companion object {
@@ -48,15 +48,15 @@ class JavadocJsonDoclet {
                 destinationDir = destinationDir.dropLast(1)
             }
 
-            val classes = HashSet<ClassDoc>()
-            val packages = HashSet<PackageDoc>()
+            val classes = mutableSetOf<ClassDoc>()
+            val packages = mutableSetOf<PackageDoc>()
 
             for (classDoc in rootDoc.classes()) {
                 classes.add(classDoc)
                 packages.add(classDoc.containingPackage())
             }
 
-            for (classdoc in classes) {
+            classes.forEach { classdoc ->
                 Clog.i("Loading classdoc [${classdoc.name()}]")
                 val file = File("$destinationDir/Class/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
                 if (!file.parentFile.exists()) {
@@ -70,18 +70,34 @@ class JavadocJsonDoclet {
                 }
             }
 
-            for (packagedoc in packages) {
-                Clog.i("Loading packagedoc [${packagedoc.name()}]")
-                val file = File("$destinationDir/Package/${packagedoc.name().replace(".", "/")}/index.json")
+            // create initial packages, use common functionality to connect parent-child structures
+            val connectedPackages = connectAllToParents(
+                packages.mapNotNull { packagedoc ->
+                    Clog.i("Loading packagedoc [${packagedoc.name()}]")
+                    try {
+                        packagedoc.toPackageDoc(true)
+                    }
+                    catch (e: Exception) {
+                        Clog.e("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
+                        null
+                    }
+                },
+                {
+                    it.item.copy(
+                        parent = it.parentId ?: "",
+                        subpackages = it.children.map { (it.item.node as PackageDoc).toPackageDoc(false) }
+                    )
+                },
+                { it.id }
+            )
+
+            // write package files to disk
+            connectedPackages.forEach {
+                val file = File("$destinationDir/Package/${it.id.replace(".", "/")}/index.json")
                 if (!file.parentFile.exists()) {
                     file.parentFile.mkdirs()
                 }
-                try {
-                    file.writeText(packagedoc.toPackageDoc().toJson())
-                }
-                catch (e: Exception) {
-                    Clog.e("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
-                }
+                file.writeText(it.toJson())
             }
 
             return true
