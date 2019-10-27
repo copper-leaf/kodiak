@@ -6,7 +6,7 @@ import com.copperleaf.kodiak.groovy.models.GroovyClass
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
 
-fun GroovyClassDoc.toClassDoc(deep: Boolean = true): GroovyClass {
+fun GroovyClassDoc.toClassDoc(deep: Boolean): GroovyClass {
     val modifiers = listOf(this.modifiers()).filterNotNull()
 
     return GroovyClass(

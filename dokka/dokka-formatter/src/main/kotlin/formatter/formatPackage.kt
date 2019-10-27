@@ -8,7 +8,7 @@ import org.jetbrains.dokka.NodeKind
 
 val DocumentationNode.packageLike: Boolean get() = this.kind == NodeKind.Package
 
-fun DocumentationNode.toPackageDoc(deep: Boolean = true): KotlinPackage {
+fun DocumentationNode.toPackageDoc(deep: Boolean): KotlinPackage {
     assert(this.kind == NodeKind.Package) { "node must be a Package" }
 
     return KotlinPackage(

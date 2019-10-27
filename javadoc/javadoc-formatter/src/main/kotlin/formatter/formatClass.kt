@@ -5,7 +5,7 @@ import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaClass
 import com.sun.javadoc.ClassDoc
 
-fun ClassDoc.toClassDoc(deep: Boolean = false): JavaClass {
+fun ClassDoc.toClassDoc(deep: Boolean): JavaClass {
     val modifiers = listOf(this.modifiers())
 
     return JavaClass(

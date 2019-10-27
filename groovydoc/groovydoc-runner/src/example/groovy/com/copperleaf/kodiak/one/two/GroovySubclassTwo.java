@@ -1,5 +1,5 @@
 package com.copperleaf.kodiak.one.two;
 
-public class SubclassTwo {
+public class GroovySubclassTwo {
 
 }

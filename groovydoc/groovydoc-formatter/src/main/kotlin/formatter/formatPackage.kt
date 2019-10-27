@@ -6,7 +6,7 @@ import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.groovy.models.GroovyPackage
 import org.codehaus.groovy.groovydoc.GroovyPackageDoc
 
-fun GroovyPackageDoc.toPackageDoc(deep: Boolean = true): GroovyPackage {
+fun GroovyPackageDoc.toPackageDoc(deep: Boolean): GroovyPackage {
     return GroovyPackage(
         this,
         this.nameWithDots(),

@@ -9,7 +9,7 @@ import org.jetbrains.dokka.path
 
 val DocumentationNode.classLike: Boolean get() = NodeKind.classLike.contains(this.kind)
 
-fun DocumentationNode.toClassDoc(deep: Boolean = false): KotlinClass {
+fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
     assert(this.classLike) { "node must be a Class-like" }
 
     val modifiers = this.modifiers

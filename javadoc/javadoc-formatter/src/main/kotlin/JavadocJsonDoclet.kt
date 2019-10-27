@@ -43,8 +43,7 @@ class JavadocJsonDoclet {
             var destinationDir = rootDoc.options().find { it.firstOrNull() == "-d" }!![1]
             if (destinationDir.endsWith("/")) {
                 destinationDir = destinationDir.dropLast(1)
-            }
-            else if (destinationDir.endsWith("\\")) {
+            } else if (destinationDir.endsWith("\\")) {
                 destinationDir = destinationDir.dropLast(1)
             }
 
@@ -64,20 +63,18 @@ class JavadocJsonDoclet {
                 }
                 try {
                     file.writeText(classdoc.toClassDoc(true).toJson())
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Clog.e("Failed to create json for classdoc [${classdoc.name()}]: ${e.message}")
                 }
             }
 
-            // create initial packages, use common functionality to connect parent-child structures
-            val connectedPackages = connectAllToParents(
+            connectAllToParents(
+                // create initial packages, use common functionality to connect parent-child structures
                 packages.mapNotNull { packagedoc ->
                     Clog.i("Loading packagedoc [${packagedoc.name()}]")
                     try {
                         packagedoc.toPackageDoc(true)
-                    }
-                    catch (e: Exception) {
+                    } catch (e: Exception) {
                         Clog.e("Failed to create json for packagedoc [${packagedoc.name()}]: ${e.message}")
                         null
                     }
@@ -89,10 +86,8 @@ class JavadocJsonDoclet {
                     )
                 },
                 { it.id }
-            )
-
-            // write package files to disk
-            connectedPackages.forEach {
+            ).forEach {
+                // write package files to disk
                 val file = File("$destinationDir/Package/${it.id.replace(".", "/")}/index.json")
                 if (!file.parentFile.exists()) {
                     file.parentFile.mkdirs()
