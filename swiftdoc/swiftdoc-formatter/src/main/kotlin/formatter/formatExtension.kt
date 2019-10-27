@@ -4,12 +4,13 @@ import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_METHOD
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_VARIABLE
 import com.copperleaf.kodiak.swift.models.SwiftExtension
 
-fun SourceKittenSubstructure.toExtensionDoc(structure: SourceKittenSubstructure): SwiftExtension {
+fun SourceKittenSubstructure.toExtensionDoc(mainArgs: MainArgs, structure: SourceKittenSubstructure): SwiftExtension {
     return SwiftExtension(
         this,
         sourceFile,
@@ -18,8 +19,8 @@ fun SourceKittenSubstructure.toExtensionDoc(structure: SourceKittenSubstructure)
         "${sourceFile}/${this.name}",
         this.getModifiers(),
         this.getComment(),
-        this.childrenOfType(STATIC_METHOD) { it.toFunctionDoc(structure) },
-        this.childrenOfType(STATIC_VARIABLE) { it.toVariableDoc(structure) },
+        this.childrenOfType(STATIC_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toFunctionDoc(structure) },
+        this.childrenOfType(STATIC_VARIABLE, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toVariableDoc(structure) },
         extensionSignature()
     )
 }

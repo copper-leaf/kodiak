@@ -1,8 +1,10 @@
 package com.copperleaf.kodiak.swift
 
 import com.caseyjbrooks.clog.Clog
+import com.copperleaf.kodiak.swift.internal.models.SwiftAccessibility
 import com.eden.orchid.api.cli.Cli
 import com.eden.orchid.api.options.annotations.Option
+import com.eden.orchid.api.options.annotations.StringDefault
 import java.io.File
 import java.nio.file.Path
 
@@ -33,6 +35,12 @@ class MainArgs {
 
     @Option
     lateinit var output: String
+
+    @JvmSuppressWildcards
+    @Option @StringDefault("OPEN", "PUBLIC")
+    lateinit var accessibility: List<String>
+
+    val visibility: List<SwiftAccessibility> get() = accessibility.map { SwiftAccessibility.valueOf(it) }
 
     val cachePath: Path by lazy {
         File(cacheDir).toPath()

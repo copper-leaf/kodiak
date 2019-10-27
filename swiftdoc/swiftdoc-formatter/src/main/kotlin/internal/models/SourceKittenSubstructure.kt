@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.swift.internal.models
 
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.swift.MainArgs
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -51,8 +52,8 @@ data class SourceKittenSubstructure(
     val nullable: Boolean
         get() = typenameRawValue.trim().endsWith('?')
 
-    fun format(structure: SourceKittenSubstructure): DocElement? {
-        return kind.format(this, structure)
+    fun format(mainArgs: MainArgs, structure: SourceKittenSubstructure): DocElement? {
+        return kind.format(mainArgs, this, structure)
     }
 
     fun findMatch(structure: SourceKittenSubstructure): SourceKittenSubstructure? {

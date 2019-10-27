@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.swift.internal.models
 
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.formatter.toClassDoc
 import com.copperleaf.kodiak.swift.formatter.toEnumCaseDoc
 import com.copperleaf.kodiak.swift.formatter.toExtensionDoc
@@ -92,21 +93,21 @@ enum class SwiftSubstructureKind(val kindName: String) {
         }
     }
 
-    fun format(substructure: SourceKittenSubstructure, structure: SourceKittenSubstructure): DocElement? {
+    fun format(mainArgs: MainArgs, substructure: SourceKittenSubstructure, structure: SourceKittenSubstructure): DocElement? {
         return when (this) {
-            CLASS                  -> substructure.toClassDoc(structure, true)
-            PROTOCOL               -> substructure.toClassDoc(structure, true)
-            ENUM                   -> substructure.toClassDoc(structure, true)
-            STRUCT                 -> substructure.toClassDoc(structure, true)
+            CLASS                  -> substructure.toClassDoc(mainArgs, structure, true)
+            PROTOCOL               -> substructure.toClassDoc(mainArgs, structure, true)
+            ENUM                   -> substructure.toClassDoc(mainArgs, structure, true)
+            STRUCT                 -> substructure.toClassDoc(mainArgs, structure, true)
 
             TYPEALIAS              -> substructure.toTypealiasDoc(structure)
             GLOBAL_VARIABLE        -> substructure.toVariableDoc(structure)
 
-            EXTENSION              -> substructure.toExtensionDoc(structure)
+            EXTENSION              -> substructure.toExtensionDoc(mainArgs, structure)
 
             TOP_LEVEL_FUNCTION     -> substructure.toFunctionDoc(structure)
 
-            ENUM_CASE              -> substructure.toEnumCaseDoc(structure)
+            ENUM_CASE              -> substructure.toEnumCaseDoc(mainArgs, structure)
 
             PARAMETER              -> substructure.toParameterDoc()
             GENERIC_TYPE_PARAMETER -> substructure.toTypeParameterDoc()

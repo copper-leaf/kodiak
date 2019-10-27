@@ -1,11 +1,16 @@
 package com.copperleaf.kodiak.swift.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
 
-fun SourceKittenSubstructure.isSuppressed(): Boolean {
-    return this.getComment().components.any { it.text.contains("^.*?- suppress".toRegex(RegexOption.MULTILINE)) }
+fun SourceKittenSubstructure.isSuppressed(mainArgs: MainArgs): Boolean {
+    return !isVisible(mainArgs) || this.getComment().components.any { it.text.contains("^.*?- suppress".toRegex(RegexOption.MULTILINE)) }
+}
+
+fun SourceKittenSubstructure.isVisible(mainArgs: MainArgs): Boolean {
+    return this.accessibility in mainArgs.visibility
 }
 
 fun SourceKittenSubstructure.getModifiers(): List<String> {

@@ -24,7 +24,7 @@ class SwiftdocRemapper(
         // create child pages for the elements contained within this source file
         val sourceFileStructures = model.substructures.map {
             val matchingStructure = it.findMatch(structure)
-            if(matchingStructure != null && !it.isSuppressed()) {
+            if(matchingStructure != null && !it.isSuppressed(mainArgs)) {
                 processSourceKittenModel(dir, sourceFileName, it to matchingStructure)
             }
             else null
@@ -58,7 +58,7 @@ class SwiftdocRemapper(
             .removeSuffix(".swift")
             .replace(".", "/")
 
-        val docModel = model.first.format(model.second)
+        val docModel = model.first.format(mainArgs, model.second)
 
         if(docModel != null && docModel is JsonableDocElement) {
             val baseDir = if(docModel is SpecializedDocElement) "${docModel.kind}/${docModel.subKind}" else docModel.kind

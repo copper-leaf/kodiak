@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.CLASS_METHOD
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.CLASS_VARIABLE
@@ -14,7 +15,7 @@ import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_VARIABLE
 import com.copperleaf.kodiak.swift.models.SwiftClass
 
-fun SourceKittenSubstructure.toClassDoc(structure: SourceKittenSubstructure, deep: Boolean = false): SwiftClass {
+fun SourceKittenSubstructure.toClassDoc(mainArgs: MainArgs, structure: SourceKittenSubstructure, deep: Boolean = false): SwiftClass {
     return SwiftClass(
         this,
         sourceFile,
@@ -23,15 +24,15 @@ fun SourceKittenSubstructure.toClassDoc(structure: SourceKittenSubstructure, dee
         "${sourceFile}/${this.name}",
         this.getModifiers(),
         this.getComment(),
-        if (deep) this.childrenOfType(INIT_METHOD, extraFilter = { !it.isSuppressed() }) { it.toInitializerDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD, extraFilter = { !it.isSuppressed() }) { it.toFunctionDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE, extraFilter = { !it.isSuppressed() }) { it.toVariableDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(INIT_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toInitializerDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toFunctionDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toVariableDoc(structure) } else emptyList(),
         classSignature()
     )
 }
 
-fun SourceKittenSubstructure.toEnumCaseDoc(structure: SourceKittenSubstructure): SwiftClass {
-    return this.toClassDoc(structure, false)
+fun SourceKittenSubstructure.toEnumCaseDoc(mainArgs: MainArgs, structure: SourceKittenSubstructure): SwiftClass {
+    return this.toClassDoc(mainArgs, structure, false)
 }
 
 fun SourceKittenSubstructure.classSignature(): List<CommentComponent> {

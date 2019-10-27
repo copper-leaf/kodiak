@@ -5,6 +5,6 @@ import UIKit
 
     - suppress
  */
-class SwiftSuppressedClass : NSObject {
+public class SwiftSuppressedClass : NSObject {
 
 }
