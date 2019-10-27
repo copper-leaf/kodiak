@@ -9,6 +9,10 @@ import com.sun.javadoc.Doc
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
 
+fun Doc.isSuppressed(): Boolean {
+    return this.tags().any { it.kind() in listOf("@suppress") }
+}
+
 fun Doc.getComment(): DocComment {
     return DocComment(
         this.inlineTags().asCommentComponents(),

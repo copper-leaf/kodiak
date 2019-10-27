@@ -18,6 +18,10 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Node
 import org.jsoup.select.NodeFilter
 
+fun GroovyDoc.isSuppressed(): Boolean {
+    return this.findCommentTags().any { it.name() in listOf("suppress") }
+}
+
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
     return this.map { CommentComponent("modifier", "$it ") }
 }

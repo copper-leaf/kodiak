@@ -16,9 +16,9 @@ fun ClassDoc.toClassDoc(deep: Boolean): JavaClass {
         this.qualifiedTypeName(),
         modifiers,
         this.getComment(),
-        if (deep) this.constructors().map { it.toConstructor() } else emptyList(),
-        if (deep) this.methods().map { it.toMethod() } else emptyList(),
-        if (deep) this.fields().map { it.toField() } else emptyList(),
+        if (deep) this.constructors().filter { !it.isSuppressed() }.map { it.toConstructor() } else emptyList(),
+        if (deep) this.methods().filter { !it.isSuppressed() }.map { it.toMethod() } else emptyList(),
+        if (deep) this.fields().filter { !it.isSuppressed() }.map { it.toField() } else emptyList(),
         this.classSignature(
             modifiers
         ),

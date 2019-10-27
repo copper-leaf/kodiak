@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.java
 
 import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.connectAllToParents
+import com.copperleaf.kodiak.java.formatter.isSuppressed
 import com.copperleaf.kodiak.java.formatter.toClassDoc
 import com.copperleaf.kodiak.java.formatter.toPackageDoc
 import com.sun.javadoc.ClassDoc
@@ -55,7 +56,7 @@ class JavadocJsonDoclet {
                 packages.add(classDoc.containingPackage())
             }
 
-            classes.forEach { classdoc ->
+            classes.filter { !it.isSuppressed() }.forEach { classdoc ->
                 Clog.i("Loading classdoc [${classdoc.name()}]")
                 val file = File("$destinationDir/Class/${classdoc.qualifiedTypeName().replace(".", "/")}.json")
                 if (!file.parentFile.exists()) {

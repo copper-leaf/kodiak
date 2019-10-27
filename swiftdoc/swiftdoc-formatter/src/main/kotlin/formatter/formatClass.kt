@@ -23,9 +23,9 @@ fun SourceKittenSubstructure.toClassDoc(structure: SourceKittenSubstructure, dee
         "${sourceFile}/${this.name}",
         this.getModifiers(),
         this.getComment(),
-        if (deep) this.childrenOfType(INIT_METHOD) { it.toInitializerDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD) { it.toFunctionDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE) { it.toVariableDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(INIT_METHOD, extraFilter = { !it.isSuppressed() }) { it.toInitializerDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD, extraFilter = { !it.isSuppressed() }) { it.toFunctionDoc(structure) } else emptyList(),
+        if (deep) this.childrenOfType(STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE, extraFilter = { !it.isSuppressed() }) { it.toVariableDoc(structure) } else emptyList(),
         classSignature()
     )
 }

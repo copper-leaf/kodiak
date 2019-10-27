@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.groovy
 
 import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.connectAllToParents
+import com.copperleaf.kodiak.groovy.formatter.isSuppressed
 import com.copperleaf.kodiak.groovy.formatter.toClassDoc
 import com.copperleaf.kodiak.groovy.formatter.toPackageDoc
 import com.copperleaf.kodiak.groovy.models.GroovyClass
@@ -62,6 +63,7 @@ class GroovyDocJsonTool(
                     else                                                                                      -> false
                 }
             }
+            .filter { !it.isSuppressed() }
             .map { it.toClassDoc(true) }
             .forEach { writeClassToOutput(output, it, destdir) }
     }

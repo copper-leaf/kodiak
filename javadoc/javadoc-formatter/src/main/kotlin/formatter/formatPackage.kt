@@ -14,7 +14,7 @@ fun PackageDoc.toPackageDoc(deep: Boolean): JavaPackage {
         emptyList(),
         this.getComment(),
         this.packageSignature(),
-        if(deep) this.allClasses().map { it.toClassDoc(false) } else emptyList(),
+        if(deep) this.allClasses().filter { !it.isSuppressed() }.map { it.toClassDoc(false) } else emptyList(),
         emptyList() // this will be populated later via .copy()
     )
 }

@@ -4,6 +4,7 @@ import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.JsonableDocElement
 import com.copperleaf.kodiak.common.SpecializedDocElement
+import com.copperleaf.kodiak.swift.formatter.isSuppressed
 import com.copperleaf.kodiak.swift.formatter.toSourceFile
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenFile
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
@@ -23,7 +24,7 @@ class SwiftdocRemapper(
         // create child pages for the elements contained within this source file
         val sourceFileStructures = model.substructures.map {
             val matchingStructure = it.findMatch(structure)
-            if(matchingStructure != null) {
+            if(matchingStructure != null && !it.isSuppressed()) {
                 processSourceKittenModel(dir, sourceFileName, it to matchingStructure)
             }
             else null
