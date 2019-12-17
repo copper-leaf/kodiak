@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
 import com.copperleaf.kodiak.swift.models.SwiftMethod
@@ -37,22 +38,27 @@ fun SourceKittenSubstructure.toFunctionDoc(structure: SourceKittenSubstructure):
 }
 
 fun SourceKittenSubstructure.toReturnType(): SwiftReturnType {
+    val typeName = this.typenameRawValue.takeIf { it.isNotBlank() } ?: "Void"
+    val typeId = this.typename.takeIf { it.isNotBlank() } ?: "Void"
     return SwiftReturnType(
         this,
         this.name,
         this.name,
-        this.getModifiers(),
-        this.getComment(),
-        this.typenameRawValue,
-        this.typename,
-        this.returnValueSignature()
+        emptyList(),
+        DocComment(
+            emptyList(),
+            emptyMap()
+        ),
+        typeName,
+        typeId,
+        this.returnValueSignature(typeName, typeId)
     )
 }
 
-fun SourceKittenSubstructure.returnValueSignature(): List<CommentComponent> {
+fun SourceKittenSubstructure.returnValueSignature(typeName: String, typeId: String): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    list.add(CommentComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
+    list.add(CommentComponent(TYPE_NAME, " $typeName", typeId))
 
     return list
 }
@@ -69,8 +75,10 @@ fun SourceKittenSubstructure.functionSignature(
     list.add(CommentComponent(TEXT, "func"))
     list.add(CommentComponent("name", " $methodName"))
     list.addAll(parameters.toParameterListSignature())
-    list.add(CommentComponent(PUNCTUATION, " -> "))
-    list.addAll(returnType.signature)
+    if(returnType.typeId != "Void") {
+        list.add(CommentComponent(PUNCTUATION, " -> "))
+        list.addAll(returnType.signature)
+    }
 
     return list
 }

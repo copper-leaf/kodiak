@@ -11,13 +11,15 @@ buildscript {
         classpath(Libs.shadow)
         classpath(Libs.gradle_bintray_plugin)
         classpath(Libs.buildsrcversions)
+        classpath("de.undercouch:gradle-download-task:4.0.2")
     }
 }
 
 apply plugin: "de.fayard.buildSrcVersions"
+apply plugin: 'de.undercouch.download'
 
 group 'com.eden.kodiak'
-version '0.4.2'
+version '0.4.3'
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------

@@ -1,1 +1,22 @@
 apply from: "${rootProject.rootDir}/gradle/groups/runners.gradle"
+
+task updateVersionLine {
+    doLast {
+        def regex = """
+// -- VERSION --
+const val version = ".*?"
+// -- ENDVERSION --
+"""
+        def replacement = """
+// -- VERSION --
+const val version = "${project.version}"
+// -- ENDVERSION --
+"""
+
+        def utilsFile = file("${project.projectDir}/src/main/kotlin/utils.kt")
+        utilsFile.text
+
+        utilsFile.write(utilsFile.text.replaceAll(regex, replacement))
+    }
+}
+tasks.compileJava.dependsOn(updateVersionLine)

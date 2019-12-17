@@ -1,6 +1,8 @@
 package com.copperleaf.kodiak.common
 
-const val version = "0.4.2"
+// -- VERSION --
+const val version = "0.4.3"
+// -- ENDVERSION --
 
 internal inline fun <T : Any?, U : Any?> List<T>.firstBy(mapper: (T)->U) : U {
     return firstBy(mapper) { it != null }
