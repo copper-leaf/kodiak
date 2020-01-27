@@ -198,12 +198,15 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun ContentBlockCode.format(topLevel: Boolean) {
         if (topLevel) {
-            joinChildren(this)
-        } else {
             wrap(
-                "<pre><code class=\"language-${this.language}\">",
+                if(this.language.isNotBlank())
+                    "<pre class=\"language-${this.language}\"><code class=\"language-${this.language}\">"
+                else
+                    "<pre><code>",
                 "</code></pre>"
             ) { joinChildren(this) }
+        } else {
+            joinChildren(this)
         }
     }
 
