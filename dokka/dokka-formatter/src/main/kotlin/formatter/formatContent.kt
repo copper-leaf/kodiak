@@ -128,7 +128,6 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
             else                            -> {
                 Clog.e("Unhandled content node: $content (${content.javaClass})")
-                ""
             }
         }
     }
@@ -177,37 +176,33 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun ContentParagraph.format(topLevel: Boolean) {
-        if (topLevel) joinChildren(this) else wrap("<p>", "</p>") { joinChildren(this) }
+        wrap("<p>", "</p>") { joinChildren(this) }
     }
 
     private fun ContentEmphasis.format(topLevel: Boolean) {
-        if (topLevel) joinChildren(this) else wrap("<i>", "</i>") { joinChildren(this) }
+        wrap("<i>", "</i>") { joinChildren(this) }
     }
 
     private fun ContentStrong.format(topLevel: Boolean) {
-        if (topLevel) joinChildren(this) else wrap("<b>", "</b>") { joinChildren(this) }
+        wrap("<b>", "</b>") { joinChildren(this) }
     }
 
     private fun ContentStrikethrough.format(topLevel: Boolean) {
-        if (topLevel) joinChildren(this) else wrap("<del>", "</del>") { joinChildren(this) }
+        wrap("<del>", "</del>") { joinChildren(this) }
     }
 
     private fun ContentCode.format(topLevel: Boolean) {
-        if (topLevel) joinChildren(this) else wrap("<code>", "</code>") { joinChildren(this) }
+        wrap("<code>", "</code>") { joinChildren(this) }
     }
 
     private fun ContentBlockCode.format(topLevel: Boolean) {
-        if (topLevel) {
-            wrap(
-                if(this.language.isNotBlank())
-                    "<pre class=\"language-${this.language}\"><code class=\"language-${this.language}\">"
-                else
-                    "<pre><code>",
-                "</code></pre>"
-            ) { joinChildren(this) }
-        } else {
-            joinChildren(this)
-        }
+        wrap(
+            if(this.language.isNotBlank())
+                "<pre class=\"language-${this.language}\"><code class=\"language-${this.language}\">"
+            else
+                "<pre><code>",
+            "</code></pre>"
+        ) { joinChildren(this) }
     }
 
     private fun ContentNodeLink.format(topLevel: Boolean) {

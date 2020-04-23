@@ -16,3 +16,26 @@ package com.copperleaf.kodiak
  * ```
  */
 class KotlinClassWithCodeInComments
+
+/**
+ * Sample Comment
+ *
+ * Example usage:
+ *
+ * ```swift
+ * import MyLib
+ *
+ * var libInstance = MyLib(parameterA: "xXXxxXxx", parameterB: "123")
+ * ```
+ * */
+class KotlinClassWithMoreCodeInCommentsUsingCodeFence
+
+/**
+ * Sample Comment
+ *
+ * Example usage:
+ *
+ *    import MyLib
+ *    var libInstance = MyLib(parameterA: "xXXxxXxx", parameterB: "123")
+ * */
+class KotlinClassWithMoreCodeInCommentsUsingIndentedCodeBlock

@@ -19,7 +19,7 @@ apply plugin: "de.fayard.buildSrcVersions"
 apply plugin: 'de.undercouch.download'
 
 group 'com.eden.kodiak'
-version '0.4.5'
+version '0.4.6'
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------
