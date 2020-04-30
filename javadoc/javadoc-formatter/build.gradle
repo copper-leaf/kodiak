@@ -3,7 +3,7 @@ apply from: "${rootProject.rootDir}/gradle/actions/shadow.gradle"
 
 dependencies {
     compile project(":common:common-formatter")
-    compile project(':javadoc:javadoc-models')
+    compile project(":javadoc:javadoc-models")
 
     def tj = org.gradle.internal.jvm.Jvm.current().toolsJar
     if(tj != null) {

@@ -3,7 +3,7 @@ apply from: "${rootProject.rootDir}/gradle/actions/shadow.gradle"
 
 dependencies {
     compile project(":common:common-formatter")
-    compile project(':swiftdoc:swiftdoc-models')
+    compile project(":swiftdoc:swiftdoc-models")
 }
 
 task updateSourceKitten {

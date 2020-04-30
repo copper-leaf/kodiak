@@ -2,7 +2,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    classifier = "sources"
     from project.sourceSets.main.allSource
 }
 
@@ -23,7 +23,7 @@ def pomConfig = {
         license {
             name rootProject.ext.license.name
             url rootProject.ext.license.url
-            distribution 'repo'
+            distribution "repo"
         }
     }
     developers {
@@ -45,9 +45,9 @@ publishing {
             version project.version
             pom.withXml {
                 def root = asNode()
-                root.appendNode('description', rootProject.ext.project_description)
-                root.appendNode('name', rootProject.ext.project_name)
-                root.appendNode('url', rootProject.ext.base_url)
+                root.appendNode("description", rootProject.ext.project_description)
+                root.appendNode("name", rootProject.ext.project_name)
+                root.appendNode("url", rootProject.ext.base_url)
                 root.children().last() + pomConfig
             }
         }
@@ -57,7 +57,7 @@ publishing {
 bintray {
     user = rootProject.ext.bintray_username
     key = rootProject.ext.bintray_api_key
-    publications = ['ProjectPublication']
+    publications = ["ProjectPublication"]
 
     dryRun = rootProject.ext.dry_deploy
     publish = !rootProject.ext.dry_deploy

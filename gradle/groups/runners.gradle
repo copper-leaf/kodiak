@@ -1,6 +1,6 @@
-apply plugin: 'kotlin'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: "kotlin"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven-publish"
 
 group rootProject.group
 version rootProject.version
@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 repositories {
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" }
-    maven { url 'https://jitpack.io' }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {

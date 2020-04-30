@@ -16,39 +16,39 @@ buildscript {
 }
 
 apply plugin: "de.fayard.buildSrcVersions"
-apply plugin: 'de.undercouch.download'
+apply plugin: "de.undercouch.download"
 
-group 'com.eden.kodiak'
-version '0.4.6'
+group "com.eden.kodiak"
+version "0.4.6"
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------
 
 ext.ossLicenses = [
-        'BSD' : [
-                name: 'BSD 3-Clause',
-                url : 'https://opensource.org/licenses/BSD-3-Clause'
+        "BSD" : [
+                name: "BSD 3-Clause",
+                url : "https://opensource.org/licenses/BSD-3-Clause"
         ]
 ]
 
 ext {
-    github_project = 'copper-leaf/kodiak'
+    github_project = "copper-leaf/kodiak"
 
     // Orchid
-    orchid_version = '0.17.1'
-    orchid_theme = 'Copper'
-    base_url = 'https://copper-leaf.github.io/kodiak'
-    github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv('GITHUB_TOKEN')
-    environment = "${project.hasProperty("env") ? project.property("env") : 'debug'}"
+    orchid_version = "0.17.1"
+    orchid_theme = "Copper"
+    base_url = "https://copper-leaf.github.io/kodiak"
+    github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv("GITHUB_TOKEN")
+    environment = "${project.hasProperty("env") ? project.property("env") : "debug"}"
 
     // Bintray uploads
-    dry_deploy = project.hasProperty('dryDeploy')
-    bintray_username = "${project.properties['bintray_username']}"
-    bintray_api_key = "${project.properties['bintray_apiKey']}"
-    bintray_repo = 'Eden'
-    bintray_user_org = 'javaeden'
+    dry_deploy = project.hasProperty("dryDeploy")
+    bintray_username = "${project.properties["bintray_username"]}"
+    bintray_api_key = "${project.properties["bintray_apiKey"]}"
+    bintray_repo = "Eden"
+    bintray_user_org = "javaeden"
 
-    maven_central_sync = project.hasProperty('includeMavenCentralSync')
+    maven_central_sync = project.hasProperty("includeMavenCentralSync")
     maven_central_username = "${project.properties['mavenCentral_username']}"
     maven_central_password = "${project.properties['mavenCentral_password']}"
 

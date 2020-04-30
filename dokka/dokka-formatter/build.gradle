@@ -1,9 +1,0 @@
-apply from: "${rootProject.rootDir}/gradle/groups/formatters.gradle"
-apply from: "${rootProject.rootDir}/gradle/actions/shadow.gradle"
-
-dependencies {
-    compile project(":common:common-formatter")
-    compile project(':dokka:dokka-models')
-
-    compile fileTree(include: ['*.jar'], dir: 'libs') // use locally-compiled version of Dokka with the `<ERROR CLASS>` bug fixed, until it's published
-}
