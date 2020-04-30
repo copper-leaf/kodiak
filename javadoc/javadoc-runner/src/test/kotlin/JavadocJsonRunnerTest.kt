@@ -32,8 +32,8 @@ class JavadocJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../javadoc-runner/build/javadoc/cache").canonicalFile.toPath()
-        outputDir = File("../javadoc-runner/build/javadoc/output").canonicalFile.toPath()
+        cacheDir = File("../javadoc-runner/build/kodiak/cache").canonicalFile.toPath()
+        outputDir = File("../javadoc-runner/build/kodiak/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }

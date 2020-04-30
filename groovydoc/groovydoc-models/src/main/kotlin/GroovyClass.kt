@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -20,6 +21,9 @@ data class GroovyClass(
     val node: Any? = null,
 
     val `package`: String,
+    val superclass: String?,
+    val interfaces: List<String>,
+
     override val kind: String,
     override val name: String,
     override val id: String,
@@ -32,7 +36,10 @@ data class GroovyClass(
     override val signature: List<CommentComponent>,
 
     val enumItems: List<GroovyEnumConstant>
-) : DocElement, AutoDocument {
+) : DocElement, AutoDocument, TopLevel {
+
+    override val parents = listOfNotNull(superclass, *interfaces.toTypedArray())
+    override val contexts = listOf(`package`)
 
     @Transient
     override val nodes = listOf(

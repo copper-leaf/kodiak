@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -28,8 +29,11 @@ data class GroovyPackage(
 
     val classes: List<GroovyClass>,
     val subpackages: List<GroovyPackage>
-) : DocElement, AutoDocument {
+) : DocElement, AutoDocument, TopLevel {
     override val kind = "Package"
+
+    override val parents = listOf(parent)
+    override val contexts = emptyList<String>()
 
     @Transient
     override val nodes = listOf(

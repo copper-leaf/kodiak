@@ -12,6 +12,8 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean): GroovyClass {
     return GroovyClass(
         this,
         this.containingPackage().nameWithDots(),
+        this.superclass()?.qualifiedTypeName(),
+        this.interfaces()?.mapNotNull { it?.qualifiedTypeName() } ?: emptyList(),
         this.classKind,
         this.simpleTypeName(),
         this.qualifiedTypeName(),

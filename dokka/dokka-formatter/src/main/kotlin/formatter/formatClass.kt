@@ -6,6 +6,8 @@ import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
+import org.jetbrains.dokka.qualifiedNameFromType
+import org.jetbrains.dokka.ignoredSupertypes
 
 val DocumentationNode.classLike: Boolean get() = NodeKind.classLike.contains(this.kind)
 
@@ -13,10 +15,19 @@ fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
     assert(this.classLike) { "node must be a Class-like" }
 
     val modifiers = this.modifiers
+    val supertypes = this
+        .details(NodeKind.Supertype)
+        .map { it.qualifiedNameFromType() to it }
+        .filterNot { it.first in listOf("kotlin.Annotation", "kotlin.Enum") }
+
+    val superclass = supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second
+    val interfaces = supertypes.filter { it.second.superclassType == null }.toMap()
 
     return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
+        superclass?.name,
+        interfaces.keys.toList(),
         this.kind.toString(),
         this.simpleName,
         this.qualifiedName,
@@ -39,7 +50,7 @@ fun DocumentationNode.classSignature(
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
-    when(this.kind) {
+    when (this.kind) {
         NodeKind.Object -> {
             list.addAll(modifiers.toModifierListSignature())
             list.add(CommentComponent("keyword", "object "))
@@ -54,8 +65,8 @@ fun DocumentationNode.classSignature(
         }
     }
     list.add(CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
-//    list.addAll(this.toTypeParameterDeclarationSignature())
-//    list.addAll(this.toSuperclassDeclarationSignature())
+    list.addAll(this.toTypeParameterDeclarationSignature())
+    list.addAll(this.toSuperclassDeclarationSignature())
 
     return list
 }

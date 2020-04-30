@@ -4,6 +4,7 @@ import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -27,8 +28,11 @@ data class JavaPackage(
     override val signature: List<CommentComponent>,
     val classes: List<JavaClass>,
     val subpackages: List<JavaPackage>
-) : DocElement, AutoDocument {
+) : DocElement, AutoDocument, TopLevel {
     override val kind = "Package"
+
+    override val parents = listOf(parent)
+    override val contexts = emptyList<String>()
 
     @Transient
     override val nodes = listOf(

@@ -32,8 +32,8 @@ class GroovydocJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../groovydoc-runner/build/groovydoc/cache").canonicalFile.toPath()
-        outputDir = File("../groovydoc-runner/build/groovydoc/output").canonicalFile.toPath()
+        cacheDir = File("../groovydoc-runner/build/kodiak/cache").canonicalFile.toPath()
+        outputDir = File("../groovydoc-runner/build/kodiak/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }

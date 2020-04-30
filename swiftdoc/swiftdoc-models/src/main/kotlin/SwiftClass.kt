@@ -6,6 +6,7 @@ import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.JsonableDocElement
 import com.copperleaf.kodiak.common.SpecializedDocElement
+import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -22,6 +23,9 @@ data class SwiftClass(
     val node: Any? = null,
 
     val sourceFile: String,
+    val superclass: String?,
+    val protocols: List<String>,
+
     override val subKind: String,
     override val name: String,
     override val id: String,
@@ -32,9 +36,12 @@ data class SwiftClass(
     val methods: List<SwiftMethod>,
     val fields: List<SwiftField>,
     override val signature: List<CommentComponent>
-) : DocElement, AutoDocument, SpecializedDocElement, JsonableDocElement {
+) : DocElement, AutoDocument, SpecializedDocElement, JsonableDocElement, TopLevel {
 
     override val kind = "Class"
+
+    override val parents = listOfNotNull(superclass, *protocols.toTypedArray())
+    override val contexts = listOf(sourceFile)
 
     @Transient
     override val nodes = listOf(

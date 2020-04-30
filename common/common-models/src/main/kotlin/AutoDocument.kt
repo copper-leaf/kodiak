@@ -15,6 +15,26 @@ interface AutoDocument {
     val nodes: List<AutoDocumentNode>
 }
 
+interface TopLevel {
+
+    /**
+     * The ID of the parent node(s) which the current node extends from. This is most likely the same node type as the
+     * current node. The IDs should be everything that can be considered a "parent" of the current node, through both
+     * inheritance and composition, but should only be the _direct_ parents.
+     *
+     * Examples:
+     *      Classes: the immediate superclass, the implemented interfaces. Do not include the superclass of a superclass, etc.
+     *      Packages: the parent package. For example, the package `com.eden.kodiak.common` has a parent package of `com.eden.kodiak`.
+     */
+    val parents: List<String>
+
+    /**
+     * The ID of the nodes which the current node "lives" in. This is most likely _not_ the same node type as the
+     * current node.
+     */
+    val contexts: List<String>
+}
+
 interface AutoDocumentNode {
     val name: String
     val elements: List<DocElement>

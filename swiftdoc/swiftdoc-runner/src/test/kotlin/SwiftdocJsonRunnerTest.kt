@@ -32,8 +32,8 @@ class SwiftdocJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("build/docs/cache").canonicalFile.toPath()
-        outputDir = File("build/docs/output").canonicalFile.toPath()
+        cacheDir = File("../swiftdoc-runner/build/kodiak/cache").canonicalFile.toPath()
+        outputDir = File("../swiftdoc-runner/build/kodiak/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }

@@ -11,6 +11,8 @@ fun ClassDoc.toClassDoc(deep: Boolean): JavaClass {
     return JavaClass(
         this,
         this.containingPackage().name(),
+        this.superclass()?.qualifiedTypeName(),
+        this.interfaces()?.mapNotNull { it?.qualifiedTypeName() } ?: emptyList(),
         this.classKind,
         this.typeName(),
         this.qualifiedTypeName(),

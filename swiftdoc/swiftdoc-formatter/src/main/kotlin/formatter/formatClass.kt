@@ -19,6 +19,8 @@ fun SourceKittenSubstructure.toClassDoc(mainArgs: MainArgs, structure: SourceKit
     return SwiftClass(
         this,
         sourceFile,
+        "",
+        emptyList(),
         this.kind.name,
         this.name,
         "${sourceFile}/${this.name}",

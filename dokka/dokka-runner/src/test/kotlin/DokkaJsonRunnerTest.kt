@@ -32,8 +32,8 @@ class DokkaJsonRunnerTest {
     }
 
     private fun initProjectDirs() {
-        cacheDir = File("../dokka-runner/build/dokka/cache").canonicalFile.toPath()
-        outputDir = File("../dokka-runner/build/dokka/output").canonicalFile.toPath()
+        cacheDir = File("../dokka-runner/build/kodiak/cache").canonicalFile.toPath()
+        outputDir = File("../dokka-runner/build/kodiak/output").canonicalFile.toPath()
         outputDir.toFile().deleteRecursively()
         outputDir.toFile().mkdirs()
     }

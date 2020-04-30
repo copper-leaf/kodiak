@@ -27,7 +27,7 @@ val DocumentationNode.qualifiedName: String
     }
 
 fun DocumentationNode.asType(): DocumentationNode {
-    return if (kind in listOf(NodeKind.Type, NodeKind.UpperBound)) {
+    return if (kind in listOf(NodeKind.Type, NodeKind.UpperBound, NodeKind.Supertype)) {
         this
     } else {
         this.detailOrNull(NodeKind.Type) ?: {
