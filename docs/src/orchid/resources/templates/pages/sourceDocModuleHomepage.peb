@@ -1,0 +1,12 @@
+<div class="content is-medium-tablet is-large-fullhd">
+{{ page.content | raw }}
+</div>
+
+{% if page.roots is not empty %}
+<p><b>API Documentation:</b></p>
+<ul>
+{%- for root in page.roots %}
+  <li>{{ anchor(root) }}</li>
+{% endfor %}
+</ul>
+{% endif %}

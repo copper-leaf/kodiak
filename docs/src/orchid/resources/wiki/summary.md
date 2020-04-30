@@ -1,7 +1,2 @@
 
-## [Languages](languages/index.md)
-
-- [Java](languages/java.md)
-- [Groovy](languages/groovy.md)
-- [Kotlin](languages/kotlin.md)
-- [Swift](languages/swift.md)
+- [Page One](page-one.md)

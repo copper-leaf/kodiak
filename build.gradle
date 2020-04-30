@@ -19,7 +19,7 @@ apply plugin: "de.fayard.buildSrcVersions"
 apply plugin: "de.undercouch.download"
 
 group "com.eden.kodiak"
-version "0.4.6"
+version "0.5.0"
 
 // Config Values
 //----------------------------------------------------------------------------------------------------------------------
@@ -33,13 +33,6 @@ ext.ossLicenses = [
 
 ext {
     github_project = "copper-leaf/kodiak"
-
-    // Orchid
-    orchid_version = "0.17.1"
-    orchid_theme = "Copper"
-    base_url = "https://copper-leaf.github.io/kodiak"
-    github_token = project.hasProperty("github_token") ? project.property("github_token") : System.getenv("GITHUB_TOKEN")
-    environment = "${project.hasProperty("env") ? project.property("env") : "debug"}"
 
     // Bintray uploads
     dry_deploy = project.hasProperty("dryDeploy")

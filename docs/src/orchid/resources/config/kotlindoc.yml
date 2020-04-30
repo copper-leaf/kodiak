@@ -1,0 +1,44 @@
+homePagePermalink: ':module'
+sourcePagePermalink: ':moduleType/:module/:sourceDocPath'
+
+#homePageOnly: true
+#showRunnerLogs: true
+
+modules:
+  - name: 'Common'
+    moduleGroup: 'common'
+    sourceDirs:
+      - '../../../../common/common-runner/src/main/kotlin'
+  - name: 'Java'
+    moduleGroup: 'languages'
+    sourceDirs:
+      - '../../../../javadoc/javadoc-models/src/main/kotlin'
+      - '../../../../javadoc/javadoc-runner/src/main/kotlin'
+  - name: 'Kotlin'
+    moduleGroup: 'languages'
+    sourceDirs:
+      - '../../../../dokka/dokka-models/src/main/kotlin'
+      - '../../../../dokka/dokka-runner/src/main/kotlin'
+  - name: 'Groovy'
+    moduleGroup: 'languages'
+    sourceDirs:
+      - '../../../../groovydoc/groovydoc-models/src/main/kotlin'
+      - '../../../../groovydoc/groovydoc-runner/src/main/kotlin'
+  - name: 'Swift'
+    moduleGroup: 'languages'
+    sourceDirs:
+      - '../../../../swiftdoc/swiftdoc-models/src/main/kotlin'
+      - '../../../../swiftdoc/swiftdoc-runner/src/main/kotlin'
+
+classesPages:
+  layoutConfig:
+    pageContentsMenu:
+      - type: 'sourcedocPageLinks'
+        includeItems: true
+        itemTitleType: "SIGNATURE"
+
+packagesPages:
+  layoutConfig:
+    pageContentsMenu:
+      - type: 'sourcedocPageLinks'
+        includeItems: true

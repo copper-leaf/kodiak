@@ -1,6 +1,6 @@
 # Kodiak
 
-A collection wrappers around various code documentation tools which produces a common JSON output readable by Orchid.
+A collection of wrappers around various code documentation tools which produces a common JSON output readable by Orchid.
 
 ## What is this?
 

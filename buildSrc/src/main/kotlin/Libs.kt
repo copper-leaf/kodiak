@@ -44,6 +44,9 @@ object Libs {
   const val orchidgithub: String = "io.github.javaeden.orchid:OrchidGithub:" +
       Versions.io_github_javaeden_orchid
 
+  const val orchidkotlindoc: String = "io.github.javaeden.orchid:OrchidKotlindoc:" +
+          Versions.io_github_javaeden_orchid
+
   /**
    * https://javaeden.github.io/Orchid/latest/core/
    */

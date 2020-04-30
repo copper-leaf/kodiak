@@ -47,7 +47,7 @@ publishing {
                 def root = asNode()
                 root.appendNode("description", rootProject.ext.project_description)
                 root.appendNode("name", rootProject.ext.project_name)
-                root.appendNode("url", rootProject.ext.base_url)
+                root.appendNode("url", "https://copper-leaf.github.io/kodiak")
                 root.children().last() + pomConfig
             }
         }

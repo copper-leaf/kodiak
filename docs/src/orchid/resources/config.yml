@@ -1,4 +1,6 @@
 site:
+  baseUrl: "https://copper-leaf.github.io/kodiak"
+  theme: "Copper"
   about:
     siteName: Kodiak
     siteDescription: Wrappers around code documentation CLI tools to produce JSON models, usable as libraries
@@ -15,13 +17,7 @@ theme:
       - link: 'https://twitter.com/OrchidSSG'
         label: 'Twitter'
         icon: 'fab fa-twitter'
-  menu:
-    - type: 'page'
-      title: 'Home'
-      itemId: 'Home'
-    - type: 'wikiSections'
-    - type: 'page'
-      itemId: 'Changelog'
+  logo: 'assets/media/theme-logo.png'
   sidebarBackground: 'primary'
   sidebarBackgroundType: GRADIENT
   colors:
@@ -33,17 +29,11 @@ theme:
 services:
   publications:
     stages:
-      - type: githubPages
+      - type: 'githubPages'
         repo: 'copper-leaf/kodiak'
         username: 'cjbrooks12'
-      - type: githubReleases
+      - type: 'githubReleases'
         repo: 'copper-leaf/kodiak'
-
-wiki:
-  wikiPages:
-    layout: wiki
-    menu:
-      - type: wiki
 
 allPages:
   components:
@@ -51,6 +41,32 @@ allPages:
     - type: "prism"
       githubTheme: 'duotone-light'
       languages:
-        - kotlin
         - java
+        - kotlin
         - groovy
+        - swift
+  menu:
+    - type: 'page'
+      title: 'Home'
+      itemId: 'Home'
+    - type: 'page'
+      itemId: 'Changelog'
+
+    - type: 'separator'
+      title: 'Wiki'
+    - type: 'wiki'
+      asSubmenu: true
+
+    - type: 'separator'
+      title: 'Supported Languages'
+    - type: "sourcedocModules"
+      moduleType: 'kotlindoc'
+      moduleGroup: 'languages'
+      asSubmenu: true
+  layoutConfig:
+    pageContentsMenu:
+      - type: 'separator'
+        title: 'In This Page'
+      - type: 'pageIds'
+        structure: nested
+        maxLevel: 2

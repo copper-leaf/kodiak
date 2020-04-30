@@ -22,7 +22,7 @@ object Versions {
 
   const val buildsrcversions: String = "0.4.2"
 
-  const val io_github_javaeden_orchid: String = "0.17.4"
+  const val io_github_javaeden_orchid: String = "0.20.0"
 
   const val strikt_core: String = "0.21.1"
 
