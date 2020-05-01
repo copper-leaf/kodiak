@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.swift.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
@@ -26,5 +27,5 @@ fun <T> SourceKittenSubstructure.childrenOfType(
 }
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent("modifier", "$it ") }
+    return this.map { CommentComponent(TEXT, "$it ") }
 }

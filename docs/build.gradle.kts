@@ -31,8 +31,8 @@ orchid {
 val orchidBuild by tasks
 val orchidDeploy by tasks
 
-val build by tasks
-build.dependsOn(orchidBuild)
+//val build by tasks
+//build.dependsOn(orchidBuild)
 
 val publish by tasks.registering {
     dependsOn(orchidDeploy)

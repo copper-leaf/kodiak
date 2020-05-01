@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.kotlin.models
 
 import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.TopLevel
@@ -35,8 +36,8 @@ data class KotlinPackage(
 ) : DocElement, AutoDocument, TopLevel {
     override val kind = "Package"
 
-    override val parents = listOf(parent)
-    override val contexts = emptyList<String>()
+    override val parents = listOf(CommentComponent(TYPE_NAME, parent, parent))
+    override val contexts = emptyList<CommentComponent>()
 
     @Transient
     override val nodes = listOf(

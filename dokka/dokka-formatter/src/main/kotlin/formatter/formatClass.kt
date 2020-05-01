@@ -2,6 +2,8 @@ package com.copperleaf.kodiak.kotlin.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -20,14 +22,14 @@ fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
         .map { it.qualifiedNameFromType() to it }
         .filterNot { it.first in listOf("kotlin.Annotation", "kotlin.Enum") }
 
-    val superclass = supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second
-    val interfaces = supertypes.filter { it.second.superclassType == null }.toMap()
+    val superclass = supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second?.name?.let { CommentComponent(TYPE_NAME, it, it) }
+    val interfaces = supertypes.filter { it.second.superclassType == null }.toMap().keys.toList()?.map { CommentComponent(TYPE_NAME, it, it) }
 
     return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-        superclass?.name,
-        interfaces.keys.toList(),
+        superclass,
+        interfaces,
         this.kind.toString(),
         this.simpleName,
         this.qualifiedName,
@@ -53,15 +55,15 @@ fun DocumentationNode.classSignature(
     when (this.kind) {
         NodeKind.Object -> {
             list.addAll(modifiers.toModifierListSignature())
-            list.add(CommentComponent("keyword", "object "))
+            list.add(CommentComponent(TEXT, "object "))
         }
         NodeKind.Interface -> {
             list.addAll((modifiers - "abstract").toModifierListSignature())
-            list.add(CommentComponent("keyword", "interface "))
+            list.add(CommentComponent(TEXT, "interface "))
         }
         else -> {
             list.addAll(modifiers.toModifierListSignature())
-            list.add(CommentComponent("keyword", "class "))
+            list.add(CommentComponent(TEXT, "class "))
         }
     }
     list.add(CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
@@ -74,6 +76,6 @@ fun DocumentationNode.classSignature(
 fun DocumentationNode.toSuperclassDeclarationSignature(): List<CommentComponent> {
     return this.details(NodeKind.Supertype).toListSignature(
         childMapper = { it.toTypeSignature() },
-        prefix = listOf(CommentComponent("punctuation", ": "))
+        prefix = listOf(CommentComponent(PUNCTUATION, ": "))
     )
 }

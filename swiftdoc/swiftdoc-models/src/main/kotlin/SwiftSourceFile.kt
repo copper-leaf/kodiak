@@ -34,8 +34,8 @@ data class SwiftSourceFile(
 ) : DocElement, AutoDocument, TopLevel {
     override val kind = "SourceFile"
 
-    override val parents = listOf<String>()
-    override val contexts = emptyList<String>()
+    override val parents = listOf<CommentComponent>()
+    override val contexts = emptyList<CommentComponent>()
 
     @Transient
     override val nodes = listOf(

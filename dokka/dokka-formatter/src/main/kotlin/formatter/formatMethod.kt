@@ -7,6 +7,9 @@ import com.copperleaf.kodiak.kotlin.models.KotlinReceiver
 import com.copperleaf.kodiak.kotlin.models.KotlinReturnType
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 
 val DocumentationNode.isMethod: Boolean get() = this.kind in listOf(NodeKind.Function)
 val DocumentationNode.isCompanionMethod: Boolean get() = this.kind in listOf(NodeKind.CompanionObjectFunction)
@@ -44,20 +47,20 @@ fun DocumentationNode.methodSignature(
     val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent("keyword", "fun "))
+    list.add(CommentComponent(TEXT, "fun "))
 
     list.addAll(this.toTypeParameterDeclarationSignature())
 
     if (receiverType != null) {
         list.addAll(receiverType.signature)
-        list.add(CommentComponent("punctuation", "."))
+        list.add(CommentComponent(PUNCTUATION, "."))
     }
 
-    list.add(CommentComponent("name", this.simpleName))
+    list.add(CommentComponent(TEXT, this.simpleName))
     list.addAll(parameters.toParameterListSignature())
 
     if (returnType.name != "Unit") {
-        list.add(CommentComponent("punctuation", ": "))
+        list.add(CommentComponent(PUNCTUATION, ": "))
         list.addAll(returnType.signature)
     }
 

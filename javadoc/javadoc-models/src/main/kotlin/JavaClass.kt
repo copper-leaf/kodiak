@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.java.models
 
 import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.SpecializedDocElement
@@ -22,8 +23,8 @@ data class JavaClass(
     val node: Any? = null,
 
     val `package`: String,
-    val superclass: String?,
-    val interfaces: List<String>,
+    val superclass: CommentComponent?,
+    val interfaces: List<CommentComponent>,
 
     override val subKind: String,
     override val name: String,
@@ -42,7 +43,7 @@ data class JavaClass(
     override val kind = "Class"
 
     override val parents = listOfNotNull(superclass, *interfaces.toTypedArray())
-    override val contexts = listOf(`package`)
+    override val contexts = listOf(CommentComponent(TYPE_NAME, `package`, `package`))
 
     @Transient
     override val nodes = listOf(

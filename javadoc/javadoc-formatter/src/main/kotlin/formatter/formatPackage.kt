@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaPackage
 import com.sun.javadoc.PackageDoc
@@ -21,7 +22,7 @@ fun PackageDoc.toPackageDoc(deep: Boolean): JavaPackage {
 
 fun PackageDoc.packageSignature(): List<CommentComponent> {
     return listOf(
-        CommentComponent("keyword", "package "),
+        CommentComponent(TEXT, "package "),
         CommentComponent(TYPE_NAME, this.name(), this.name())
     )
 }

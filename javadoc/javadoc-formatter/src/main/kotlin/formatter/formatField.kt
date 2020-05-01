@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.java.models.JavaField
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.sun.javadoc.FieldDoc
 import com.sun.javadoc.Type
 
@@ -30,7 +31,7 @@ fun FieldDoc.fieldSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(CommentComponent("name", " ${this.name()}"))
+    list.add(CommentComponent(TEXT, " ${this.name()}"))
 
     return list
 }

@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.groovy.models.GroovyPackage
@@ -25,7 +26,7 @@ fun GroovyPackageDoc.toPackageDoc(deep: Boolean): GroovyPackage {
 
 fun GroovyPackageDoc.packageSignature(): List<CommentComponent> {
     return listOf(
-        CommentComponent("keyword", "package "),
+        CommentComponent(TEXT, "package "),
         CommentComponent(TYPE_NAME, this.nameWithDots(), this.nameWithDots())
     )
 }

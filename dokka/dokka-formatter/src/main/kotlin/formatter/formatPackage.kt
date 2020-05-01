@@ -3,6 +3,8 @@ package com.copperleaf.kodiak.kotlin.formatter
 import com.copperleaf.kodiak.common.CommentComponent
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -39,7 +41,7 @@ fun DocumentationNode.toPackageDoc(deep: Boolean): KotlinPackage {
 
 fun DocumentationNode.packageSignature(): List<CommentComponent> {
     return listOf(
-        CommentComponent("keyword", "package "),
+        CommentComponent(TEXT, "package "),
         CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName)
     )
 }

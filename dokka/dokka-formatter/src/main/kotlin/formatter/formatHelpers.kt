@@ -6,6 +6,9 @@ import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedNameFromType
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 
 val DocumentationNode.modifiers: List<String>
     get() = this.details(NodeKind.Modifier)
@@ -53,14 +56,14 @@ val DocumentationNode.nullable: Boolean
     }
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent("modifier", "$it ") }
+    return this.map { CommentComponent(TEXT, "$it ") }
 }
 
 fun List<DocumentationNode>.toListSignature(
     childMapper: (DocumentationNode) -> List<CommentComponent>,
     prefix: List<CommentComponent> = emptyList(),
     postfix: List<CommentComponent> = emptyList(),
-    separator: List<CommentComponent> = listOf(CommentComponent("punctuation", ", "))
+    separator: List<CommentComponent> = listOf(CommentComponent(PUNCTUATION, ", "))
 ): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 

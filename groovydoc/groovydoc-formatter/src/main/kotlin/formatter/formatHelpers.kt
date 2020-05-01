@@ -23,7 +23,7 @@ fun GroovyDoc.isSuppressed(): Boolean {
 }
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent("modifier", "$it ") }
+    return this.map { CommentComponent(TEXT, "$it ") }
 }
 
 fun GroovyType.real(): GroovyType {
@@ -212,3 +212,7 @@ private fun String.trimLines() = this
     .lines()
     .map { it.trimEnd() }
     .joinToString("\n")
+
+fun GroovyClassDoc.asCommentComponent() : CommentComponent {
+    return CommentComponent(TYPE_NAME, "" + this.simpleTypeName(), "" + this.qualifiedTypeName())
+}

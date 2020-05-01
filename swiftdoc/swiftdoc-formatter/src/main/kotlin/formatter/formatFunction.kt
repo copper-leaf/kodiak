@@ -73,7 +73,7 @@ fun SourceKittenSubstructure.functionSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.add(CommentComponent(TEXT, "func"))
-    list.add(CommentComponent("name", " $methodName"))
+    list.add(CommentComponent(TEXT, " $methodName"))
     list.addAll(parameters.toParameterListSignature())
     if(returnType.typeId != "Void") {
         list.add(CommentComponent(PUNCTUATION, " -> "))

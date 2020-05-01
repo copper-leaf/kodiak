@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.swift.models
 
 import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.JsonableDocElement
@@ -23,8 +24,8 @@ data class SwiftClass(
     val node: Any? = null,
 
     val sourceFile: String,
-    val superclass: String?,
-    val protocols: List<String>,
+    val superclass: CommentComponent?,
+    val protocols: List<CommentComponent>,
 
     override val subKind: String,
     override val name: String,
@@ -41,7 +42,7 @@ data class SwiftClass(
     override val kind = "Class"
 
     override val parents = listOfNotNull(superclass, *protocols.toTypedArray())
-    override val contexts = listOf(sourceFile)
+    override val contexts = listOf(CommentComponent(TYPE_NAME, sourceFile, sourceFile))
 
     @Transient
     override val nodes = listOf(

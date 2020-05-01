@@ -14,7 +14,7 @@ fun DocumentationNode.toCompanionObjectDoc(): KotlinClass {
     return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-        "",
+        null,
         kotlin.collections.emptyList(),
         this.kind.toString(),
         this.simpleName,

@@ -1,6 +1,8 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaClass
 import com.sun.javadoc.ClassDoc
@@ -11,8 +13,8 @@ fun ClassDoc.toClassDoc(deep: Boolean): JavaClass {
     return JavaClass(
         this,
         this.containingPackage().name(),
-        this.superclass()?.qualifiedTypeName(),
-        this.interfaces()?.mapNotNull { it?.qualifiedTypeName() } ?: emptyList(),
+        this.superclass()?.asCommentComponent(),
+        this.interfaces()?.mapNotNull { it?.asCommentComponent() } ?: emptyList(),
         this.classKind,
         this.typeName(),
         this.qualifiedTypeName(),
@@ -47,35 +49,35 @@ fun ClassDoc.classSignature(
     val list = mutableListOf<CommentComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent("name", "${this.classKind} "))
-    list.add(CommentComponent(TYPE_NAME, this.name(), this.qualifiedName()))
+    list.add(CommentComponent(TEXT, "${this.classKind} "))
+    list.add(this.asCommentComponent())
     list.addAll(this.typeParameters().toWildcardSignature())
 
     if (this.isInterface) {
         val interfaces = this.interfaces()
         if (interfaces.isNotEmpty()) {
-            list.add(CommentComponent("name", " extends "))
+            list.add(CommentComponent(TEXT, " extends "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(CommentComponent("punctuation", ", "))
+                    list.add(CommentComponent(PUNCTUATION, ", "))
                 }
             }
         }
     } else {
         val superclass = this.superclass()
         if (superclass != null) {
-            list.add(CommentComponent("name", " extends "))
+            list.add(CommentComponent(TEXT, " extends "))
             list.addAll(superclass.toTypeSignature())
         }
 
         val interfaces = this.interfaces()
         if (interfaces.isNotEmpty()) {
-            list.add(CommentComponent("name", " implements "))
+            list.add(CommentComponent(TEXT, " implements "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(CommentComponent("punctuation", ", "))
+                    list.add(CommentComponent(PUNCTUATION, ", "))
                 }
             }
         }

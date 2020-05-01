@@ -2,6 +2,7 @@ package com.copperleaf.kodiak.java.formatter
 
 import com.caseyjbrooks.clog.Clog
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaParameter
@@ -40,15 +41,15 @@ fun Parameter.toParameter(tag: ParamTag?, isVarArg: Boolean): JavaParameter {
 
 fun List<JavaParameter>.toParameterListSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
-    list.add(CommentComponent("punctuation", "("))
+    list.add(CommentComponent(PUNCTUATION, "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
-            list.add(CommentComponent("punctuation", ", "))
+            list.add(CommentComponent(PUNCTUATION, ", "))
         }
     }
-    list.add(CommentComponent("punctuation", ")"))
+    list.add(CommentComponent(PUNCTUATION, ")"))
 
     return list
 }
@@ -62,22 +63,22 @@ fun Type.toTypeSignature(): List<CommentComponent> {
     if (wildcard != null) {
         val extendsTypes = wildcard.extendsBounds()
         if (extendsTypes.isNotEmpty()) {
-            list.add(CommentComponent("name", " extends "))
+            list.add(CommentComponent(TEXT, " extends "))
             extendsTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
                 if (index < extendsTypes.size - 1) {
-                    list.add(CommentComponent("punctuation", ", "))
+                    list.add(CommentComponent(PUNCTUATION, ", "))
                 }
             }
         }
 
         val superTypes = wildcard.superBounds()
         if (superTypes.isNotEmpty()) {
-            list.add(CommentComponent("name", " extends "))
+            list.add(CommentComponent(TEXT, " extends "))
             superTypes.forEachIndexed { index, parameter ->
                 list.addAll(parameter.toTypeSignature())
                 if (index < superTypes.size - 1) {
-                    list.add(CommentComponent("punctuation", ", "))
+                    list.add(CommentComponent(PUNCTUATION, ", "))
                 }
             }
         }
@@ -85,14 +86,14 @@ fun Type.toTypeSignature(): List<CommentComponent> {
 
     if (this.asParameterizedType() != null) {
         val typeArguments = this.asParameterizedType().typeArguments()
-        list.add(CommentComponent("punctuation", "<"))
+        list.add(CommentComponent(PUNCTUATION, "<"))
         typeArguments.forEachIndexed { index, parameter ->
             list.addAll(parameter.toTypeSignature())
             if (index < typeArguments.size - 1) {
-                list.add(CommentComponent("punctuation", ", "))
+                list.add(CommentComponent(PUNCTUATION, ", "))
             }
         }
-        list.add(CommentComponent("punctuation", ">"))
+        list.add(CommentComponent(PUNCTUATION, ">"))
     }
 
     return list
@@ -128,27 +129,27 @@ fun Array<TypeVariable>.toWildcardSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
 
     if (this.isNotEmpty()) {
-        list.add(CommentComponent("punctuation", "<"))
+        list.add(CommentComponent(PUNCTUATION, "<"))
         this.forEachIndexed { index, typeVariable ->
-            list.add(CommentComponent("name", typeVariable.simpleTypeName()))
+            list.add(CommentComponent(TEXT, typeVariable.simpleTypeName()))
 
             val typeParamBounds = typeVariable.bounds()
             if (typeParamBounds.isNotEmpty()) {
-                list.add(CommentComponent("name", " extends "))
+                list.add(CommentComponent(TEXT, " extends "))
 
                 typeParamBounds.forEachIndexed { boundsIndex, type ->
                     list.addAll(type.toTypeSignature())
                     if (boundsIndex < typeParamBounds.size - 1) {
-                        list.add(CommentComponent("punctuation", " & "))
+                        list.add(CommentComponent(PUNCTUATION, " & "))
                     }
                 }
             }
 
             if (index < this.size - 1) {
-                list.add(CommentComponent("punctuation", ", "))
+                list.add(CommentComponent(PUNCTUATION, ", "))
             }
         }
-        list.add(CommentComponent("punctuation", ">"))
+        list.add(CommentComponent(PUNCTUATION, ">"))
     }
 
     return list

@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.java.models.JavaEnumConstant
 import com.sun.javadoc.FieldDoc
 
@@ -18,6 +19,6 @@ fun FieldDoc.toEnumConstant(): JavaEnumConstant {
 
 fun FieldDoc.enumConstantSignature() : List<CommentComponent> {
     return listOf(
-        CommentComponent("text", this.name())
+        CommentComponent(TEXT, this.name())
     )
 }

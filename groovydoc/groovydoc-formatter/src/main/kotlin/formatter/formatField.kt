@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.groovy.models.GroovyField
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -30,7 +31,7 @@ fun GroovyFieldDoc.fieldSignature(
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(CommentComponent("name", " ${this.name()}"))
+    list.add(CommentComponent(TEXT, " ${this.name()}"))
 
     return list
 }

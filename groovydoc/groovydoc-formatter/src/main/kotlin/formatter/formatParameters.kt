@@ -1,6 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
 import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import org.codehaus.groovy.groovydoc.GroovyParameter
@@ -33,15 +34,15 @@ fun GroovyParameter.toParameter(tag: GroovyTag?): GroovyParameterDoc {
 
 fun List<GroovyParameterDoc>.toParameterListSignature(): List<CommentComponent> {
     val list = mutableListOf<CommentComponent>()
-    list.add(CommentComponent("punctuation", "("))
+    list.add(CommentComponent(PUNCTUATION, "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
-            list.add(CommentComponent("punctuation", ", "))
+            list.add(CommentComponent(PUNCTUATION, ", "))
         }
     }
-    list.add(CommentComponent("punctuation", ")"))
+    list.add(CommentComponent(PUNCTUATION, ")"))
 
     return list
 }

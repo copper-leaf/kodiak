@@ -5,6 +5,7 @@ import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
+import com.sun.javadoc.ClassDoc
 import com.sun.javadoc.Doc
 import com.sun.javadoc.SeeTag
 import com.sun.javadoc.Tag
@@ -63,7 +64,7 @@ fun CommentComponent.toCommentTag(): CommentTag {
 }
 
 fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent("modifier", "$it ") }
+    return this.map { CommentComponent(TEXT, "$it ") }
 }
 
 fun CommentComponent.expandUnparsedInlineTags(): List<CommentComponent> {
@@ -101,4 +102,8 @@ fun CommentComponent.expandUnparsedInlineTags(): List<CommentComponent> {
     } else {
         return listOf(this)
     }
+}
+
+fun ClassDoc.asCommentComponent() : CommentComponent {
+    return CommentComponent(TYPE_NAME, this.typeName(), this.qualifiedTypeName())
 }
