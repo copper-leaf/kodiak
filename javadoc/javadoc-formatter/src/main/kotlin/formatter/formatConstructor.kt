@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.java.models.JavaConstructor
 import com.copperleaf.kodiak.java.models.JavaParameter
 import com.sun.javadoc.ConstructorDoc
@@ -26,13 +26,13 @@ fun ConstructorDoc.toConstructor(): JavaConstructor {
 fun ConstructorDoc.constructorSignature(
     modifiers: List<String>,
     parameters: List<JavaParameter>
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(this.typeParameters().toWildcardSignature())
     list.add(
-        CommentComponent(
+        RichTextComponent(
             TYPE_NAME,
             this.containingClass().simpleTypeName(),
             this.containingClass().qualifiedName()

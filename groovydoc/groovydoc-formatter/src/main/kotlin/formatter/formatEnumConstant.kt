@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.groovy.models.GroovyEnumConstant
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 
@@ -17,10 +17,10 @@ fun GroovyFieldDoc.toEnumConstant(): GroovyEnumConstant {
     )
 }
 
-fun GroovyFieldDoc.enumConstantSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun GroovyFieldDoc.enumConstantSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
-    list.add(CommentComponent(TEXT, this.name()))
+    list.add(RichTextComponent(TEXT, this.name()))
 
     return list
 }

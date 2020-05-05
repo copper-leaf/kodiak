@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.java.formatter
 
 import com.copperleaf.kodiak.java.models.JavaField
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.sun.javadoc.FieldDoc
 import com.sun.javadoc.Type
 
@@ -26,12 +26,12 @@ fun FieldDoc.toField(): JavaField {
 fun FieldDoc.fieldSignature(
     modifiers: List<String>,
     type: Type
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(CommentComponent(TEXT, " ${this.name()}"))
+    list.add(RichTextComponent(TEXT, " ${this.name()}"))
 
     return list
 }

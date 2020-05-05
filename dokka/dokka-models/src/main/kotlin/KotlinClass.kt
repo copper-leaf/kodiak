@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.kotlin.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.TopLevel
@@ -23,8 +23,8 @@ data class KotlinClass(
     val node: Any? = null,
 
     val `package`: String,
-    val superclass: CommentComponent?,
-    val interfaces: List<CommentComponent>,
+    val superclass: RichTextComponent?,
+    val interfaces: List<RichTextComponent>,
 
     override val kind: String,
     override val name: String,
@@ -36,14 +36,14 @@ data class KotlinClass(
     val methods: List<KotlinMethod>,
     val fields: List<KotlinField>,
     val extensions: List<KotlinMethod>,
-    override val signature: List<CommentComponent>,
+    override val signature: List<RichTextComponent>,
 
     val companionObject: KotlinClass?,
     val enumItems: List<KotlinEnumConstant>
 ) : DocElement, AutoDocument, TopLevel {
 
     override val parents = listOfNotNull(superclass, *interfaces.toTypedArray())
-    override val contexts = listOf(CommentComponent(TYPE_NAME, `package`, `package`))
+    override val contexts = listOf(RichTextComponent(TYPE_NAME, `package`, `package`))
 
     @Transient
     override val nodes = listOf(

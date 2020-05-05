@@ -1,9 +1,11 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -22,14 +24,11 @@ fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
         .map { it.qualifiedNameFromType() to it }
         .filterNot { it.first in listOf("kotlin.Annotation", "kotlin.Enum") }
 
-    val superclass = supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second?.name?.let { CommentComponent(TYPE_NAME, it, it) }
-    val interfaces = supertypes.filter { it.second.superclassType == null }.toMap().keys.toList()?.map { CommentComponent(TYPE_NAME, it, it) }
-
     return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-        superclass,
-        interfaces,
+        supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second?.name?.let { RichTextComponent(INHERITED, it, it) },
+        supertypes.filter { it.second.superclassType == null }.toMap().keys.toList()?.map { RichTextComponent(COMPOSED, it, it) },
         this.kind.toString(),
         this.simpleName,
         this.qualifiedName,
@@ -49,33 +48,33 @@ fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
 
 fun DocumentationNode.classSignature(
     modifiers: List<String>
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     when (this.kind) {
         NodeKind.Object -> {
             list.addAll(modifiers.toModifierListSignature())
-            list.add(CommentComponent(TEXT, "object "))
+            list.add(RichTextComponent(TEXT, "object "))
         }
         NodeKind.Interface -> {
             list.addAll((modifiers - "abstract").toModifierListSignature())
-            list.add(CommentComponent(TEXT, "interface "))
+            list.add(RichTextComponent(TEXT, "interface "))
         }
         else -> {
             list.addAll(modifiers.toModifierListSignature())
-            list.add(CommentComponent(TEXT, "class "))
+            list.add(RichTextComponent(TEXT, "class "))
         }
     }
-    list.add(CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
+    list.add(RichTextComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
     list.addAll(this.toTypeParameterDeclarationSignature())
     list.addAll(this.toSuperclassDeclarationSignature())
 
     return list
 }
 
-fun DocumentationNode.toSuperclassDeclarationSignature(): List<CommentComponent> {
+fun DocumentationNode.toSuperclassDeclarationSignature(): List<RichTextComponent> {
     return this.details(NodeKind.Supertype).toListSignature(
         childMapper = { it.toTypeSignature() },
-        prefix = listOf(CommentComponent(PUNCTUATION, ": "))
+        prefix = listOf(RichTextComponent(PUNCTUATION, ": "))
     )
 }

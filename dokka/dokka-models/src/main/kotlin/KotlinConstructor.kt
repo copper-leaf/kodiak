@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.kotlin.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.fromDocList
@@ -22,7 +22,7 @@ data class KotlinConstructor(
     override val comment: DocComment,
 
     val parameters: List<KotlinParameter>,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Constructor"
 

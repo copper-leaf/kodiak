@@ -26,13 +26,13 @@ interface TopLevel {
      *      Classes: the immediate superclass, the implemented interfaces. Do not include the superclass of a superclass, etc.
      *      Packages: the parent package. For example, the package `com.eden.kodiak.common` has a parent package of `com.eden.kodiak`.
      */
-    val parents: List<CommentComponent>
+    val parents: List<RichTextComponent>
 
     /**
      * The ID of the nodes which the current node "lives" in. This is most likely _not_ the same node type as the
      * current node.
      */
-    val contexts: List<CommentComponent>
+    val contexts: List<RichTextComponent>
 }
 
 interface AutoDocumentNode {

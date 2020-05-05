@@ -1,9 +1,12 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
 import com.caseyjbrooks.clog.Clog
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
 import org.jetbrains.dokka.ContentBlock
@@ -58,7 +61,7 @@ fun DocumentationNode.getComment(sectionName: String, subjectName: String?): Doc
 class DokkaContentFormatter(val node: DocumentationNode) {
 
     private var used = false
-    val components = mutableListOf<CommentComponent>()
+    val components = mutableListOf<RichTextComponent>()
     val tags = mutableMapOf<String, CommentTag>()
 
     var currentText = ""
@@ -70,11 +73,11 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         for (section in node.owner!!.content.sections) {
             if (section.tag == sectionName && section.subjectName == subjectName) {
                 extractContentInternal(section.children)
-                components.add(CommentComponent(TEXT, currentText))
+                components.add(RichTextComponent(TEXT, currentText))
                 return
             }
         }
-        components.add(CommentComponent(TEXT, ""))
+        components.add(RichTextComponent(TEXT, ""))
     }
 
     fun extractContent() {
@@ -82,7 +85,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         used = true
 
         this.extractContentInternal(node.content.children)
-        components.add(CommentComponent(TEXT, currentText))
+        components.add(RichTextComponent(TEXT, currentText))
     }
 
     private fun extractContentInternal(content: List<ContentNode>) {
@@ -207,10 +210,10 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun ContentNodeLink.format(topLevel: Boolean) {
         if (node != null) {
-            components.add(CommentComponent(TEXT, currentText, ""))                        // append current text to components list
+            components.add(RichTextComponent(TEXT, currentText, ""))                        // append current text to components list
             currentText = ""                                                               // get fresh text content
             joinChildren(this)                                                             // have children append themselved to the context
-            components.add(CommentComponent(TYPE_NAME, currentText, node!!.qualifiedName)) // convert that text to the text of the link component
+            components.add(RichTextComponent(TYPE_NAME, currentText, node!!.qualifiedName)) // convert that text to the text of the link component
             currentText = ""                                                               // prepare to continue with later components
         } else {
             joinChildren(this)

@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.groovy.models.GroovyPackage
 import org.codehaus.groovy.groovydoc.GroovyPackageDoc
@@ -24,9 +24,9 @@ fun GroovyPackageDoc.toPackageDoc(deep: Boolean): GroovyPackage {
     )
 }
 
-fun GroovyPackageDoc.packageSignature(): List<CommentComponent> {
+fun GroovyPackageDoc.packageSignature(): List<RichTextComponent> {
     return listOf(
-        CommentComponent(TEXT, "package "),
-        CommentComponent(TYPE_NAME, this.nameWithDots(), this.nameWithDots())
+        RichTextComponent(TEXT, "package "),
+        RichTextComponent(TYPE_NAME, this.nameWithDots(), this.nameWithDots())
     )
 }

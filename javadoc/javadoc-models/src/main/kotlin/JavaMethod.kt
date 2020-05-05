@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.java.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.fromDoc
@@ -24,7 +24,7 @@ data class JavaMethod(
 
     val parameters: List<JavaParameter>,
     val returnValue: JavaReturnType,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : DocElement, AutoDocument {
     override val kind = "Method"
 

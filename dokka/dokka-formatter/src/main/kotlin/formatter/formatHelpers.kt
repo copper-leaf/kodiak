@@ -1,14 +1,13 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.caseyjbrooks.clog.Clog
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedNameFromType
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.caseyjbrooks.clog.Clog
 
 val DocumentationNode.modifiers: List<String>
     get() = this.details(NodeKind.Modifier)
@@ -55,17 +54,17 @@ val DocumentationNode.nullable: Boolean
         return asType().details(NodeKind.NullabilityModifier).singleOrNull() != null
     }
 
-fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent(TEXT, "$it ") }
+fun List<String>.toModifierListSignature(): List<RichTextComponent> {
+    return this.map { RichTextComponent(TEXT, "$it ") }
 }
 
 fun List<DocumentationNode>.toListSignature(
-    childMapper: (DocumentationNode) -> List<CommentComponent>,
-    prefix: List<CommentComponent> = emptyList(),
-    postfix: List<CommentComponent> = emptyList(),
-    separator: List<CommentComponent> = listOf(CommentComponent(PUNCTUATION, ", "))
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+    childMapper: (DocumentationNode) -> List<RichTextComponent>,
+    prefix: List<RichTextComponent> = emptyList(),
+    postfix: List<RichTextComponent> = emptyList(),
+    separator: List<RichTextComponent> = listOf(RichTextComponent(PUNCTUATION, ", "))
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     if (this.isNotEmpty()) {
         list.addAll(prefix)

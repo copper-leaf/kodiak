@@ -8,11 +8,11 @@ import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNull
 
-class CommentComponentTest {
+class RichTextComponentTest {
 
     @Test
-    fun testSerializerFor_CommentComponent() {
-        val underTest = CommentComponent(
+    fun testSerializerFor_RichTextComponent() {
+        val underTest = RichTextComponent(
             kind = "testKind",
             text = "testText",
             value = "testValue"
@@ -25,10 +25,10 @@ class CommentComponentTest {
             |}
             """.trimMargin()
 
-        val serialized = Json.indented.stringify(CommentComponent.serializer(), underTest)
+        val serialized = Json.indented.stringify(RichTextComponent.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = Json.indented.parse(CommentComponent.serializer(), json)
+        val parsed = Json.indented.parse(RichTextComponent.serializer(), json)
         expectThat(parsed)
             .and { get { kind }.isEqualTo("testKind") }
             .and { get { text }.isEqualTo("testText") }
@@ -38,8 +38,8 @@ class CommentComponentTest {
     }
 
     @Test
-    fun testSerializerFor_CommentComponent_WithNullValue() {
-        val underTest = CommentComponent(
+    fun testSerializerFor_RichTextComponent_WithNullValue() {
+        val underTest = RichTextComponent(
             kind = "testKind",
             text = "testText",
             value = null
@@ -52,10 +52,10 @@ class CommentComponentTest {
             |}
             """.trimMargin()
 
-        val serialized = Json.indented.stringify(CommentComponent.serializer(), underTest)
+        val serialized = Json.indented.stringify(RichTextComponent.serializer(), underTest)
         expectThat(serialized).isEqualTo(json)
 
-        val parsed = Json.indented.parse(CommentComponent.serializer(), json)
+        val parsed = Json.indented.parse(RichTextComponent.serializer(), json)
         expectThat(parsed)
             .and { get { kind }.isEqualTo("testKind") }
             .and { get { text }.isEqualTo("testText") }

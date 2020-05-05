@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.java.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.SpecializedDocElement
@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single class. Includes a list of the constructors, methods, and fields in the class, as well as the
- * KDoc commentComponents on the class.
+ * KDoc RichTextComponents on the class.
  */
 @Serializable
 data class JavaClass(
@@ -23,8 +23,8 @@ data class JavaClass(
     val node: Any? = null,
 
     val `package`: String,
-    val superclass: CommentComponent?,
-    val interfaces: List<CommentComponent>,
+    val superclass: RichTextComponent?,
+    val interfaces: List<RichTextComponent>,
 
     override val subKind: String,
     override val name: String,
@@ -35,7 +35,7 @@ data class JavaClass(
     val constructors: List<JavaConstructor>,
     val methods: List<JavaMethod>,
     val fields: List<JavaField>,
-    override val signature: List<CommentComponent>,
+    override val signature: List<RichTextComponent>,
 
     val enumItems: List<JavaEnumConstant>
 ) : DocElement, AutoDocument, SpecializedDocElement, TopLevel {
@@ -43,7 +43,7 @@ data class JavaClass(
     override val kind = "Class"
 
     override val parents = listOfNotNull(superclass, *interfaces.toTypedArray())
-    override val contexts = listOf(CommentComponent(TYPE_NAME, `package`, `package`))
+    override val contexts = listOf(RichTextComponent(TYPE_NAME, `package`, `package`))
 
     @Transient
     override val nodes = listOf(

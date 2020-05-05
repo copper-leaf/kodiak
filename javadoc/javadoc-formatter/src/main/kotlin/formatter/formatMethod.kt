@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.java.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.java.models.JavaMethod
 import com.copperleaf.kodiak.java.models.JavaParameter
 import com.copperleaf.kodiak.java.models.JavaReturnType
@@ -46,13 +46,13 @@ fun MethodDoc.methodSignature(
     modifiers: List<String>,
     parameters: List<JavaParameter>,
     returnType: JavaReturnType
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(this.typeParameters().toWildcardSignature())
     list.addAll(returnType.signature)
-    list.add(CommentComponent(TEXT, " ${this.name()}"))
+    list.add(RichTextComponent(TEXT, " ${this.name()}"))
     list.addAll(parameters.toParameterListSignature())
 
     return list

@@ -1,9 +1,10 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.groovy.models.GroovyClass
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.tools.groovydoc.SimpleGroovyDoc
@@ -14,8 +15,8 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean): GroovyClass {
     return GroovyClass(
         this,
         this.containingPackage().nameWithDots(),
-        this.superclass()?.asCommentComponent(),
-        this.interfaces()?.mapNotNull { it?.asCommentComponent() } ?: emptyList(),
+        this.superclass()?.asRichTextComponent(INHERITED),
+        this.interfaces()?.mapNotNull { it?.asRichTextComponent(COMPOSED) } ?: emptyList(),
         this.classKind,
         this.simpleTypeName(),
         this.qualifiedTypeName(),
@@ -45,39 +46,39 @@ val GroovyClassDoc.classKind: String
 
 fun GroovyClassDoc.classSignature(
     modifiers: List<String>
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent(TEXT, "${this.classKind} "))
-    list.add(this.asCommentComponent())
+    list.add(RichTextComponent(TEXT, "${this.classKind} "))
+    list.add(this.asRichTextComponent())
 //    list.addAll(this.typeParameters().toWildcardSignature())
 
     if (this.isInterface) {
         val interfaces = this.interfaces()
         if (interfaces.isNotEmpty()) {
-            list.add(CommentComponent(TEXT, " extends "))
+            list.add(RichTextComponent(TEXT, " extends "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(CommentComponent(PUNCTUATION, ", "))
+                    list.add(RichTextComponent(PUNCTUATION, ", "))
                 }
             }
         }
     } else {
         val superclass = this.superclass()
         if (superclass != null) {
-            list.add(CommentComponent(TEXT, " extends "))
+            list.add(RichTextComponent(TEXT, " extends "))
             list.addAll(superclass.toTypeSignature())
         }
 
         val interfaces = this.interfaces()
         if (interfaces.isNotEmpty()) {
-            list.add(CommentComponent(TEXT, " implements "))
+            list.add(RichTextComponent(TEXT, " implements "))
             interfaces.forEachIndexed { boundsIndex, type ->
                 list.addAll(type.toTypeSignature())
                 if (boundsIndex < interfaces.size - 1) {
-                    list.add(CommentComponent(PUNCTUATION, ", "))
+                    list.add(RichTextComponent(PUNCTUATION, ", "))
                 }
             }
         }

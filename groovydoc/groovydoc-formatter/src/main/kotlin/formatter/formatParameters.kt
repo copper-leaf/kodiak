@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import org.codehaus.groovy.groovydoc.GroovyParameter
 import org.codehaus.groovy.groovydoc.GroovyTag
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -32,43 +32,43 @@ fun GroovyParameter.toParameter(tag: GroovyTag?): GroovyParameterDoc {
     )
 }
 
-fun List<GroovyParameterDoc>.toParameterListSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
-    list.add(CommentComponent(PUNCTUATION, "("))
+fun List<GroovyParameterDoc>.toParameterListSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
+    list.add(RichTextComponent(PUNCTUATION, "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
-            list.add(CommentComponent(PUNCTUATION, ", "))
+            list.add(RichTextComponent(PUNCTUATION, ", "))
         }
     }
-    list.add(CommentComponent(PUNCTUATION, ")"))
+    list.add(RichTextComponent(PUNCTUATION, ")"))
 
     return list
 }
 
-fun GroovyType?.toTypeSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun GroovyType?.toTypeSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     if (this != null) {
-        list.add(CommentComponent(TYPE_NAME, this.real().simpleTypeName(), this.real().qualifiedTypeName()))
+        list.add(RichTextComponent(TYPE_NAME, this.real().simpleTypeName(), this.real().qualifiedTypeName()))
     }
 
     return list
 }
 
-fun GroovyParameter.parameterSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun GroovyParameter.parameterSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(this.realType().toTypeSignature())
 
     val dimension = this.dimension()
     if(dimension.isNotBlank()) {
-        list.add(CommentComponent(TEXT, dimension, ""))
+        list.add(RichTextComponent(TEXT, dimension, ""))
     }
 
     list.add(
-        CommentComponent(
+        RichTextComponent(
             TEXT,
             " ${this.name()}",
             ""

@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
@@ -55,10 +55,10 @@ fun SourceKittenSubstructure.toReturnType(): SwiftReturnType {
     )
 }
 
-fun SourceKittenSubstructure.returnValueSignature(typeName: String, typeId: String): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun SourceKittenSubstructure.returnValueSignature(typeName: String, typeId: String): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
-    list.add(CommentComponent(TYPE_NAME, " $typeName", typeId))
+    list.add(RichTextComponent(TYPE_NAME, " $typeName", typeId))
 
     return list
 }
@@ -68,15 +68,15 @@ fun SourceKittenSubstructure.functionSignature(
     modifiers: List<String>,
     parameters: List<SwiftParameter>,
     returnType: SwiftReturnType
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent(TEXT, "func"))
-    list.add(CommentComponent(TEXT, " $methodName"))
+    list.add(RichTextComponent(TEXT, "func"))
+    list.add(RichTextComponent(TEXT, " $methodName"))
     list.addAll(parameters.toParameterListSignature())
     if(returnType.typeId != "Void") {
-        list.add(CommentComponent(PUNCTUATION, " -> "))
+        list.add(RichTextComponent(PUNCTUATION, " -> "))
         list.addAll(returnType.signature)
     }
 

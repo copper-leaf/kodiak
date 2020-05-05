@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.swift.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
 import com.copperleaf.kodiak.swift.models.SwiftConstructor
@@ -34,12 +34,12 @@ fun SourceKittenSubstructure.initializerSignature(
     methodName: String,
     modifiers: List<String>,
     parameters: List<SwiftParameter>
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
-    list.add(CommentComponent(TEXT, "func"))
-    list.add(CommentComponent(TYPE_NAME, " $methodName"))
+    list.add(RichTextComponent(TEXT, "func"))
+    list.add(RichTextComponent(TYPE_NAME, " $methodName"))
     list.addAll(parameters.toParameterListSignature())
 
     return list

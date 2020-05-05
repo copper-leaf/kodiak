@@ -32,5 +32,5 @@ interface DocElement {
      * A simple, rich signature for this type which, when concatenated together, creates the full declaration of this
      * element.
      */
-    val signature: List<CommentComponent>
+    val signature: List<RichTextComponent>
 }

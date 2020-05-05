@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.TopLevel
@@ -26,15 +26,15 @@ data class GroovyPackage(
     val parent: String,
     override val modifiers: List<String>,
     override val comment: DocComment,
-    override val signature: List<CommentComponent>,
+    override val signature: List<RichTextComponent>,
 
     val classes: List<GroovyClass>,
     val subpackages: List<GroovyPackage>
 ) : DocElement, AutoDocument, TopLevel {
     override val kind = "Package"
 
-    override val parents = listOf(CommentComponent(TYPE_NAME, parent, parent))
-    override val contexts = emptyList<CommentComponent>()
+    override val parents = listOf(RichTextComponent(TYPE_NAME, parent, parent))
+    override val contexts = emptyList<RichTextComponent>()
 
     @Transient
     override val nodes = listOf(

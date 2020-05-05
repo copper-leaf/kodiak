@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.models.SwiftField
 
@@ -20,13 +20,13 @@ fun SourceKittenSubstructure.toVariableDoc(structure: SourceKittenSubstructure):
     )
 }
 
-fun SourceKittenSubstructure.variableSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun SourceKittenSubstructure.variableSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
-    list.add(CommentComponent(TEXT, "var"))
-    list.add(CommentComponent(TEXT, " ${this.name}"))
-    list.add(CommentComponent(PUNCTUATION, ":"))
-    list.add(CommentComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
+    list.add(RichTextComponent(TEXT, "var"))
+    list.add(RichTextComponent(TEXT, " ${this.name}"))
+    list.add(RichTextComponent(PUNCTUATION, ":"))
+    list.add(RichTextComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
 
     return list
 }

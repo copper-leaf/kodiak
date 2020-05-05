@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.swift.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.SpecializedDocElement
@@ -26,7 +26,7 @@ data class SwiftMethod(
 
     val parameters: List<SwiftParameter>,
     val returnValue: SwiftReturnType,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : DocElement, AutoDocument, SpecializedDocElement {
 
     override val kind = "Method"

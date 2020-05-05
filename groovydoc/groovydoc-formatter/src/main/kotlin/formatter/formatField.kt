@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.groovy.models.GroovyField
 import org.codehaus.groovy.groovydoc.GroovyFieldDoc
 import org.codehaus.groovy.groovydoc.GroovyType
@@ -26,12 +26,12 @@ fun GroovyFieldDoc.toField(): GroovyField {
 fun GroovyFieldDoc.fieldSignature(
     modifiers: List<String>,
     type: GroovyType
-): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
     list.addAll(modifiers.toModifierListSignature())
     list.addAll(type.toTypeSignature())
-    list.add(CommentComponent(TEXT, " ${this.name()}"))
+    list.add(RichTextComponent(TEXT, " ${this.name()}"))
 
     return list
 }

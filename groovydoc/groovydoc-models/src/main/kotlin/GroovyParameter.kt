@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.groovy.models
 
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.ElementType
 import kotlinx.serialization.Serializable
@@ -21,7 +21,7 @@ data class GroovyParameter(
 
     override val typeName: String,
     override val typeId: String,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : ElementType {
     override val kind = "Parameter"
 }

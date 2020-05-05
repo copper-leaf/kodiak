@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.swift.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.common.JsonableDocElement
@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 
 /**
  * The docs for a single class. Includes a list of the constructors, methods, and fields in the class, as well as the
- * KDoc commentComponents on the class.
+ * KDoc RichTextComponents on the class.
  */
 @Serializable
 data class SwiftClass(
@@ -24,8 +24,8 @@ data class SwiftClass(
     val node: Any? = null,
 
     val sourceFile: String,
-    val superclass: CommentComponent?,
-    val protocols: List<CommentComponent>,
+    val superclass: RichTextComponent?,
+    val protocols: List<RichTextComponent>,
 
     override val subKind: String,
     override val name: String,
@@ -36,13 +36,13 @@ data class SwiftClass(
     val constructors: List<SwiftConstructor>,
     val methods: List<SwiftMethod>,
     val fields: List<SwiftField>,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : DocElement, AutoDocument, SpecializedDocElement, JsonableDocElement, TopLevel {
 
     override val kind = "Class"
 
     override val parents = listOfNotNull(superclass, *protocols.toTypedArray())
-    override val contexts = listOf(CommentComponent(TYPE_NAME, sourceFile, sourceFile))
+    override val contexts = listOf(RichTextComponent(TYPE_NAME, sourceFile, sourceFile))
 
     @Transient
     override val nodes = listOf(

@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.MainArgs
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_METHOD
@@ -25,21 +25,21 @@ fun SourceKittenSubstructure.toExtensionDoc(mainArgs: MainArgs, structure: Sourc
     )
 }
 
-fun SourceKittenSubstructure.extensionSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun SourceKittenSubstructure.extensionSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
-    list.add(CommentComponent(TEXT, "extension"))
-    list.add(CommentComponent(TEXT, " ${this.kind.kindName}"))
-    list.add(CommentComponent(TYPE_NAME, " ${this.name}", this.name))
+    list.add(RichTextComponent(TEXT, "extension"))
+    list.add(RichTextComponent(TEXT, " ${this.kind.kindName}"))
+    list.add(RichTextComponent(TYPE_NAME, " ${this.name}", this.name))
 
     if(this.inheritedtypes.isNotEmpty()) {
-        list.add(CommentComponent(PUNCTUATION, ":"))
+        list.add(RichTextComponent(PUNCTUATION, ":"))
 
         this.inheritedtypes.forEachIndexed { index, type ->
-            list.add(CommentComponent(TYPE_NAME, " ${type.name}", type.name))
+            list.add(RichTextComponent(TYPE_NAME, " ${type.name}", type.name))
 
             if (index < this.inheritedtypes.size - 1) {
-                list.add(CommentComponent(PUNCTUATION, ", "))
+                list.add(RichTextComponent(PUNCTUATION, ", "))
             }
         }
     }

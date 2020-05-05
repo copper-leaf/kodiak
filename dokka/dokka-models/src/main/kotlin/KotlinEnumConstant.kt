@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.kotlin.models
 
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
 import kotlinx.serialization.Serializable
@@ -18,7 +18,7 @@ data class KotlinEnumConstant(
     override val id: String,
     override val modifiers: List<String>,
     override val comment: DocComment,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : DocElement {
 
     override val kind: String = "enumConstant"

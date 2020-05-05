@@ -1,7 +1,7 @@
 package com.copperleaf.kodiak.common
 
 import com.caseyjbrooks.clog.Clog
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -47,12 +47,12 @@ class AutoDocumentTest {
             override val modifiers = emptyList<String>()
             override val comment: DocComment
                 get() = DocComment(
-                    components = listOf(CommentComponent(TEXT, commentText)),
+                    components = listOf(RichTextComponent(TEXT, commentText)),
                     tags =
                     commentTags.mapValues {
                         CommentTag(
                             value = listOf(
-                                CommentComponent(
+                                RichTextComponent(
                                     TEXT,
                                     it.value
                                 )
@@ -60,7 +60,7 @@ class AutoDocumentTest {
                         )
                     }
                 )
-            override val signature: List<CommentComponent> = emptyList()
+            override val signature: List<RichTextComponent> = emptyList()
         }
     }
 
@@ -78,8 +78,8 @@ class AutoDocumentTest {
             id,
             modifiers,
             DocComment(
-                listOf(CommentComponent(TEXT, commentText)),
-                commentTags.mapValues { CommentTag(value = listOf(CommentComponent(TEXT, it.value))) }
+                listOf(RichTextComponent(TEXT, commentText)),
+                commentTags.mapValues { CommentTag(value = listOf(RichTextComponent(TEXT, it.value))) }
             )
         )
     }
@@ -115,5 +115,5 @@ internal data class TestTypeElement(
 
     override val typeName: String = name,
     override val typeId: String = id,
-    override val signature: List<CommentComponent> = emptyList()
+    override val signature: List<RichTextComponent> = emptyList()
 ) : ElementType

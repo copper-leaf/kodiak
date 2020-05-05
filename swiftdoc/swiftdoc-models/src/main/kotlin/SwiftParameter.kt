@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.swift.models
 
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.ElementType
 import com.copperleaf.kodiak.common.SpecializedDocElement
@@ -23,7 +23,7 @@ data class SwiftParameter(
 
     override val typeName: String,
     override val typeId: String,
-    override val signature: List<CommentComponent>
+    override val signature: List<RichTextComponent>
 ) : ElementType, SpecializedDocElement {
     override val kind = "Parameter"
 }

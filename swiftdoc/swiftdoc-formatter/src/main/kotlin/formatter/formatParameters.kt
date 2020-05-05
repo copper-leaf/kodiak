@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.swift.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.models.SwiftParameter
 
@@ -21,12 +21,12 @@ fun SourceKittenSubstructure.toParameterDoc(): SwiftParameter {
     )
 }
 
-fun SourceKittenSubstructure.parameterSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun SourceKittenSubstructure.parameterSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
 
-    list.add(CommentComponent(TEXT, " ${this.name}"))
-    list.add(CommentComponent(PUNCTUATION, ":"))
-    list.add(CommentComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
+    list.add(RichTextComponent(TEXT, " ${this.name}"))
+    list.add(RichTextComponent(PUNCTUATION, ":"))
+    list.add(RichTextComponent(TYPE_NAME, " ${this.typenameRawValue}", this.typename))
 
     return list
 }
@@ -45,17 +45,17 @@ fun SourceKittenSubstructure.toTypeParameterDoc(): SwiftParameter {
     )
 }
 
-fun List<SwiftParameter>.toParameterListSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
-    list.add(CommentComponent(PUNCTUATION, "("))
+fun List<SwiftParameter>.toParameterListSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
+    list.add(RichTextComponent(PUNCTUATION, "("))
     this.forEachIndexed { index, parameter ->
         list.addAll(parameter.signature)
 
         if (index < this.size - 1) {
-            list.add(CommentComponent(PUNCTUATION, ", "))
+            list.add(RichTextComponent(PUNCTUATION, ", "))
         }
     }
-    list.add(CommentComponent(PUNCTUATION, ")"))
+    list.add(RichTextComponent(PUNCTUATION, ")"))
 
     return list
 }

@@ -1,10 +1,11 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.caseyjbrooks.clog.Clog
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.kotlin.models.KotlinTypealias
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -26,15 +27,15 @@ fun DocumentationNode.toTypealiasDoc(): KotlinTypealias {
     )
 }
 
-fun DocumentationNode.typealiasSignature(): List<CommentComponent> {
-    val list = mutableListOf<CommentComponent>()
+fun DocumentationNode.typealiasSignature(): List<RichTextComponent> {
+    val list = mutableListOf<RichTextComponent>()
     val underlyingKind = this.details.first { it.kind == NodeKind.TypeAliasUnderlyingType }
 
-    list.add(CommentComponent(TEXT, "typealias "))
-    list.add(CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
-    list.add(CommentComponent(PUNCTUATION, " = "))
+    list.add(RichTextComponent(TEXT, "typealias "))
+    list.add(RichTextComponent(TYPE_NAME, this.simpleName, this.qualifiedName))
+    list.add(RichTextComponent(PUNCTUATION, " = "))
     list.add(
-        CommentComponent(
+        RichTextComponent(
             TYPE_NAME,
             underlyingKind.simpleName,
             underlyingKind.detailOrNull(NodeKind.QualifiedName)?.simpleName ?: ""

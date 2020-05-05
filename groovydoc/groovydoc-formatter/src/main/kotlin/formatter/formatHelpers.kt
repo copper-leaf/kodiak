@@ -1,8 +1,8 @@
 package com.copperleaf.kodiak.groovy.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
@@ -22,8 +22,8 @@ fun GroovyDoc.isSuppressed(): Boolean {
     return this.findCommentTags().any { it.name() in listOf("suppress") }
 }
 
-fun List<String>.toModifierListSignature(): List<CommentComponent> {
-    return this.map { CommentComponent(TEXT, "$it ") }
+fun List<String>.toModifierListSignature(): List<RichTextComponent> {
+    return this.map { RichTextComponent(TEXT, "$it ") }
 }
 
 fun GroovyType.real(): GroovyType {
@@ -71,7 +71,7 @@ tailrec fun GroovyClassDoc.isExceptionClass(): Boolean {
 //----------------------------------------------------------------------------------------------------------------------
 
 data class GroovyCommentData(
-    val commentText: List<CommentComponent>,
+    val commentText: List<RichTextComponent>,
     val commentTags: Map<String, List<Pair<String, String>>>
 )
 
@@ -118,7 +118,7 @@ fun String.parseCommentToValues(): GroovyCommentData {
         commentTags[dlName] = tagValues
     }
 
-    val commentComponents = mutableListOf<CommentComponent>()
+    val RichTextComponents = mutableListOf<RichTextComponent>()
 
     val originalCommentText = commentDoc.select("body").html().trimLines()
     val linkRegex = "<a(.*?)>(.*?)</a>".toRegex()
@@ -132,9 +132,9 @@ fun String.parseCommentToValues(): GroovyCommentData {
         val title = aTag.attr("title")
 
         if(!(href.startsWith("http://") || href.startsWith("https://"))) {
-            // internal link, add it as a TYPE_NAME commentComponent
-            commentComponents.add(
-                CommentComponent(
+            // internal link, add it as a TYPE_NAME RichTextComponent
+            RichTextComponents.add(
+                RichTextComponent(
                     TEXT,
                     originalCommentText.substring(currentIndex, match.range.first),
                     ""
@@ -142,8 +142,8 @@ fun String.parseCommentToValues(): GroovyCommentData {
             )
 
             val linkedId = href.replace("../", "").replace(".html", "").replace("/", ".")
-            commentComponents.add(
-                CommentComponent(
+            RichTextComponents.add(
+                RichTextComponent(
                     TYPE_NAME,
                     text,
                     linkedId
@@ -154,8 +154,8 @@ fun String.parseCommentToValues(): GroovyCommentData {
         currentIndex = match.range.last + 1
     }
 
-    commentComponents.add(
-        CommentComponent(
+    RichTextComponents.add(
+        RichTextComponent(
             TEXT,
             originalCommentText.substring(currentIndex),
             ""
@@ -163,7 +163,7 @@ fun String.parseCommentToValues(): GroovyCommentData {
     )
 
     return GroovyCommentData(
-        commentComponents,
+        RichTextComponents,
         commentTags
     )
 }
@@ -182,7 +182,7 @@ fun GroovyTag?.getComment(): DocComment {
     )
 }
 
-fun GroovyDoc.findCommentText(): List<CommentComponent> {
+fun GroovyDoc.findCommentText(): List<RichTextComponent> {
     return this.commentText().parseCommentToValues().commentText
 }
 
@@ -213,6 +213,6 @@ private fun String.trimLines() = this
     .map { it.trimEnd() }
     .joinToString("\n")
 
-fun GroovyClassDoc.asCommentComponent() : CommentComponent {
-    return CommentComponent(TYPE_NAME, "" + this.simpleTypeName(), "" + this.qualifiedTypeName())
+fun GroovyClassDoc.asRichTextComponent(type: String = TYPE_NAME) : RichTextComponent {
+    return RichTextComponent(type, "" + this.simpleTypeName(), "" + this.qualifiedTypeName())
 }

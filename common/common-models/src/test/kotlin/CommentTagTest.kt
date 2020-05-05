@@ -19,7 +19,7 @@ class CommentTagTest {
     fun testSerializeCommentTag_singleValue() {
         val underTest = CommentTag(
             value = listOf(
-                CommentComponent(
+                RichTextComponent(
                     kind = "testKind",
                     text = "testText",
                     value = "testValue"
@@ -62,7 +62,7 @@ class CommentTagTest {
         val underTest = CommentTag(
             values = mapOf(
                 "testKey" to listOf(
-                    CommentComponent(
+                    RichTextComponent(
                         kind = "testKind",
                         text = "testText",
                         value = "testValue"
@@ -111,7 +111,7 @@ class CommentTagTest {
     @Test
     fun testSerializeCommentTag_bothValueAndValues_throws() {
         val comment = listOf(
-            CommentComponent(
+            RichTextComponent(
                 kind = "testKind",
                 text = "testText",
                 value = "testValue"

@@ -1,10 +1,12 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.copperleaf.kodiak.common.CommentComponent
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.kotlin.models.KotlinPackage
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.CommentComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.CommentComponent.Companion.PUNCTUATION
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 
@@ -39,9 +41,9 @@ fun DocumentationNode.toPackageDoc(deep: Boolean): KotlinPackage {
     )
 }
 
-fun DocumentationNode.packageSignature(): List<CommentComponent> {
+fun DocumentationNode.packageSignature(): List<RichTextComponent> {
     return listOf(
-        CommentComponent(TEXT, "package "),
-        CommentComponent(TYPE_NAME, this.simpleName, this.qualifiedName)
+        RichTextComponent(TEXT, "package "),
+        RichTextComponent(TYPE_NAME, this.simpleName, this.qualifiedName)
     )
 }
