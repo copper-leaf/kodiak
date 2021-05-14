@@ -1,17 +1,25 @@
 package com.copperleaf.kodiak.swift
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
+import clog.dsl.addTagToBlacklist
 import com.copperleaf.kodiak.swift.internal.models.SwiftAccessibility
 import com.eden.orchid.api.cli.Cli
 import com.eden.orchid.api.options.annotations.Option
 import com.eden.orchid.api.options.annotations.StringDefault
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.file.Path
 
 fun main(vararg args: String) {
-    Clog.getInstance().addTagToBlacklist("FlagsParser")
+    Clog.addTagToBlacklist("FlagsParser")
 
     val mainArgs = Cli.parseArgsInto(MainArgs(), args)
+
+    val jsonModule = Json {
+        isLenient = true
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
 
     SourcekittenWrapper(mainArgs).use { sourceKitten ->
         sourceKitten.cacheSourceKittenBinary()
@@ -20,7 +28,8 @@ fun main(vararg args: String) {
         SwiftdocFileParser(
             mainArgs,
             sourceKitten,
-            SwiftdocRemapper(mainArgs)
+            SwiftdocRemapper(mainArgs),
+            jsonModule
         ).processAll()
     }
 }
@@ -63,7 +72,7 @@ class MainArgs {
     }
 }
 
-internal fun newFile(name: String) : File = File(name).apply {
+internal fun newFile(name: String): File = File(name).apply {
     if (!parentFile.exists()) {
         parentFile.mkdirs()
     }

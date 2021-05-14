@@ -33,8 +33,4 @@ package com.copperleaf.kodiak
  * @since v1.0.0
  * @orchidApi extensible
  */
-class KotlinMarkdown {
-
-
-
-}
+class KotlinMarkdown

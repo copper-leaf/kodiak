@@ -104,6 +104,6 @@ fun RichTextComponent.expandUnparsedInlineTags(): List<RichTextComponent> {
     }
 }
 
-fun ClassDoc.asRichTextComponent(type: String = TYPE_NAME) : RichTextComponent {
+fun ClassDoc.asRichTextComponent(type: String = TYPE_NAME): RichTextComponent {
     return RichTextComponent(type, this.typeName(), this.qualifiedTypeName())
 }

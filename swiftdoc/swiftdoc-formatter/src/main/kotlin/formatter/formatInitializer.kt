@@ -13,7 +13,9 @@ fun SourceKittenSubstructure.toInitializerDoc(structure: SourceKittenSubstructur
 
     val methodName = this.name.split("(").first().trim()
     val modifiers = this.getModifiers()
-    val parameters = ownStructure?.childrenOfType(SwiftSubstructureKind.PARAMETER) { it.toParameterDoc() } ?: emptyList()
+    val parameters = ownStructure
+        ?.childrenOfType(SwiftSubstructureKind.PARAMETER) { it.toParameterDoc() }
+        ?: emptyList()
 
     return SwiftConstructor(
         this,

@@ -61,8 +61,8 @@ data class SourceKittenSubstructure(
     }
 
     companion object {
-        fun fromJson(json: String) : SourceKittenSubstructure {
-            return Json.nonstrict.parse(serializer(), json)
+        fun fromJson(jsonModule: Json, json: String): SourceKittenSubstructure {
+            return jsonModule.decodeFromString(serializer(), json)
         }
     }
 }

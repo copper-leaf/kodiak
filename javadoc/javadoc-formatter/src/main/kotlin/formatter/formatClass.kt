@@ -28,7 +28,7 @@ fun ClassDoc.toClassDoc(deep: Boolean): JavaClass {
             modifiers
         ),
 
-        if(deep && this.isEnum) this.enumConstants().map { it.toEnumConstant() } else emptyList()
+        if (deep && this.isEnum) this.enumConstants().map { it.toEnumConstant() } else emptyList()
     )
 }
 

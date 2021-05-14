@@ -17,7 +17,8 @@ import org.jetbrains.dokka.Utilities.lazyBind
 import org.jetbrains.dokka.Utilities.toOptional
 import org.jetbrains.dokka.Utilities.toType
 
-class DokkaJsonFormatDescriptor : FormatDescriptor,
+class DokkaJsonFormatDescriptor :
+    FormatDescriptor,
     DefaultAnalysisComponent,
     DefaultAnalysisComponentServices by KotlinAsKotlin {
 
@@ -39,4 +40,3 @@ class DokkaJsonFormatDescriptor : FormatDescriptor,
         lazyBind<PackageListService>() toOptional packageListServiceClass
     }
 }
-

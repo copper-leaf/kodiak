@@ -40,7 +40,6 @@ constructor(s1: T?) {
      */
     lateinit var someData5: List<T>
 
-
     /**
      * This class _freaking awesome_ method links to [KotlinInterface], **yo**!
      *

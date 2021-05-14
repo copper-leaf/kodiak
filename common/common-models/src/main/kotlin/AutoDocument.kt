@@ -43,13 +43,19 @@ interface AutoDocumentNode {
 fun fromDoc(prop: KProperty<DocElement?>): AutoDocumentNode {
     return object : AutoDocumentNode {
         override val name: String = prop.name
-        override val elements by lazy { prop.getter.call()?.let { listOf(it) } ?: emptyList() }
+        override val elements: List<DocElement> by lazy {
+            val el: DocElement? = prop.getter.call()
+            listOfNotNull(el)
+        }
     }
 }
 
 fun fromDocList(prop: KProperty<List<DocElement>?>): AutoDocumentNode {
     return object : AutoDocumentNode {
         override val name: String = prop.name
-        override val elements by lazy { prop.getter.call() ?: emptyList() }
+        override val elements: List<DocElement> by lazy {
+            val els: List<DocElement>? = prop.getter.call()
+            els ?: emptyList()
+        }
     }
 }

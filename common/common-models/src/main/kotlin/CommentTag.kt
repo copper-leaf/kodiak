@@ -30,6 +30,8 @@ data class CommentTag(
     val values: Map<String, List<RichTextComponent>>? = null
 ) {
     init {
-        check((value != null) xor (values != null)) { "A CommentTag must have a single value or a map of values, but not both!" }
+        check((value != null) xor (values != null)) {
+            "A CommentTag must have a single value or a map of values, but not both!"
+        }
     }
 }

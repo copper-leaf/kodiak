@@ -29,5 +29,4 @@ class DefaultProjectRootLocator(
             "settings.gradle(.kts)?"
         )
     }
-
 }

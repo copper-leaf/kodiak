@@ -3,15 +3,14 @@ package com.copperleaf.kodiak.swift
 import com.copperleaf.kodiak.common.DocInvoker
 import com.copperleaf.kodiak.swift.models.SwiftModuleDoc
 import com.eden.common.util.IOStreamUtils
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import strikt.api.expectThat
-import strikt.assertions.isNotEmpty
-import strikt.assertions.isNotNull
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class SwiftdocJsonRunnerTest {
 
@@ -39,16 +38,15 @@ class SwiftdocJsonRunnerTest {
     }
 
     private fun cleanupProjectDirs() {
-
     }
 
-    @BeforeEach
+    @Before
     internal fun setUp() {
         if (useTempDirs) initTempDirs() else initProjectDirs()
         swiftdocRunner = SwiftdocInvokerImpl(cacheDir)
     }
 
-    @AfterEach
+    @After
     internal fun tearDown() {
         if (useTempDirs) cleanupTempDirs() else cleanupProjectDirs()
     }
@@ -60,10 +58,8 @@ class SwiftdocJsonRunnerTest {
             outputDir
         ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
-        expectThat(rootDoc)
-            .isNotNull()
-            .and { get { sourceFiles }.isNotEmpty() }
-            .and { get { classes }.isNotEmpty() }
+        assertNotNull(rootDoc)
+        assertTrue(rootDoc.sourceFiles.isNotEmpty())
+        assertTrue(rootDoc.classes.isNotEmpty())
     }
-
 }

@@ -7,7 +7,7 @@ import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedNameFromType
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 
 val DocumentationNode.modifiers: List<String>
     get() = this.details(NodeKind.Modifier)

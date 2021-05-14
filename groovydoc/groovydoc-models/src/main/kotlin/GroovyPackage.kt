@@ -1,15 +1,16 @@
 package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.JsonableDocElement
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -30,20 +31,22 @@ data class GroovyPackage(
 
     val classes: List<GroovyClass>,
     val subpackages: List<GroovyPackage>
-) : DocElement, AutoDocument, TopLevel {
+) : DocElement, AutoDocument, TopLevel, JsonableDocElement {
     override val kind = "Package"
 
-    override val parents = listOf(RichTextComponent(TYPE_NAME, parent, parent))
-    override val contexts = emptyList<RichTextComponent>()
+    override val parents: List<RichTextComponent>
+        get() = listOf(RichTextComponent(TYPE_NAME, parent, parent))
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::classes),
-        fromDocList(::subpackages)
-    )
+    override val contexts: List<RichTextComponent>
+        get() = emptyList()
 
-    @UseExperimental(UnstableDefault::class)
-    fun toJson(): String {
-        return Json.indented.stringify(serializer(), this)
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::classes),
+            fromDocList(::subpackages)
+        )
+
+    override fun toJson(json: Json): String {
+        return json.encodeToString(serializer(), this)
     }
 }

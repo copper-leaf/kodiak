@@ -1,8 +1,0 @@
-apply plugin: "com.github.johnrengelman.shadow"
-
-tasks.assemble.dependsOn shadowJar
-
-shadowJar {
-    version = rootProject.version
-    extension = "zip"
-}

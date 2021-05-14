@@ -1,9 +1,10 @@
 package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.fromDoc
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
@@ -28,9 +29,9 @@ data class GroovyMethod(
 ) : DocElement, AutoDocument {
     override val kind = "Method"
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::parameters),
-        fromDoc(::returnValue)
-    )
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::parameters),
+            fromDoc(::returnValue)
+        )
 }

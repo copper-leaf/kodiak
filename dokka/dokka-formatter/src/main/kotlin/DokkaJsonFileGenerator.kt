@@ -1,12 +1,13 @@
 package com.copperleaf.kodiak.kotlin
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 import com.copperleaf.kodiak.common.connectAllToParents
 import com.copperleaf.kodiak.kotlin.formatter.qualifiedName
 import com.copperleaf.kodiak.kotlin.formatter.toClassDoc
 import com.copperleaf.kodiak.kotlin.formatter.toPackageDoc
 import com.google.inject.Inject
 import com.google.inject.name.Named
+import kotlinx.serialization.json.Json
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.FileLocation
 import org.jetbrains.dokka.NodeKind
@@ -19,6 +20,12 @@ import java.util.ArrayDeque
 
 class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override val root: File) :
     NodeLocationAwareGenerator {
+
+    val jsonModule = Json {
+        isLenient = true
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
 
     override fun location(node: DocumentationNode): FileLocation {
         return FileLocation(fileForNode(node, "json"))
@@ -57,7 +64,7 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
                 val file = fileForNode(itemInFile, "Class", "json")
                 file.parentFile?.mkdirsOrFail()
                 try {
-                    file.writeText(itemInFile.toClassDoc(true).toJson())
+                    file.writeText(itemInFile.toClassDoc(true).toJson(jsonModule))
                 } catch (e: Throwable) {
                     println(e)
                 }
@@ -88,7 +95,7 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
             val file = fileForNode((it.node as DocumentationNode), "Package", "json")
             file.parentFile?.mkdirsOrFail()
             try {
-                file.writeText(it.toJson())
+                file.writeText(it.toJson(jsonModule))
             } catch (e: Throwable) {
                 println(e)
             }
@@ -96,15 +103,12 @@ class DokkaJsonFileGenerator @Inject constructor(@Named("outputDir") override va
     }
 
     override fun buildOutlines(nodes: Iterable<DocumentationNode>) {
-
     }
 
     override fun buildSupportFiles() {
-
     }
 
     override fun buildPackageList(nodes: Iterable<DocumentationNode>) {
-
     }
 
     private fun File.mkdirsOrFail() {

@@ -1,10 +1,17 @@
-apply(from = "${rootProject.rootDir}/gradle/groups/formatters.gradle")
-apply(from = "${rootProject.rootDir}/gradle/actions/shadow.gradle")
+plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-formatters`
+    `copper-leaf-publish`
+    `copper-leaf-shadow`
+}
+
+description = "Kodiak - Dokka Formatter"
 
 dependencies {
-    "implementation"(project(":common:common-formatter"))
-    "implementation"(project(":dokka:dokka-models"))
+    api(project(":dokka:dokka-models"))
 
     // use locally-compiled version of Dokka with the `<ERROR CLASS>` bug fixed, until it"s published
-    "implementation"(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    api(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }

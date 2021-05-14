@@ -1,5 +1,9 @@
-apply(from = "${rootProject.rootDir}/gradle/groups/models.gradle")
-
-dependencies {
-    "compile"(project(":common:common-models"))
+plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-models`
+    `copper-leaf-publish`
 }
+
+description = "Kodiak - Swiftdoc Models"

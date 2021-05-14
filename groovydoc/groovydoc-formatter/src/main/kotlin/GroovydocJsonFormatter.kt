@@ -17,9 +17,9 @@ class GroovydocJsonFormatter(
         return dirs
             .map { dir ->
                 dir.toFile()
-                    .walkTopDown()                                               // recursively find files in the source directory
-                    .filter { it.exists() && it.isFile }                         // only get files, not directories
-                    .filter { extensions.contains(it.extension) }                // only use Groovy or Java files
+                    .walkTopDown() // recursively find files in the source directory
+                    .filter { it.exists() && it.isFile } // only get files, not directories
+                    .filter { extensions.contains(it.extension) } // only use Groovy or Java files
                     .map { it.relativeTo(dir.toFile()).invariantSeparatorsPath } // get the file's path relative to the source directory
                     .toList()
             }
@@ -52,5 +52,4 @@ class GroovydocJsonFormatter(
             it.renderToOutput(FileOutputTool(), destDir.toFile().canonicalPath)
         }
     }
-
 }

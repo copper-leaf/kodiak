@@ -13,5 +13,4 @@ internal class DelegatingModuleLocator(
     override fun getModuleRoots(rootPath: Path): List<Path> {
         return locators.firstBy({ it.getModuleRoots(rootPath) }, { it.isNotEmpty() })
     }
-
 }

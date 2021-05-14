@@ -1,26 +1,30 @@
 plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-formatters`
+    `copper-leaf-publish`
+    `copper-leaf-shadow`
     id("de.undercouch.download")
 }
 
-apply(from = "${rootProject.rootDir}/gradle/groups/formatters.gradle")
-apply(from = "${rootProject.rootDir}/gradle/actions/shadow.gradle")
+description = "Kodiak - Swiftdoc Formatter"
 
 dependencies {
-    "compile"(project(":common:common-formatter"))
-    "compile"(project(":swiftdoc:swiftdoc-models"))
+    api(project(":swiftdoc:swiftdoc-models"))
 }
 
-val updateSourceKitten by tasks.registering() {
+val updateSourceKitten by tasks.registering {
     doLast {
         val version = project.property("sourceKittenVersion")
-        val tarFile = file("${project.buildDir}/sourcekitten/sourcekitten-${version}.mojave.bottle.tar.gz")
+        val tarFile = file("${project.buildDir}/sourcekitten/sourcekitten-$version.mojave.bottle.tar.gz")
         val tarFileUnpacked = file("${project.buildDir}/sourcekitten/unpacked")
-        val unpackedBinary = file("${project.buildDir}/sourcekitten/unpacked/sourcekitten/${version}/bin/sourcekitten")
+        val unpackedBinary = file("${project.buildDir}/sourcekitten/unpacked/sourcekitten/$version/bin/sourcekitten")
         val destinationBinaryFolder = file("${project.projectDir}/src/main/resources/bin")
 
         download.configure(
             delegateClosureOf<de.undercouch.gradle.tasks.download.DownloadAction> {
-                src("https://homebrew.bintray.com/bottles/sourcekitten-${version}.mojave.bottle.tar.gz")
+                src("https://homebrew.bintray.com/bottles/sourcekitten-$version.mojave.bottle.tar.gz")
                 dest(tarFile)
                 overwrite(true)
             }

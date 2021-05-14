@@ -8,8 +8,7 @@ import java.nio.file.Path
  */
 class MavenModuleLocator : ModuleLocator {
 
-    override fun getModuleRoots(rootPath: Path) : List<Path> {
+    override fun getModuleRoots(rootPath: Path): List<Path> {
         return emptyList()
     }
-
 }

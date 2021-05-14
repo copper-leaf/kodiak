@@ -7,10 +7,10 @@ import java.nio.file.Path
  */
 interface ModuleLocator {
 
-    fun getModuleRoots(rootPath: Path) : List<Path>
+    fun getModuleRoots(rootPath: Path): List<Path>
 
     companion object {
-        fun from(vararg locators: ModuleLocator) : ModuleLocator {
+        fun from(vararg locators: ModuleLocator): ModuleLocator {
             return DelegatingModuleLocator(locators.toList())
         }
     }

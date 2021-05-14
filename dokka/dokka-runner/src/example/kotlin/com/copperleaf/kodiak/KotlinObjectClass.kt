@@ -4,7 +4,7 @@ object KotlinObjectClass {
 
     const val objectVariable: String = ""
 
-    fun objectFunction() : String {
+    fun objectFunction(): String {
         return objectVariable
     }
 }

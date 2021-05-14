@@ -1,18 +1,24 @@
-apply(from = "${rootProject.rootDir}/gradle/groups/runners.gradle")
+plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-runners`
+    `copper-leaf-publish`
+}
+
+description = "Kodiak - Swiftdoc Runner"
 
 dependencies {
-    "compile"(project(":common:common-runner"))
-    "compile"(project(":swiftdoc:swiftdoc-models"))
+    api(project(":common:common-runner"))
+    api(project(":swiftdoc:swiftdoc-models"))
 }
 
 // wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
 // in this project
 val formatterProject = project(":swiftdoc:swiftdoc-formatter")
+val formatterProjectShadowJar by formatterProject.tasks.named("shadowJar")
 
-val thisProjectAssemble = tasks.getByName("assemble")
-val formatterProjectAssemble = formatterProject.tasks.getByName("assemble")
-thisProjectAssemble.dependsOn(formatterProjectAssemble)
-
-(tasks.getByName("processResources") as ProcessResources).apply {
+tasks.withType<ProcessResources> {
+    dependsOn(formatterProjectShadowJar)
     from("${formatterProject.buildDir}/libs/swiftdoc-formatter-$version-all.zip")
 }

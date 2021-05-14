@@ -17,7 +17,7 @@ fun FieldDoc.toEnumConstant(): JavaEnumConstant {
     )
 }
 
-fun FieldDoc.enumConstantSignature() : List<RichTextComponent> {
+fun FieldDoc.enumConstantSignature(): List<RichTextComponent> {
     return listOf(
         RichTextComponent(TEXT, this.name())
     )

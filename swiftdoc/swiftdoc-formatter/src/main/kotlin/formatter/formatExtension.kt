@@ -16,11 +16,17 @@ fun SourceKittenSubstructure.toExtensionDoc(mainArgs: MainArgs, structure: Sourc
         sourceFile,
         this.kind.name,
         this.name,
-        "${sourceFile}/${this.name}",
+        "$sourceFile/${this.name}",
         this.getModifiers(),
         this.getComment(),
-        this.childrenOfType(STATIC_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toFunctionDoc(structure) },
-        this.childrenOfType(STATIC_VARIABLE, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toVariableDoc(structure) },
+        this.childrenOfType(
+            STATIC_METHOD,
+            extraFilter = { !it.isSuppressed(mainArgs) }
+        ) { it.toFunctionDoc(structure) },
+        this.childrenOfType(
+            STATIC_VARIABLE,
+            extraFilter = { !it.isSuppressed(mainArgs) }
+        ) { it.toVariableDoc(structure) },
         extensionSignature()
     )
 }
@@ -32,7 +38,7 @@ fun SourceKittenSubstructure.extensionSignature(): List<RichTextComponent> {
     list.add(RichTextComponent(TEXT, " ${this.kind.kindName}"))
     list.add(RichTextComponent(TYPE_NAME, " ${this.name}", this.name))
 
-    if(this.inheritedtypes.isNotEmpty()) {
+    if (this.inheritedtypes.isNotEmpty()) {
         list.add(RichTextComponent(PUNCTUATION, ":"))
 
         this.inheritedtypes.forEachIndexed { index, type ->

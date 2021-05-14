@@ -15,7 +15,11 @@ import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind.STATIC_VARIABLE
 import com.copperleaf.kodiak.swift.models.SwiftClass
 
-fun SourceKittenSubstructure.toClassDoc(mainArgs: MainArgs, structure: SourceKittenSubstructure, deep: Boolean = false): SwiftClass {
+fun SourceKittenSubstructure.toClassDoc(
+    mainArgs: MainArgs,
+    structure: SourceKittenSubstructure,
+    deep: Boolean = false
+): SwiftClass {
     return SwiftClass(
         this,
         sourceFile,
@@ -23,12 +27,36 @@ fun SourceKittenSubstructure.toClassDoc(mainArgs: MainArgs, structure: SourceKit
         emptyList(),
         this.kind.name,
         this.name,
-        "${sourceFile}/${this.name}",
+        "$sourceFile/${this.name}",
         this.getModifiers(),
         this.getComment(),
-        if (deep) this.childrenOfType(INIT_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toInitializerDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toFunctionDoc(structure) } else emptyList(),
-        if (deep) this.childrenOfType(STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE, extraFilter = { !it.isSuppressed(mainArgs) }) { it.toVariableDoc(structure) } else emptyList(),
+        if (deep) {
+            this
+                .childrenOfType(
+                    INIT_METHOD,
+                    extraFilter = { !it.isSuppressed(mainArgs) }
+                ) { it.toInitializerDoc(structure) }
+        } else {
+            emptyList()
+        },
+        if (deep) {
+            this
+                .childrenOfType(
+                    STATIC_METHOD, CLASS_METHOD, INSTANCE_METHOD,
+                    extraFilter = { !it.isSuppressed(mainArgs) }
+                ) { it.toFunctionDoc(structure) }
+        } else {
+            emptyList()
+        },
+        if (deep) {
+            this
+                .childrenOfType(
+                    STATIC_VARIABLE, CLASS_VARIABLE, INSTANCE_VARIABLE,
+                    extraFilter = { !it.isSuppressed(mainArgs) }
+                ) { it.toVariableDoc(structure) }
+        } else {
+            emptyList()
+        },
         classSignature()
     )
 }
@@ -43,7 +71,7 @@ fun SourceKittenSubstructure.classSignature(): List<RichTextComponent> {
     list.add(RichTextComponent(TEXT, this.kind.kindName))
     list.add(RichTextComponent(TYPE_NAME, " ${this.name}", this.name))
 
-    if(this.inheritedtypes.isNotEmpty()) {
+    if (this.inheritedtypes.isNotEmpty()) {
         list.add(RichTextComponent(PUNCTUATION, ":"))
 
         this.inheritedtypes.forEachIndexed { index, type ->

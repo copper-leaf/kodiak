@@ -15,7 +15,7 @@ fun formatParameters(
     tags: Array<ParamTag>,
     lastParamIsVarArgs: Boolean
 ): List<JavaParameter> {
-    val paramWithVararg = if(lastParamIsVarArgs) params.lastOrNull { it.type().dimension().isNotBlank() } else null
+    val paramWithVararg = if (lastParamIsVarArgs) params.lastOrNull { it.type().dimension().isNotBlank() } else null
 
     return params.map { param ->
         param.toParameter(
@@ -119,7 +119,6 @@ fun Parameter.parameterSignature(isVarArg: Boolean): List<RichTextComponent> {
             ""
         )
     )
-
 
     return list
 }

@@ -1,19 +1,17 @@
 package com.copperleaf.kodiak.swift.internal.models
 
-import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.internal.StringSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.map
 
 data class SourceKittenParseResult(
     val files: Map<String, SourceKittenFile>
 ) {
 
-    @UseExperimental(UnstableDefault::class)
     companion object {
-        fun fromJson(json: String): SourceKittenParseResult {
-            val filesSerializer = (StringSerializer to SourceKittenFile.serializer()).map
-            val files = Json.nonstrict.parse(filesSerializer, json)
+        fun fromJson(jsonModule: Json, json: String): SourceKittenParseResult {
+            val filesSerializer = MapSerializer(String.serializer(), SourceKittenFile.serializer())
+            val files = jsonModule.decodeFromString(filesSerializer, json)
             return SourceKittenParseResult(files)
         }
     }

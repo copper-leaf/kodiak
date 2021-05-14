@@ -1,9 +1,9 @@
 package com.copperleaf.kodiak.groovy.formatter
 
+import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.DocComment
 import org.codehaus.groovy.groovydoc.GroovyClassDoc
 import org.codehaus.groovy.groovydoc.GroovyDoc
 import org.codehaus.groovy.groovydoc.GroovyParameter
@@ -57,7 +57,7 @@ class PrimitiveFieldTypeWrapper(val field: GroovyParameter) : GroovyType {
 }
 
 // Determine if class is exception class
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
 tailrec fun GroovyClassDoc.isExceptionClass(): Boolean {
     return when {
@@ -68,7 +68,7 @@ tailrec fun GroovyClassDoc.isExceptionClass(): Boolean {
 }
 
 // Process comment text
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
 data class GroovyCommentData(
     val commentText: List<RichTextComponent>,
@@ -79,11 +79,13 @@ fun String.parseCommentToValues(): GroovyCommentData {
     val commentTags = mutableMapOf<String, List<Pair<String, String>>>()
 
     val commentDoc = Jsoup.parse(this.trim())
-    commentDoc.outputSettings(Document.OutputSettings().apply {
-        indentAmount(2)
-        prettyPrint(true)
-        outline(true)
-    })
+    commentDoc.outputSettings(
+        Document.OutputSettings().apply {
+            indentAmount(2)
+            prettyPrint(true)
+            outline(true)
+        }
+    )
     commentDoc.filter(object : NodeFilter {
         override fun tail(node: Node, depth: Int): NodeFilter.FilterResult {
             return if (node is Comment) {
@@ -126,12 +128,12 @@ fun String.parseCommentToValues(): GroovyCommentData {
     var currentIndex = 0
 
     linkRegex.findAll(originalCommentText).forEach { match ->
-        val (wholeMatch, attrs, text) = match.groupValues
+        val (wholeMatch, _, text) = match.groupValues
         val aTag = Jsoup.parseBodyFragment(wholeMatch).select("a")
         val href = aTag.attr("href")
-        val title = aTag.attr("title")
+//        val title = aTag.attr("title")
 
-        if(!(href.startsWith("http://") || href.startsWith("https://"))) {
+        if (!(href.startsWith("http://") || href.startsWith("https://"))) {
             // internal link, add it as a TYPE_NAME RichTextComponent
             RichTextComponents.add(
                 RichTextComponent(
@@ -213,6 +215,6 @@ private fun String.trimLines() = this
     .map { it.trimEnd() }
     .joinToString("\n")
 
-fun GroovyClassDoc.asRichTextComponent(type: String = TYPE_NAME) : RichTextComponent {
+fun GroovyClassDoc.asRichTextComponent(type: String = TYPE_NAME): RichTextComponent {
     return RichTextComponent(type, "" + this.simpleTypeName(), "" + this.qualifiedTypeName())
 }
