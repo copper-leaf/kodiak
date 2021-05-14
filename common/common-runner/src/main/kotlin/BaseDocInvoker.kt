@@ -1,7 +1,6 @@
 package com.copperleaf.kodiak.common
 
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.nio.file.Files
@@ -42,7 +41,7 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
     }
 
 // Run documentation runner
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
     private fun cacheEmbeddedJar() {
         formatterJar.parent.toFile().mkdirs()
@@ -73,9 +72,8 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
     }
 
 // Helper Functions
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
-    @UseExperimental(UnstableDefault::class)
     protected fun <T : Any> getDocsInSubdirectory(
         destinationDir: Path,
         subdirectory: String,
@@ -87,8 +85,7 @@ abstract class BaseDocInvoker<T : ModuleDoc>(
             .walkTopDown()
             .filter { it.isFile }
             .filter { it.exists() }
-            .mapNotNull { Json.parse(deserializer, it.readText()) }
+            .mapNotNull { Json.decodeFromString(deserializer, it.readText()) }
             .toList()
     }
-
 }

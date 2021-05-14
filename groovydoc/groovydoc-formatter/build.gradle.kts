@@ -1,10 +1,16 @@
-apply(from = "${rootProject.rootDir}/gradle/groups/formatters.gradle")
-apply(from = "${rootProject.rootDir}/gradle/actions/shadow.gradle")
+plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-formatters`
+    `copper-leaf-publish`
+    `copper-leaf-shadow`
+}
+
+description = "Kodiak - Groovydoc Formatter"
 
 dependencies {
-    "implementation"(project(":common:common-formatter"))
-    "implementation"(project(":groovydoc:groovydoc-models"))
-    
-    "implementation"(Libs.groovy_all)
-    "implementation"(Libs.jsoup)
+    api(project(":groovydoc:groovydoc-models"))
+    api("org.codehaus.groovy:groovy-all:2.5.8")
+    api("org.jsoup:jsoup:1.12.1")
 }

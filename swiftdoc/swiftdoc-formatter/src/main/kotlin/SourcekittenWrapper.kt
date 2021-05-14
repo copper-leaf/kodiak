@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.swift
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 import com.eden.common.util.IOStreamUtils
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -39,7 +39,7 @@ class SourcekittenWrapper(
     /**
      * Execute a SourceKitten command in a child process, and return the stdout content as a String
      */
-    fun proc(vararg processArgs: String) : String {
+    fun proc(vararg processArgs: String): String {
         val builder = ProcessBuilder()
             .directory(mainArgs.sourceKittenBinary.parent.toFile())
             .command("./sourcekitten", *processArgs)
@@ -64,5 +64,4 @@ class SourcekittenWrapper(
     override fun close() {
         executor.shutdown()
     }
-
 }

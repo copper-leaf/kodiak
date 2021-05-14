@@ -11,7 +11,6 @@ import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
 import org.jetbrains.dokka.path
 import org.jetbrains.dokka.qualifiedNameFromType
-import org.jetbrains.dokka.ignoredSupertypes
 
 val DocumentationNode.classLike: Boolean get() = NodeKind.classLike.contains(this.kind)
 
@@ -27,8 +26,18 @@ fun DocumentationNode.toClassDoc(deep: Boolean): KotlinClass {
     return KotlinClass(
         this,
         this.path.map { it.name }.filterNot { it.isEmpty() }.first(),
-        supertypes.filter { it.second.superclassType != null }.singleOrNull()?.second?.name?.let { RichTextComponent(INHERITED, it, it) },
-        supertypes.filter { it.second.superclassType == null }.toMap().keys.toList()?.map { RichTextComponent(COMPOSED, it, it) },
+        supertypes
+            .filter { it.second.superclassType != null }
+            .singleOrNull()
+            ?.second
+            ?.name
+            ?.let { RichTextComponent(INHERITED, it, it) },
+        supertypes
+            .filter { it.second.superclassType == null }
+            .toMap()
+            .keys
+            .toList()
+            ?.map { RichTextComponent(COMPOSED, it, it) },
         this.kind.toString(),
         this.simpleName,
         this.qualifiedName,

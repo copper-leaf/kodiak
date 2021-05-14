@@ -26,6 +26,6 @@ fun String.stringClassExtensionMethod(input: String): String {
 /**
  * A method with a receiver, defined outside of any class, just in the package.
  */
-fun methodWithReceiver(input: (String)->Int): Int {
+fun methodWithReceiver(input: (String) -> Int): Int {
     return input("")
 }

@@ -7,7 +7,9 @@ import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
 import com.copperleaf.kodiak.swift.internal.models.SwiftSubstructureKind
 
 fun SourceKittenSubstructure.isSuppressed(mainArgs: MainArgs): Boolean {
-    return !isVisible(mainArgs) || this.getComment().components.any { it.text.contains("^.*?- suppress".toRegex(RegexOption.MULTILINE)) }
+    return !isVisible(mainArgs) || this.getComment().components.any {
+        it.text.contains("^.*?- suppress".toRegex(RegexOption.MULTILINE))
+    }
 }
 
 fun SourceKittenSubstructure.isVisible(mainArgs: MainArgs): Boolean {

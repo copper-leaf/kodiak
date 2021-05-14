@@ -1,6 +1,6 @@
 package com.copperleaf.kodiak.java
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 import com.copperleaf.kodiak.common.connectAllToParents
 import com.copperleaf.kodiak.java.formatter.isSuppressed
 import com.copperleaf.kodiak.java.formatter.toClassDoc
@@ -10,6 +10,7 @@ import com.sun.javadoc.LanguageVersion
 import com.sun.javadoc.PackageDoc
 import com.sun.javadoc.RootDoc
 import com.sun.tools.doclets.standard.Standard
+import kotlinx.serialization.json.Json
 import java.io.File
 
 class JavadocJsonDoclet {
@@ -35,12 +36,17 @@ class JavadocJsonDoclet {
             return Standard.optionLength(optionFlag)
         }
 
-
 // Entry points, main routines
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
         @JvmStatic
         fun start(rootDoc: RootDoc): Boolean {
+            val jsonModule = Json {
+                isLenient = true
+                prettyPrint = true
+                ignoreUnknownKeys = true
+            }
+
             var destinationDir = rootDoc.options().find { it.firstOrNull() == "-d" }!![1]
             if (destinationDir.endsWith("/")) {
                 destinationDir = destinationDir.dropLast(1)
@@ -63,7 +69,7 @@ class JavadocJsonDoclet {
                     file.parentFile.mkdirs()
                 }
                 try {
-                    file.writeText(classdoc.toClassDoc(true).toJson())
+                    file.writeText(classdoc.toClassDoc(true).toJson(jsonModule))
                 } catch (e: Exception) {
                     Clog.e("Failed to create json for classdoc [${classdoc.name()}]: ${e.message}")
                 }
@@ -93,7 +99,7 @@ class JavadocJsonDoclet {
                 if (!file.parentFile.exists()) {
                     file.parentFile.mkdirs()
                 }
-                file.writeText(it.toJson())
+                file.writeText(it.toJson(jsonModule))
             }
 
             return true

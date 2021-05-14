@@ -19,7 +19,7 @@ fun GroovyPackageDoc.toPackageDoc(deep: Boolean): GroovyPackage {
             emptyMap()
         ),
         this.packageSignature(),
-        if(deep) this.allClasses().filter { !it.isSuppressed() }.map { it.toClassDoc(false) } else emptyList(),
+        if (deep) this.allClasses().filter { !it.isSuppressed() }.map { it.toClassDoc(false) } else emptyList(),
         emptyList()
     )
 }

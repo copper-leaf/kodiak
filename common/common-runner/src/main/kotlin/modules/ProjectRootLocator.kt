@@ -13,12 +13,11 @@ interface ProjectRootLocator {
      * Return the project root given an arbitrary path expected to be in that root. Returns null if the locator is
      * unable to determine the project root given the input path.
      */
-    fun getRootPath(input: Path) : Path?
+    fun getRootPath(input: Path): Path?
 
     companion object {
-        fun from(vararg locators: ProjectRootLocator) : ProjectRootLocator {
+        fun from(vararg locators: ProjectRootLocator): ProjectRootLocator {
             return DelegatingProjectRootLocator(locators.toList())
         }
     }
-
 }

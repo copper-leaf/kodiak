@@ -1,6 +1,8 @@
 package com.copperleaf.kodiak.groovy
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
+import clog.dsl.addTagToBlacklist
+import clog.dsl.tag
 import com.eden.orchid.api.cli.Cli
 import com.eden.orchid.api.options.annotations.Option
 import groovy.lang.GroovySystem
@@ -12,7 +14,7 @@ const val FILE_ENCODING = "UTF-8"
 fun main(vararg args: String) {
     Clog.tag("Groovy version").i("{}", GroovySystem.getVersion())
 
-    Clog.getInstance().addTagToBlacklist("FlagsParser")
+    Clog.addTagToBlacklist("FlagsParser")
     val mainArgs = Cli.parseArgsInto(MainArgs(), args)
 
     GroovydocJsonFormatter(mainArgs.srcPaths, mainArgs.outputPath).execute()
@@ -37,5 +39,4 @@ class MainArgs {
     val outputPath: Path by lazy {
         File(output).toPath()
     }
-
 }

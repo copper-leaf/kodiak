@@ -16,7 +16,9 @@ fun SourceKittenSubstructure.toFunctionDoc(structure: SourceKittenSubstructure):
 
     val methodName = this.name.split("(").first().trim()
     val modifiers = this.getModifiers()
-    val parameters = ownStructure?.childrenOfType(SwiftSubstructureKind.PARAMETER) { it.toParameterDoc() } ?: emptyList()
+    val parameters = ownStructure
+        ?.childrenOfType(SwiftSubstructureKind.PARAMETER) { it.toParameterDoc() }
+        ?: emptyList()
     val returnType = this.toReturnType()
 
     return SwiftMethod(
@@ -75,7 +77,7 @@ fun SourceKittenSubstructure.functionSignature(
     list.add(RichTextComponent(TEXT, "func"))
     list.add(RichTextComponent(TEXT, " $methodName"))
     list.addAll(parameters.toParameterListSignature())
-    if(returnType.typeId != "Void") {
+    if (returnType.typeId != "Void") {
         list.add(RichTextComponent(PUNCTUATION, " -> "))
         list.addAll(returnType.signature)
     }

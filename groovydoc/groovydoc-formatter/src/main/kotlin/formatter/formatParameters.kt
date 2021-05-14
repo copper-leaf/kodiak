@@ -63,7 +63,7 @@ fun GroovyParameter.parameterSignature(): List<RichTextComponent> {
     list.addAll(this.realType().toTypeSignature())
 
     val dimension = this.dimension()
-    if(dimension.isNotBlank()) {
+    if (dimension.isNotBlank()) {
         list.add(RichTextComponent(TEXT, dimension, ""))
     }
 
@@ -78,30 +78,27 @@ fun GroovyParameter.parameterSignature(): List<RichTextComponent> {
     return list
 }
 
-private fun GroovyParameter.dimension() : String {
+private fun GroovyParameter.dimension(): String {
     val thisTypeName: String
-    if(this is SimpleGroovyParameter) {
+    if (this is SimpleGroovyParameter) {
         val currentType = this.type()
         this.setType(null)
         thisTypeName = this.typeName()
         this.setType(currentType)
-    }
-    else {
+    } else {
         thisTypeName = ""
     }
 
-    if(thisTypeName.contains("[]")) {
+    if (thisTypeName.contains("[]")) {
         val trimmed = thisTypeName.replaceBefore('[', "")
 
-        if(this is SimpleGroovyParameter && this.vararg()) {
+        if (this is SimpleGroovyParameter && this.vararg()) {
             val vararged = trimmed.replaceAfterLast("[]", "...")
             return vararged
-        }
-        else {
+        } else {
             return trimmed
         }
-    }
-    else {
+    } else {
         return ""
     }
 }

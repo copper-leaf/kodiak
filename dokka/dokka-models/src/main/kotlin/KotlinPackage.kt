@@ -1,15 +1,16 @@
 package com.copperleaf.kodiak.kotlin.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.JsonableDocElement
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -33,30 +34,31 @@ data class KotlinPackage(
     val fields: List<KotlinField>,
     val typealiases: List<KotlinTypealias>,
     override val signature: List<RichTextComponent>
-) : DocElement, AutoDocument, TopLevel {
+) : DocElement, AutoDocument, TopLevel, JsonableDocElement {
     override val kind = "Package"
 
-    override val parents = listOf(RichTextComponent(TYPE_NAME, parent, parent))
-    override val contexts = emptyList<RichTextComponent>()
+    override val parents: List<RichTextComponent>
+        get() = listOf(RichTextComponent(TYPE_NAME, parent, parent))
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::classes),
-        fromDocList(::subpackages),
-        fromDocList(::typealiases),
-        fromDocList(::fields),
-        fromDocList(::methods)
-    )
+    override val contexts: List<RichTextComponent>
+        get() = emptyList<RichTextComponent>()
 
-    @UseExperimental(UnstableDefault::class)
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::classes),
+            fromDocList(::subpackages),
+            fromDocList(::typealiases),
+            fromDocList(::fields),
+            fromDocList(::methods)
+        )
+
     companion object {
         fun fromJson(json: String): KotlinPackage {
-            return Json.parse(KotlinPackage.serializer(), json)
+            return Json.decodeFromString(KotlinPackage.serializer(), json)
         }
     }
 
-    @UseExperimental(UnstableDefault::class)
-    fun toJson(): String {
-        return Json.indented.stringify(KotlinPackage.serializer(), this)
+    override fun toJson(json: Json): String {
+        return json.encodeToString(serializer(), this)
     }
 }

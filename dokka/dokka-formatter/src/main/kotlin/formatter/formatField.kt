@@ -2,10 +2,7 @@ package com.copperleaf.kodiak.kotlin.formatter
 
 import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.kotlin.models.KotlinField
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeKind
@@ -37,10 +34,9 @@ fun DocumentationNode.fieldSignature(
 ): List<RichTextComponent> {
     val list = mutableListOf<RichTextComponent>()
 
-    if(modifiers.isEmpty()) {
+    if (modifiers.isEmpty()) {
         list.add(RichTextComponent(TEXT, "val "))
-    }
-    else {
+    } else {
         list.addAll(modifiers.toModifierListSignature())
     }
 

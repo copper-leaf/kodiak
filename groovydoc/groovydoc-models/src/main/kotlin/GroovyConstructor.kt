@@ -1,9 +1,10 @@
 package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -26,8 +27,8 @@ data class GroovyConstructor(
 ) : DocElement, AutoDocument {
     override val kind = "Constructor"
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::parameters)
-    )
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::parameters)
+        )
 }

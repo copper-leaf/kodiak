@@ -8,14 +8,13 @@ import java.nio.file.Path
  */
 class GitProjectRootLocator : ProjectRootLocator {
 
-    override fun getRootPath(input: Path) : Path? {
+    override fun getRootPath(input: Path): Path? {
         var currentDir: Path? = input
-        while(currentDir != null) {
-            if(currentDir.fileName.toString() == ".git") return currentDir
+        while (currentDir != null) {
+            if (currentDir.fileName.toString() == ".git") return currentDir
             currentDir = currentDir.parent
         }
 
         return null
     }
-
 }

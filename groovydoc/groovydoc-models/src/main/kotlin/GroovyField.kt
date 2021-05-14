@@ -2,9 +2,9 @@ package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
 import com.copperleaf.kodiak.common.AutoDocumentNode
-import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.ElementType
+import com.copperleaf.kodiak.common.RichTextComponent
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -27,6 +27,6 @@ data class GroovyField(
 ) : ElementType, AutoDocument {
     override val kind = "Field"
 
-    @Transient
-    override val nodes = emptyList<AutoDocumentNode>()
+    override val nodes: List<AutoDocumentNode>
+        get() = emptyList()
 }

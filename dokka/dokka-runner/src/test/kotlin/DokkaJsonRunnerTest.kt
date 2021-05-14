@@ -3,15 +3,14 @@ package com.copperleaf.kodiak.kotlin
 import com.copperleaf.kodiak.common.DocInvoker
 import com.copperleaf.kodiak.kotlin.models.KotlinModuleDoc
 import com.eden.common.util.IOStreamUtils
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import strikt.api.expectThat
-import strikt.assertions.isNotEmpty
-import strikt.assertions.isNotNull
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class DokkaJsonRunnerTest {
 
@@ -39,16 +38,15 @@ class DokkaJsonRunnerTest {
     }
 
     private fun cleanupProjectDirs() {
-
     }
 
-    @BeforeEach
+    @Before
     internal fun setUp() {
         if (useTempDirs) initTempDirs() else initProjectDirs()
         dokkaRunner = KotlindocInvokerImpl(cacheDir)
     }
 
-    @AfterEach
+    @After
     internal fun tearDown() {
         if (useTempDirs) cleanupTempDirs() else cleanupProjectDirs()
     }
@@ -63,10 +61,8 @@ class DokkaJsonRunnerTest {
             outputDir
         ) { inputStream -> IOStreamUtils.InputStreamPrinter(inputStream, null) }
 
-        expectThat(rootDoc)
-            .isNotNull()
-            .and { get { packages }.isNotEmpty() }
-            .and { get { classes }.isNotEmpty() }
+        assertNotNull(rootDoc)
+        assertTrue(rootDoc.packages.isNotEmpty())
+        assertTrue(rootDoc.classes.isNotEmpty())
     }
-
 }

@@ -1,16 +1,18 @@
 package com.copperleaf.kodiak.swift
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 import com.copperleaf.kodiak.common.DocElement
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenParseResult
 import com.copperleaf.kodiak.swift.internal.models.SourceKittenSubstructure
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.file.Path
 
 class SwiftdocFileParser(
     val mainArgs: MainArgs,
     val sourceKittenWrapper: SourcekittenWrapper,
-    val remapper: SwiftdocRemapper
+    val remapper: SwiftdocRemapper,
+    val jsonModule: Json,
 ) {
 
     fun processAll() {
@@ -39,18 +41,18 @@ class SwiftdocFileParser(
 
         singleFile.writeText(doc)
 
-        val sourceKittenDocs = SourceKittenParseResult.fromJson(doc)
+        val sourceKittenDocs = SourceKittenParseResult.fromJson(jsonModule, doc)
 
         sourceKittenDocs.files.forEach { (key, value) ->
             Clog.v("Processing $relativeFile.swift")
             val structure = sourceKittenWrapper.proc("structure", "--file", file.absolutePath)
-            val structureDoc = SourceKittenSubstructure.fromJson(structure)
+            val structureDoc = SourceKittenSubstructure.fromJson(jsonModule, structure)
 
             value.sourceFile = relativeFile
             structureDoc.sourceFile = relativeFile
 
             structureFile.writeText(structure)
-            remapper.processSourceKittenModel(dir, key, value, structureDoc)
+            remapper.processSourceKittenModel(dir, key, value, structureDoc, jsonModule)
         }
 
         return null

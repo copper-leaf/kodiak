@@ -44,27 +44,29 @@ fun SourceKittenFile.sourceFileSignature(): List<RichTextComponent> {
     return list
 }
 
-private inline fun <reified T : DocElement> Map<Class<DocElement>, List<DocElement>>.getAs(transform: T.()->T) : List<T> {
+private inline fun <reified T : DocElement> Map<Class<DocElement>, List<DocElement>>.getAs(
+    transform: T.() -> T
+): List<T> {
     val tt: Class<DocElement> = T::class.java as Class<DocElement>
     return this[tt]?.map { it as T }?.map { it.transform() } ?: emptyList()
 }
 
-private fun SwiftClass.liteCopy() : SwiftClass {
+private fun SwiftClass.liteCopy(): SwiftClass {
     return this.copy(constructors = emptyList(), methods = emptyList(), fields = emptyList())
 }
 
-private fun SwiftField.liteCopy() : SwiftField {
+private fun SwiftField.liteCopy(): SwiftField {
     return this.copy()
 }
 
-private fun SwiftMethod.liteCopy() : SwiftMethod {
+private fun SwiftMethod.liteCopy(): SwiftMethod {
     return this.copy()
 }
 
-private fun SwiftTypealias.liteCopy() : SwiftTypealias {
+private fun SwiftTypealias.liteCopy(): SwiftTypealias {
     return this.copy()
 }
 
-private fun SwiftExtension.liteCopy() : SwiftExtension {
+private fun SwiftExtension.liteCopy(): SwiftExtension {
     return this.copy()
 }

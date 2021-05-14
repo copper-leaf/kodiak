@@ -1,12 +1,9 @@
 package com.copperleaf.kodiak.kotlin.formatter
 
-import com.caseyjbrooks.clog.Clog
+import clog.Clog
 import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TEXT
 import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.PUNCTUATION
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.INHERITED
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.COMPOSED
 import com.copperleaf.kodiak.common.CommentTag
 import com.copperleaf.kodiak.common.DocComment
 import org.jetbrains.dokka.ContentBlock
@@ -39,7 +36,6 @@ import org.jetbrains.dokka.ContentUnorderedList
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.NodeRenderContent
 import org.jetbrains.dokka.KotlinLanguageService
-import org.jetbrains.dokka.NodeKind
 
 fun DocumentationNode.getComment(): DocComment {
     val formatter = DokkaContentFormatter(this).apply { extractContent() }
@@ -94,49 +90,49 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun extractContentInternal(content: ContentNode, topLevel: Boolean) {
         when (content) {
-            is ContentKeyword               -> content.format(topLevel)
-            is ContentIdentifier            -> content.format(topLevel)
-            is ContentSymbol                -> content.format(topLevel)
-            is ContentEntity                -> content.format(topLevel)
+            is ContentKeyword -> content.format(topLevel)
+            is ContentIdentifier -> content.format(topLevel)
+            is ContentSymbol -> content.format(topLevel)
+            is ContentEntity -> content.format(topLevel)
 
-            is ContentNonBreakingSpace      -> content.format(topLevel)
-            is ContentSoftLineBreak         -> content.format(topLevel)
+            is ContentNonBreakingSpace -> content.format(topLevel)
+            is ContentSoftLineBreak -> content.format(topLevel)
             is ContentIndentedSoftLineBreak -> content.format(topLevel)
-            is ContentHardLineBreak         -> content.format(topLevel)
+            is ContentHardLineBreak -> content.format(topLevel)
 
-            is ContentEmphasis              -> content.format(topLevel)
-            is ContentStrong                -> content.format(topLevel)
-            is ContentStrikethrough         -> content.format(topLevel)
+            is ContentEmphasis -> content.format(topLevel)
+            is ContentStrong -> content.format(topLevel)
+            is ContentStrikethrough -> content.format(topLevel)
 
-            is ContentCode                  -> content.format(topLevel)
-            is ContentBlockCode             -> content.format(topLevel)
+            is ContentCode -> content.format(topLevel)
+            is ContentBlockCode -> content.format(topLevel)
 
-            is ContentNodeDirectLink        -> content.format(topLevel)
-            is ContentNodeLazyLink          -> content.format(topLevel)
-            is NodeRenderContent            -> content.format(topLevel)
-            is ContentExternalLink          -> content.format(topLevel)
-            is ContentNodeLink              -> content.format(topLevel)
+            is ContentNodeDirectLink -> content.format(topLevel)
+            is ContentNodeLazyLink -> content.format(topLevel)
+            is NodeRenderContent -> content.format(topLevel)
+            is ContentExternalLink -> content.format(topLevel)
+            is ContentNodeLink -> content.format(topLevel)
 
-            is ContentUnorderedList         -> content.format(topLevel)
-            is ContentOrderedList           -> content.format(topLevel)
-            is ContentListItem              -> content.format(topLevel)
+            is ContentUnorderedList -> content.format(topLevel)
+            is ContentOrderedList -> content.format(topLevel)
+            is ContentListItem -> content.format(topLevel)
 
-            is ContentHeading               -> content.format(topLevel)
-            is ContentSection               -> content.format(topLevel)
-            is ContentParagraph             -> content.format(topLevel)
+            is ContentHeading -> content.format(topLevel)
+            is ContentSection -> content.format(topLevel)
+            is ContentParagraph -> content.format(topLevel)
 
-            is ContentText                  -> content.format(topLevel)
-            is ContentBlock                 -> content.format(topLevel)
-            is ContentEmpty                 -> content.format(topLevel)
+            is ContentText -> content.format(topLevel)
+            is ContentBlock -> content.format(topLevel)
+            is ContentEmpty -> content.format(topLevel)
 
-            else                            -> {
+            else -> {
                 Clog.e("Unhandled content node: $content (${content.javaClass})")
             }
         }
     }
 
 // Content Node typeName Handlers
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
     private fun ContentEmpty.format(topLevel: Boolean) {
         append("")
@@ -200,7 +196,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun ContentBlockCode.format(topLevel: Boolean) {
         wrap(
-            if(this.language.isNotBlank())
+            if (this.language.isNotBlank())
                 "<pre class=\"language-${this.language}\"><code class=\"language-${this.language}\">"
             else
                 "<pre><code>",
@@ -210,11 +206,12 @@ class DokkaContentFormatter(val node: DocumentationNode) {
 
     private fun ContentNodeLink.format(topLevel: Boolean) {
         if (node != null) {
-            components.add(RichTextComponent(TEXT, currentText, ""))                        // append current text to components list
-            currentText = ""                                                               // get fresh text content
-            joinChildren(this)                                                             // have children append themselved to the context
-            components.add(RichTextComponent(TYPE_NAME, currentText, node!!.qualifiedName)) // convert that text to the text of the link component
-            currentText = ""                                                               // prepare to continue with later components
+            components.add(RichTextComponent(TEXT, currentText, "")) // append current text to components list
+            currentText = "" // get fresh text content
+            joinChildren(this) // have children append themselved to the context
+            components // convert that text to the text of the link component
+                .add(RichTextComponent(TYPE_NAME, currentText, node!!.qualifiedName))
+            currentText = "" // prepare to continue with later components
         } else {
             joinChildren(this)
         }
@@ -229,7 +226,7 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
     private fun ContentExternalLink.format(topLevel: Boolean) {
-        wrap("<a href=\"${this.href}\">", "</a>") { joinChildren(this)}
+        wrap("<a href=\"${this.href}\">", "</a>") { joinChildren(this) }
     }
 
     private fun ContentUnorderedList.format(topLevel: Boolean) {
@@ -244,9 +241,9 @@ class DokkaContentFormatter(val node: DocumentationNode) {
         val child = this.children.singleOrNull()
         if (child is ContentParagraph) {
             // Ignore paragraph if item is nested underneath an item
-            wrap("<li>", "</li>") { joinChildren(child)}
+            wrap("<li>", "</li>") { joinChildren(child) }
         } else {
-            wrap("<li>", "</li>") { joinChildren(this)}
+            wrap("<li>", "</li>") { joinChildren(this) }
         }
     }
 
@@ -259,12 +256,12 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     }
 
 // Helper Methods
-//----------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------
 
     private fun append(text: String) {
         currentText += text
     }
-    private fun wrap(prefix: String, suffix: String, body: ()->Unit) {
+    private fun wrap(prefix: String, suffix: String, body: () -> Unit) {
         append(prefix)
         body()
         append(suffix)
@@ -273,5 +270,4 @@ class DokkaContentFormatter(val node: DocumentationNode) {
     private fun joinChildren(block: ContentBlock) {
         block.children.forEach { extractContentInternal(it, topLevel = false) }
     }
-
 }

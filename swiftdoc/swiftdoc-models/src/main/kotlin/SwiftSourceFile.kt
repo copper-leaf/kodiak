@@ -1,14 +1,15 @@
 package com.copperleaf.kodiak.swift.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.JsonableDocElement
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -31,23 +32,25 @@ data class SwiftSourceFile(
     val typealiases: List<SwiftTypealias>,
     val extensions: List<SwiftExtension>,
     override val signature: List<RichTextComponent>
-) : DocElement, AutoDocument, TopLevel {
+) : DocElement, AutoDocument, TopLevel, JsonableDocElement {
     override val kind = "SourceFile"
 
-    override val parents = listOf<RichTextComponent>()
-    override val contexts = emptyList<RichTextComponent>()
+    override val parents: List<RichTextComponent>
+        get() = emptyList()
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::classes),
-        fromDocList(::variables),
-        fromDocList(::functions),
-        fromDocList(::typealiases),
-        fromDocList(::extensions)
-    )
+    override val contexts: List<RichTextComponent>
+        get() = emptyList()
 
-    @UseExperimental(UnstableDefault::class)
-    fun toJson(): String {
-        return Json.indented.stringify(serializer(), this)
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::classes),
+            fromDocList(::variables),
+            fromDocList(::functions),
+            fromDocList(::typealiases),
+            fromDocList(::extensions)
+        )
+
+    override fun toJson(json: Json): String {
+        return json.encodeToString(serializer(), this)
     }
 }

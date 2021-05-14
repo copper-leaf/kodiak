@@ -11,7 +11,7 @@ fun SourceKittenSubstructure.toTypealiasDoc(structure: SourceKittenSubstructure)
     return SwiftTypealias(
         this,
         this.kind.name,
-        "${sourceFile}/${this.name}",
+        "$sourceFile/${this.name}",
         this.getModifiers(),
         this.getComment(),
         typealiasSignature()
@@ -24,7 +24,7 @@ fun SourceKittenSubstructure.typealiasSignature(): List<RichTextComponent> {
     list.add(RichTextComponent(TEXT, this.kind.kindName))
     list.add(RichTextComponent(TYPE_NAME, " ${this.name}", this.name))
 
-    if(this.inheritedtypes.isNotEmpty()) {
+    if (this.inheritedtypes.isNotEmpty()) {
         list.add(RichTextComponent(PUNCTUATION, ":"))
 
         this.inheritedtypes.forEachIndexed { index, type ->

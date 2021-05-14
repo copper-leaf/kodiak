@@ -1,9 +1,10 @@
 package com.copperleaf.kodiak.swift.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.RichTextComponent
 import com.copperleaf.kodiak.common.SpecializedDocElement
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
@@ -32,9 +33,9 @@ data class SwiftExtension(
 
     override val kind = "Extension"
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::fields),
-        fromDocList(::methods)
-    )
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::fields),
+            fromDocList(::methods)
+        )
 }

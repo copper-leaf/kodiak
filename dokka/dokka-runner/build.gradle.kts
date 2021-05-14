@@ -1,8 +1,13 @@
 plugins {
+    `copper-leaf-base`
+    `copper-leaf-version`
+    `copper-leaf-lint`
+    `kodiak-runners`
+    `copper-leaf-publish`
     id("org.jetbrains.dokka") version "0.9.18"
 }
 
-apply(from = "${rootProject.rootDir}/gradle/groups/runners.gradle")
+description = "Kodiak - Dokka Runner"
 
 dependencies {
     "compile"(project(":common:common-runner"))
@@ -12,16 +17,14 @@ dependencies {
 // wait to build this project until after the formatter is built, because we want to bundle the formatter as a resource
 // in this project
 val formatterProject = project(":dokka:dokka-formatter")
+val formatterProjectShadowJar by formatterProject.tasks.named("shadowJar")
 
-val thisProjectAssemble = tasks.getByName("assemble")
-val formatterProjectAssemble = formatterProject.tasks.getByName("assemble")
-thisProjectAssemble.dependsOn(formatterProjectAssemble)
-
-(tasks.getByName("processResources") as ProcessResources).apply {
+tasks.withType<ProcessResources> {
+    dependsOn(formatterProjectShadowJar)
     from("${formatterProject.buildDir}/libs/dokka-formatter-$version-all.zip")
 }
 
-(tasks.getByName("dokka") as org.jetbrains.dokka.gradle.DokkaTask).apply {
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
     outputFormat = "html"
     outputDirectory = "$buildDir/dokka/compare"
 

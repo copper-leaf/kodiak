@@ -1,15 +1,16 @@
 package com.copperleaf.kodiak.groovy.models
 
 import com.copperleaf.kodiak.common.AutoDocument
-import com.copperleaf.kodiak.common.RichTextComponent
-import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
+import com.copperleaf.kodiak.common.AutoDocumentNode
 import com.copperleaf.kodiak.common.DocComment
 import com.copperleaf.kodiak.common.DocElement
+import com.copperleaf.kodiak.common.JsonableDocElement
+import com.copperleaf.kodiak.common.RichTextComponent
+import com.copperleaf.kodiak.common.RichTextComponent.Companion.TYPE_NAME
 import com.copperleaf.kodiak.common.TopLevel
 import com.copperleaf.kodiak.common.fromDocList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 
 /**
@@ -37,21 +38,23 @@ data class GroovyClass(
     override val signature: List<RichTextComponent>,
 
     val enumItems: List<GroovyEnumConstant>
-) : DocElement, AutoDocument, TopLevel {
+) : DocElement, AutoDocument, TopLevel, JsonableDocElement {
 
-    override val parents = listOfNotNull(superclass, *interfaces.toTypedArray())
-    override val contexts = listOf(RichTextComponent(TYPE_NAME, `package`, `package`))
+    override val parents: List<RichTextComponent>
+        get() = listOfNotNull(superclass, *interfaces.toTypedArray())
 
-    @Transient
-    override val nodes = listOf(
-        fromDocList(::enumItems),
-        fromDocList(::fields),
-        fromDocList(::constructors),
-        fromDocList(::methods)
-    )
+    override val contexts: List<RichTextComponent>
+        get() = listOf(RichTextComponent(TYPE_NAME, `package`, `package`))
 
-    @UseExperimental(UnstableDefault::class)
-    fun toJson(): String {
-        return Json.indented.stringify(GroovyClass.serializer(), this)
+    override val nodes: List<AutoDocumentNode>
+        get() = listOf(
+            fromDocList(::enumItems),
+            fromDocList(::fields),
+            fromDocList(::constructors),
+            fromDocList(::methods)
+        )
+
+    override fun toJson(json: Json): String {
+        return json.encodeToString(serializer(), this)
     }
 }

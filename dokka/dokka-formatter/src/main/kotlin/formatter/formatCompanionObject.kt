@@ -4,7 +4,8 @@ import com.copperleaf.kodiak.kotlin.models.KotlinClass
 import org.jetbrains.dokka.DocumentationNode
 import org.jetbrains.dokka.path
 
-val DocumentationNode.hasCompanionObject: Boolean get() = this.members.any { it.isCompanionMethod || it.isCompanionField }
+val DocumentationNode.hasCompanionObject: Boolean
+    get() = this.members.any { it.isCompanionMethod || it.isCompanionField }
 
 fun DocumentationNode.toCompanionObjectDoc(): KotlinClass {
     assert(this.classLike) { "node must be a Class-like" }

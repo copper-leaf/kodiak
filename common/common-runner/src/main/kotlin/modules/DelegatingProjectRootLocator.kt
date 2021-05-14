@@ -10,8 +10,7 @@ internal class DelegatingProjectRootLocator(
     private val locators: List<ProjectRootLocator>
 ) : ProjectRootLocator {
 
-    override fun getRootPath(input: Path) : Path? {
+    override fun getRootPath(input: Path): Path? {
         return locators.firstOrNullBy { it.getRootPath(input) }
     }
-
 }

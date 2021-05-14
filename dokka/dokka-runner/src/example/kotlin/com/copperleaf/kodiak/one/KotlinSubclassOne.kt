@@ -1,5 +1,3 @@
-package com.copperleaf.kodiak.one;
+package com.copperleaf.kodiak.one
 
-public class KotlinSubclassOne {
-
-}
+public class KotlinSubclassOne

@@ -35,12 +35,12 @@ fun GroovyClassDoc.toClassDoc(deep: Boolean): GroovyClass {
 val GroovyClassDoc.classKind: String
     get() {
         return when {
-            isInterface                        -> "interface"
-            isAnnotationType                   -> "@interface"
-            isEnum                             -> "enum"
-            isExceptionClass()                 -> "class"
+            isInterface -> "interface"
+            isAnnotationType -> "@interface"
+            isEnum -> "enum"
+            isExceptionClass() -> "class"
             this is SimpleGroovyDoc && isTrait -> "trait"
-            else                               -> "class"
+            else -> "class"
         }
     }
 
