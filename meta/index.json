@@ -1,0 +1,116 @@
+{
+  "ownKey": "index",
+  "childrenPages": {"meta": {
+    "ownKey": "meta",
+    "ownPages": [
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "changelog.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/changelog.index.json"
+        },
+        "description": "",
+        "title": "Changelog . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "forms.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/forms.index.json"
+        },
+        "description": "",
+        "title": "Forms . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "home.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/home.index.json"
+        },
+        "description": "",
+        "title": "Home . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "pages.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/pages.index.json"
+        },
+        "description": "",
+        "title": "Pages . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "snippets.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/snippets.index.json"
+        },
+        "description": "",
+        "title": "Snippets . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "wiki.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/wiki.index.json"
+        },
+        "description": "",
+        "title": "Wiki . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "sitemap.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/sitemap.index.json"
+        },
+        "description": "",
+        "title": "Sitemap . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "indices.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/indices.index.json"
+        },
+        "description": "",
+        "title": "Indices . Index"
+      },
+      {
+        "reference": {
+          "path": "meta",
+          "baseUrl": "https://copper-leaf.github.io/kodiak",
+          "fileName": "all.index",
+          "extension": "json",
+          "usePrettyUrl": false,
+          "link": "https://copper-leaf.github.io/kodiak/meta/all.index.json"
+        },
+        "description": "",
+        "title": "All . Index"
+      }
+    ]
+  }}
+}

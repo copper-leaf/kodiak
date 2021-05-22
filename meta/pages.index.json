@@ -1,0 +1,19 @@
+{
+  "ownKey": "pages",
+  "childrenPages": {"changelog": {
+    "ownKey": "changelog",
+    "ownPages": [{
+      "reference": {
+        "path": "",
+        "baseUrl": "https://copper-leaf.github.io/kodiak",
+        "fileName": "changelog",
+        "extension": "html",
+        "usePrettyUrl": true,
+        "link": "https://copper-leaf.github.io/kodiak/changelog"
+      },
+      "description": "",
+      "title": "Changelog",
+      "content": ""
+    }]
+  }}
+}
